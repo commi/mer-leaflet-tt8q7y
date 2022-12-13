@@ -1,47 +1,63 @@
-navigator.geolocation.getCurrentPosition(success, error);
+async function initMap() {
+  const latLong = [51.4, 10.4];
 
-function success(position) {
-  const coords = position.coords;
-  const latitude = coords.latitude;
-  const longitude = coords.longitude;
-  const accuracy = coords.accuracy;
+  const map = L.map('map').setView(latLong, 6);
 
-  console.log(`Latitude : ${latitude}`);
-  console.log(`Longitude: ${longitude}`);
-  console.log(`Accuracy: ${accuracy} m.`);
+  // add german border
+  const outlineGermany = await (
+    await fetch(
+      'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/Grenze%20Deutschland.geojson'
+    )
+  ).json();
 
-  const latLong = [latitude, longitude];
-
-  const map = L.map('map').setView(latLong, 13);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
+  L.geoJSON(outlineGermany, {
+    style: { color: '#333' },
   }).addTo(map);
 
-  const marker = L.marker(latLong).addTo(map);
+  // add city dots
+  const citiesGermany = await (
+    await fetch(
+      'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/St%C3%A4dte%20Deutschland.geojson'
+    )
+  ).json();
 
-  const circle = L.circle(latLong, {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 500
+  const geojsonMarkerOptions = {
+    radius: 4,
+    fillColor: '#eee',
+    color: '#000',
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8,
+  };
+
+  L.geoJSON(citiesGermany, {
+    pointToLayer: function (feature, latlng) {
+      return (
+        L.circleMarker(latlng, geojsonMarkerOptions)
+          // add label to each city dot
+          .bindTooltip(feature.properties.name, {
+            permanent: true,
+            direction: 'right',
+            className: 'city',
+          })
+          .openTooltip()
+      );
+    },
   }).addTo(map);
-  
-  map.on('click', onMapClick);
+
+  // add german border
+  const highways = await (
+    await fetch(
+      'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/TEN-T%20roads.geojson'
+    )
+  ).json();
+
+
+  L.Proj.geoJson(highways).addTo(map);
+  L.geoJSON(highways, {
+    style: { color: '#333' },
+    fill: false
+  }).addTo(map);
 }
 
-function error(error) {
-  console.error('Error getting location:', error.code, error.message);
-}
-
-
-const popup = L.popup();
-
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(map);
-}
-
+initMap();
