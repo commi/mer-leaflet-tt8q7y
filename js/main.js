@@ -45,7 +45,7 @@ async function initMap() {
     },
   }).addTo(map);
 
-  // add german border
+  // add german highways
   const highways = await (
     await fetch(
       'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/TEN-T%20roads.geojson'
