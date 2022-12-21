@@ -52,11 +52,15 @@ async function initMap() {
     )
   ).json();
 
+  proj4.defs(
+    'EPSG:3034',
+    '+proj=lcc +lat_0=52 +lon_0=10 +lat_1=35 +lat_2=65 +x_0=4000000 +y_0=2800000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
+  );
 
-  L.Proj.geoJson(highways).addTo(map);
-  L.geoJSON(highways, {
-    style: { color: '#333' },
-    fill: false
+  L.Proj.geoJson(highways, {
+    style: (f) => ({ color: '#888' }),
+    fill: false,
+    stroke: '#777',
   }).addTo(map);
 }
 
