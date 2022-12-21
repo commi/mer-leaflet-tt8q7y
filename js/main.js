@@ -155,8 +155,10 @@ async function initMap()
     const year = yearSlider.valueAsNumber;
 
     oberleitungsFeatures.forEach((marker, feature) => {
+      // convert german date to iso date
+      const isoDate     = feature?.properties?.Time.replace(/(\d\d)\.(\d\d)\.(\d{4})/, '$3-$2-$1');
       // check if feature is before the selected year
-      const featureDate = new Date(feature?.properties?.Time);
+      const featureDate = new Date(isoDate);
       if(featureDate.getFullYear() <= year) {
         marker.addTo(oberleitungsLayer)
       }
