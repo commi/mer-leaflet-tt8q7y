@@ -129,6 +129,13 @@ async function initMap()
   L.Proj.geoJson(DieselFahrten, {
     pointToLayer: (feature, latlng) => {
       if(feature.properties.Wert) {
+        // convert german date to iso date
+        const isoDate     = feature?.properties?.Time.replace(/(\d\d)\.(\d\d)\.(\d{4}).*/, '$3-$2-$1');
+        // check if feature is before the selected year
+        const featureDate = new Date(isoDate);
+
+        if(featureDate.getFullYear() != 2023) return;
+
         const marker = L.circle(latlng, {
           radius:      feature.properties.Wert / 2, // in meters here
           fillColor:   'red',
