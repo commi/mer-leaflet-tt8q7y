@@ -12,7 +12,7 @@ async function initMap() {
   /* 
   const outlineGermany = await (
     await fetch(
-      'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/Grenze%20Deutschland.geojson'
+      './data/Hintergrundkarte/Grenze%20Deutschland.geojson'
     )
   ).json();
 
@@ -24,7 +24,7 @@ async function initMap() {
   // add state backgrounds
   const outlineStates = await (
     await fetch(
-      'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/Grenze%20Bundesländer.geojson' 
+      './data/Hintergrundkarte/Grenze%20Bundesländer.geojson' 
     )
   ).json();
 
@@ -35,7 +35,7 @@ async function initMap() {
   // add german highways
   const highways = await (
     await fetch(
-      'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/TEN-T%20roads.geojson'
+      './data/Hintergrundkarte/TEN-T%20roads.geojson'
     )
   ).json();
 
@@ -53,7 +53,7 @@ async function initMap() {
   // add city dots
   const citiesGermany = await (
     await fetch(
-      'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/St%C3%A4dte%20Deutschland.geojson'
+      './data/Hintergrundkarte/St%C3%A4dte%20Deutschland.geojson'
     )
   ).json();
 
