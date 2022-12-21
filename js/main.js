@@ -3,6 +3,11 @@ async function initMap() {
 
   const map = L.map('map').setView(latLong, 6);
 
+  proj4.defs(
+    'EPSG:3034',
+    '+proj=lcc +lat_0=52 +lon_0=10 +lat_1=35 +lat_2=65 +x_0=4000000 +y_0=2800000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
+  );
+
   // add german border
   const outlineGermany = await (
     await fetch(
@@ -11,6 +16,16 @@ async function initMap() {
   ).json();
 
   L.geoJSON(outlineGermany, {
+    style: { color: '#333' },
+  }).addTo(map);
+
+  const outlineStates = await (
+    await fetch(
+      'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/Grenze%20Bundesländer.geojson'
+    )
+  ).json();
+
+  L.geoJSON(outlineStates, {
     style: { color: '#333' },
   }).addTo(map);
 
@@ -51,11 +66,6 @@ async function initMap() {
       'https://raw.githubusercontent.com/commi/mer-leaflet-tt8q7y/main/data/Hintergrundkarte/TEN-T%20roads.geojson'
     )
   ).json();
-
-  proj4.defs(
-    'EPSG:3034',
-    '+proj=lcc +lat_0=52 +lon_0=10 +lat_1=35 +lat_2=65 +x_0=4000000 +y_0=2800000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
-  );
 
   L.Proj.geoJson(highways, {
     style: (f) => ({ color: '#888' }),
