@@ -10,6 +10,8 @@ async function initMap()
   );
   proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
 
+  proj4.defs['OGC:CRS84'] = proj4.defs['EPSG:4326'];
+
   const hintergundLayer = L.layerGroup([]).addTo(map);
 
   // add german border
@@ -113,19 +115,48 @@ async function initMap()
     stroke:       '#777',
   }).addTo(oberleitungsLayer);
 
+  // add Diesel
+  const DieselFahrten = await (
+    await fetch(
+      './data/GeoJSON/Diesel.geojson'
+    )
+  ).json();
+
+  const DieselFahrtenLayer = L.layerGroup([]).addTo(map);
+
+  const DieselFahrtenFeatures = new Map();
+
+  L.Proj.geoJson(DieselFahrten, {
+    pointToLayer: (feature, latlng) => {
+      if(feature.properties.Wert) {
+        const marker = L.circle(latlng, {
+          radius:      feature.properties.Wert / 2, // in meters here
+          fillColor:   'red',
+          stroke:      false,
+          fillOpacity: 0.5,
+        });
+        DieselFahrtenFeatures.set(feature, marker);
+        return marker;
+      }
+    },
+    style:        _ => ({ color: '#888' }),
+    fill:         false,
+    stroke:       '#777',
+  }).addTo(DieselFahrtenLayer);
+
 
   // interactive controls
-
-
   const yearSlider = document.querySelector('#input_year');
 
+
+  // show / hide Oberleitungen depending on seleted year
   function updateOberleitungslayer()
   {
     const year = yearSlider.valueAsNumber;
 
     oberleitungsFeatures.forEach((marker, feature) => {
       // check if feature is before the selected year
-      const featureDate = new Date(feature.properties?.Time);
+      const featureDate = new Date(feature?.properties?.Time);
       if(featureDate.getFullYear() <= year) {
         marker.addTo(oberleitungsLayer)
       }
@@ -136,7 +167,7 @@ async function initMap()
   };
   updateOberleitungslayer();
 
-  yearSlider.addEventListener('input', ev => {
+  yearSlider.addEventListener('input', _ => {
     updateOberleitungslayer();
   });
 }
