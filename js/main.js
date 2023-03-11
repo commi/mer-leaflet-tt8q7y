@@ -35,16 +35,28 @@ async function initMap()
 
   // Add german state backgrounds
   // fetch GeoJOSN file and decode it as JSON
-  const outlineStates = await (await fetch('./data/Hintergrundkarte/Grenze%20Bundesländer.geojson')).json();
-
-  // Add german state backgrounds to background layer
-  L.geoJSON(outlineStates, {
-    style: { color: '#333', weight: 1, stroke: false },
-  }).addTo(hintergundLayer);
+  const outlineStatesPromise = fetch('./data/Hintergrundkarte/Grenze%20Bundesländer.geojson').then(res => res.json());
 
   // add german highways
   // fetch GeoJOSN file and decode it as JSON
-  const highways = await (await fetch('./data/Hintergrundkarte/TEN-T%20roads.geojson')).json();
+  const highwaysPromise = fetch('./data/Hintergrundkarte/TEN-T%20roads.geojson').then(res => res.json());
+
+  // add city dots
+  // fetch GeoJOSN file and decode it as JSON
+  const citiesGermanyPromise = fetch('./data/Hintergrundkarte/St%C3%A4dte%20Deutschland.geojson').then(res => res.json());
+
+  // add oberleitung layer
+  const oberleitungPromise = fetch('./data/Oberleitungsausbau.geojson').then(res => res.json());
+
+  // Wait for all promises to complete before continuing
+  const [outlineStates, highways, citiesGermany, oberleitung] = await Promise.all([
+    outlineStatesPromise, highwaysPromise, citiesGermanyPromise, oberleitungPromise
+  ]);
+
+  // Add german state borders to background layer
+  L.geoJSON(outlineStates, {
+    style: { color: '#333', weight: 1, fill: false },
+  }).addTo(hintergundLayer);
 
   // Add german highways to background layer
   L.Proj.geoJson(highways, {
@@ -53,14 +65,10 @@ async function initMap()
     stroke: '#777',
   }).addTo(hintergundLayer);
 
-  // Add german state border to background layer again. this time the border as black lines, this is done here to draw the lines over the highways
+  // Add german state backgrounds to background layer
   L.geoJSON(outlineStates, {
-    style: { color: '#333', weight: 1, fill: false },
+    style: { color: '#333', weight: 1, stroke: false },
   }).addTo(hintergundLayer);
-
-  // add city dots
-  // fetch GeoJOSN file and decode it as JSON
-  const citiesGermany = await (await fetch('./data/Hintergrundkarte/St%C3%A4dte%20Deutschland.geojson')).json();
 
   // Add cities to background layer
   L.geoJSON(citiesGermany, {
@@ -82,10 +90,6 @@ async function initMap()
   }).addTo(hintergundLayer);
 
 
-  // =========
-
-  // add oberleitung layer
-  const oberleitung          = await (await fetch('./data/Oberleitungsausbau.geojson')).json();
   // add a layer to the existing map
   const oberleitungsLayer    = L.layerGroup([]).addTo(map);
   // Map to store features and the map objects created from them outside that map to manipulate them later
@@ -105,8 +109,7 @@ async function initMap()
     style:         _ => ({ color: '#888' }),
     fill:          false,
     stroke:        '#777',
-  }).addTo(oberleitungsLayer);
-
+  });
 
   /**
    * Function to add a GeoJSON file with MultiLineFeatures to the map.
@@ -140,7 +143,7 @@ async function initMap()
         features.set(feature, layer);
       },
       fill:          false,
-    }).addTo(parentLayer);
+    });
     return { parentLayer, features };
   }
 
@@ -148,13 +151,18 @@ async function initMap()
   const layers = new Map();
 
   // create and add Diesel layer
-  layers.set('Diesel', await addLayer('./data/GeoJSON/Diesel.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.Diesel_Wer ?? 0));
-  // create and add BEV layer
-  layers.set('BEV', await addLayer('./data/GeoJSON/BEV.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.BEV_Wert ?? 0));
-  // create and add OLKW layer
-  layers.set('OLKW', await addLayer('./data/GeoJSON/OLKW.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.OLKW_Wert ?? 0));
-  // create and add FCEV layer
-  layers.set('FCEV', await addLayer('./data/GeoJSON/FCEV.geojson', '#F7FCF5', '#075C05', 0, 15000, feature => feature.properties?.FCEV_Wert ?? 0));
+  const [dieselLayer, bevLayer, olkwLayer, fcevLayer] = await Promise.all([
+    addLayer('./data/GeoJSON/Diesel.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.Diesel_Wer ?? 0),
+    addLayer('./data/GeoJSON/BEV.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.BEV_Wert ?? 0),
+    addLayer('./data/GeoJSON/OLKW.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.OLKW_Wert ?? 0),
+    addLayer('./data/GeoJSON/FCEV.geojson', '#F7FCF5', '#075C05', 0, 15000, feature => feature.properties?.FCEV_Wert ?? 0),
+  ]);
+
+  layers.set('Diesel', dieselLayer);
+  layers.set('BEV', bevLayer);
+  layers.set('OLKW', olkwLayer);
+  layers.set('FCEV', fcevLayer);
+
 
   // get references to controls from HTML
   const yearSlider              = document.querySelector('#input_year');
