@@ -153,9 +153,9 @@ async function initMap()
   // create and add Diesel layer
   const [dieselLayer, bevLayer, olkwLayer, fcevLayer] = await Promise.all([
     addLayer('./data/GeoJSON/Diesel.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.Diesel_Wer ?? 0),
-    addLayer('./data/GeoJSON/BEV.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.BEV_Wert ?? 0),
-    addLayer('./data/GeoJSON/OLKW.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.OLKW_Wert ?? 0),
-    addLayer('./data/GeoJSON/FCEV.geojson', '#F7FCF5', '#075C05', 0, 15000, feature => feature.properties?.FCEV_Wert ?? 0),
+    addLayer('./data/GeoJSON/BEV.geojson', '#FFEDA0', '#363080', 0, 15000, feature => feature.properties?.BEV_Wert ?? 0),
+    addLayer('./data/GeoJSON/OLKW.geojson', '#FFEDA0', '#166010', 0, 15000, feature => feature.properties?.OLKW_Wert ?? 0),
+    addLayer('./data/GeoJSON/FCEV.geojson', '#F7FCF5', '#760040', 0, 15000, feature => feature.properties?.FCEV_Wert ?? 0),
   ]);
 
   layers.set('Diesel', dieselLayer);
