@@ -149,7 +149,7 @@ async function initMap()
 
   // create and add Diesel layer
   layers.set('Diesel', await addLayer('./data/GeoJSON/Diesel.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.Diesel_Wer ?? 0));
-   // create and add BEV layer
+  // create and add BEV layer
   layers.set('BEV', await addLayer('./data/GeoJSON/BEV.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.BEV_Wert ?? 0));
   // create and add OLKW layer
   layers.set('OLKW', await addLayer('./data/GeoJSON/OLKW.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.OLKW_Wert ?? 0));
@@ -158,12 +158,16 @@ async function initMap()
 
   // get references to controls from HTML
   const yearSlider              = document.querySelector('#input_year');
+  const yearLabel               = document.querySelector('#label_year');
   const radioOberleitungsausbau = document.querySelector('#visible_layer_oberleitungsausbau');
 
   // show / hide Layer depending on seleted year and selected checkboxes
   function updateLayerVisibility()
   {
     const year = yearSlider.valueAsNumber;
+
+    // show year in on the map
+    yearLabel.textContent = year;
 
     // add/remove Oberleitungs-features to berleitungs-layer if the checkbox is checked and the year as before the feature date
     oberleitungsFeatures.forEach((marker, feature) => {
@@ -212,8 +216,15 @@ async function initMap()
   updateLayerVisibility();
 
   // Update the visibility of all feature whenever a control in the #form_settings container is changed by the user
-  document.querySelector('#form_settings').addEventListener('input', _ => {
-    updateLayerVisibility();
+  let timeoutId;
+  document.querySelector('#form_settings').addEventListener('input', () => {
+    if(timeoutId) {
+      cancelAnimationFrame(timeoutId);
+    }
+    timeoutId = requestAnimationFrame(() => {
+      updateLayerVisibility();
+      timeoutId = null;
+    });
   });
 }
 
