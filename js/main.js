@@ -116,8 +116,8 @@ async function initMap()
    * @param {string} url URL to GeoJSON file
    * @param {string} lowColor      Define the colors to use for the gradient
    * @param {string} highColor      Define the colors to use for the gradient
-   * @param {number} minValue       Define the minimum and maximum values of the Diesel_Wer property
-   * @param {number} maxValue       Define the minimum and maximum values of the Diesel_Wer property
+   * @param {number} minValue       Define the minimum and maximum values
+   * @param {number} maxValue       Define the minimum and maximum values
    * @param {(Object) => Number} getValueFromFeature  function to get a scalar value from the GeoJSON feature
    */
   async function addLayer(url, lowColor, highColor, minValue, maxValue, getValueFromFeature)
@@ -132,7 +132,7 @@ async function initMap()
     // create map layers from GeoJSON
     L.Proj.geoJson(json, {
       style:         feature => ({
-        // set color of the feature with the value of the Diesel_Wer property
+        // set color of the feature with the value derived from the feature
         "color": getLineColor(lowColor, highColor, minValue, maxValue, getValueFromFeature(feature))
       }),
       onEachFeature: (feature, layer) => {
@@ -149,6 +149,10 @@ async function initMap()
 
   // create and add Diesel layer
   layers.set('Diesel', await addLayer('./data/GeoJSON/Diesel.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.Diesel_Wer ?? 0));
+   // create and add BEV layer
+  layers.set('BEV', await addLayer('./data/GeoJSON/BEV.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.BEV_Wert ?? 0));
+  // create and add OLKW layer
+  layers.set('OLKW', await addLayer('./data/GeoJSON/OLKW.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.OLKW_Wert ?? 0));
   // create and add FCEV layer
   layers.set('FCEV', await addLayer('./data/GeoJSON/FCEV.geojson', '#F7FCF5', '#075C05', 0, 15000, feature => feature.properties?.FCEV_Wert ?? 0));
 
