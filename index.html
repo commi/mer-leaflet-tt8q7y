@@ -24,9 +24,19 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col p-0">
+			<div class="col p-0 position-relative">
 				<div id="map"></div>
+
 				<h2 id="label_year" class="position-absolute top-0 end-0 p-2"></h2>
+
+				<table class="table table-borderless table-sm bg-white border rounded position-absolute bottom-0 start-0 m-2 w-auto">
+					<tbody>
+						<tr>
+							<th colspan="3">Prognostizierten Fahrten pro Tag pro Abschnitt</th>
+						</tr>
+					</tbody>
+					<tbody id="tbody_legend"></tbody>
+				</table>
 			</div>
 		</div>
 	</div>

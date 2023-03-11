@@ -116,15 +116,27 @@ async function initMap()
    * It creates a layer and adds all features as sub-layers to it.
    * It colors the with the value derived with {@see getValueFromFeature}
    *
-   * @param {string} url URL to GeoJSON file
-   * @param {string} lowColor      Define the colors to use for the gradient
-   * @param {string} highColor      Define the colors to use for the gradient
-   * @param {number} minValue       Define the minimum and maximum values
-   * @param {number} maxValue       Define the minimum and maximum values
-   * @param {(Object) => Number} getValueFromFeature  function to get a scalar value from the GeoJSON feature
+   * @param {Object} options An object containing the following properties:
+   * @param {string} options.url URL to GeoJSON file
+   * @param {string} options.lowColor The color to use for the lowest value.
+   * @param {string} options.highColor The color to use for the highest value.
+   * @param {number} options.minValue The minimum value of the range.
+   * @param {number} options.maxValue The maximum value of the range.
+   * @param {(Object) => Number} options.getValueFromFeature A function to get a scalar value from the GeoJSON feature.
+   *
+   * @returns {Promise<{features: Map<any, any>, parentLayer: any}>} A promise that resolves to an object containing the parent layer and the map of features.
    */
-  async function addLayer(url, lowColor, highColor, minValue, maxValue, getValueFromFeature)
+  async function addLayer(options)
   {
+    const {
+            url,
+            lowColor,
+            highColor,
+            minValue,
+            maxValue,
+            getValueFromFeature,
+          } = options;
+
     // fetch the File and decode it as JSON
     const json        = await (await fetch(url)).json();
     // add a layer to the existing map
@@ -147,21 +159,83 @@ async function initMap()
     return { parentLayer, features };
   }
 
+
+  // create layer options as a Map with layer names as keys
+  const layerOptions = new Map([
+    [
+      'Diesel', {
+      url:                 './data/GeoJSON/Diesel.geojson',
+      lowColor:            '#FFEDA0',
+      highColor:           '#800026',
+      minValue:            0,
+      maxValue:            15000,
+      getValueFromFeature: feature => feature.properties?.Diesel_Wer ?? 0
+    }
+    ],
+    [
+      'BEV', {
+      url:                 './data/GeoJSON/BEV.geojson',
+      lowColor:            '#FFEDA0',
+      highColor:           '#363080',
+      minValue:            0,
+      maxValue:            15000,
+      getValueFromFeature: feature => feature.properties?.BEV_Wert ?? 0
+    }
+    ],
+    [
+      'OLKW', {
+      url:                 './data/GeoJSON/OLKW.geojson',
+      lowColor:            '#FFEDA0',
+      highColor:           '#166010',
+      minValue:            0,
+      maxValue:            15000,
+      getValueFromFeature: feature => feature.properties?.OLKW_Wert ?? 0
+    }
+    ],
+    [
+      'FCEV', {
+      url:                 './data/GeoJSON/FCEV.geojson',
+      lowColor:            '#F7FCF5',
+      highColor:           '#760040',
+      minValue:            0,
+      maxValue:            15000,
+      getValueFromFeature: feature => feature.properties?.FCEV_Wert ?? 0
+    }
+    ],
+  ]);
+
+
   // Map with names and layers that are added to the map
   const layers = new Map();
 
-  // create and add Diesel layer
-  const [dieselLayer, bevLayer, olkwLayer, fcevLayer] = await Promise.all([
-    addLayer('./data/GeoJSON/Diesel.geojson', '#FFEDA0', '#800026', 0, 15000, feature => feature.properties?.Diesel_Wer ?? 0),
-    addLayer('./data/GeoJSON/BEV.geojson', '#FFEDA0', '#363080', 0, 15000, feature => feature.properties?.BEV_Wert ?? 0),
-    addLayer('./data/GeoJSON/OLKW.geojson', '#FFEDA0', '#166010', 0, 15000, feature => feature.properties?.OLKW_Wert ?? 0),
-    addLayer('./data/GeoJSON/FCEV.geojson', '#F7FCF5', '#760040', 0, 15000, feature => feature.properties?.FCEV_Wert ?? 0),
-  ]);
+  // create and add layers using layer options
+  const promises = Array.from(layerOptions)
+    .map(([layerName, options]) => addLayer(options).then(layer => [layerName, layer]));
 
-  layers.set('Diesel', dieselLayer);
-  layers.set('BEV', bevLayer);
-  layers.set('OLKW', olkwLayer);
-  layers.set('FCEV', fcevLayer);
+  (await Promise.all(promises))
+    .forEach(([layerName, layer]) => layers.set(layerName, layer));
+
+
+  // create table and legend
+  const tbody = document.querySelector('#tbody_legend');
+
+  for(const [layerName, options] of layerOptions) {
+    // create table row and cells for layer legend
+    const row       = tbody.insertRow();
+    const nameCell  = row.insertCell();
+    const colorCell = row.insertCell();
+    const rangeCell = row.insertCell();
+
+    // layer name
+    nameCell.textContent = layerName;
+
+    // color legend
+    colorCell.style.background = `linear-gradient(to right, ${options.lowColor}, ${options.highColor})`;
+    colorCell.style.width      = '120px';
+
+    // value range
+    rangeCell.textContent = `${options.minValue} – ${options.maxValue}`;
+  }
 
 
   // get references to controls from HTML
