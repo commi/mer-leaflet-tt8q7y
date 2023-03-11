@@ -230,8 +230,11 @@ async function initMap()
     nameCell.textContent = layerName;
 
     // color legend
-    colorCell.style.background = `linear-gradient(to right, ${options.lowColor}, ${options.highColor})`;
-    colorCell.style.width      = '120px';
+    const gradientColors           = chroma.scale([options.lowColor, options.highColor]).mode('hsl').colors(10).map(color => color);
+    colorCell.style.background     = `linear-gradient(to right, ${gradientColors.join(', ')})`;
+    colorCell.style.width          = '120px';
+    colorCell.style.padding        = '6px';
+    colorCell.style.backgroundClip = 'content-box';
 
     // value range
     rangeCell.textContent = `${options.minValue} – ${options.maxValue}`;
@@ -310,6 +313,124 @@ async function initMap()
   });
 }
 
-// start the loading process
+
+// Erstellen einer Map zum Speichern der zwischengespeicherten Daten
+const dataCache = new Map();
+
+// Funktion zum Abrufen von JSON-Daten unter Verwendung des Cache
+async function fetchJSON(filename)
+{
+  if(dataCache.has(filename)) {
+    // Wenn die Daten bereits vorhanden sind, aus dem Cache zurückgeben
+    return dataCache.get(filename);
+  }
+  // Abrufen der Daten ab, wenn sie nicht im Cache vorhanden sind
+  const data = await (await fetch(filename)).json();
+
+  // Füge die Daten zum Cache hinzu
+  dataCache.set(filename, data);
+
+  return data;
+}
+
+
+async function initCharts()
+{
+  // Funktion zum Aktualisieren der Sichtbarkeit der Kartenfunktionen basierend auf den ausgewählten Einstellungen
+  async function updateChart()
+  {
+    // Abrufen der ausgewählten Datenquelle und Größenklasse
+    const dataSource = document.querySelector('input[name="datasource"]:checked').value;
+    const sizeClass  = document.querySelector('input[name="sizeclass"]:checked').value;
+
+    // Zusammensetzen des Dateinamens aus den ausgewählten Einstellungen
+    const filename = `./data/Bestand und Neuzulassungen/${dataSource} ${sizeClass}.json`;
+
+
+    // Abrufen der Daten unter Verwendung des Cache
+    const data = await fetchJSON(filename);
+
+    // Mapping für die Farben
+    const colorMap = {
+      BEV100:     '#003746',
+      BEV200:     '#A2C5D3',
+      BEV300:     '#93C120',
+      BEV400:     '#DEDC00',
+      BEV500:     '#00609C',
+      BEV600:     '#965987',
+      "O-HEV":    '#00212A',
+      "O-BEV50":  "#488198",
+      "O-BEV100": "#587413",
+      "O-BEV150": "#858400",
+      "O-BEV200": "#003A5E",
+      "O-BEV250": "#5A3551",
+      "O-BEV300": "#007C9E",
+      FCEV:       '#B5D1DC',
+      Diesel:     '#B0DF3B'
+    };
+
+    // Extrahieren der Serien-namen
+    const labels = data.map(datum => datum[dataSource])
+
+    // Filtere die Schlüssel, um die Daten für das Diagramm zu generieren
+    const seriesNames = Object.keys(data[0]).filter(key => key !== dataSource);
+    const datasets    = seriesNames.map(label => ({
+      name:   label,
+      values: data.map(datum => typeof datum[label] === 'string' ? parseFloat(datum[label].replace(',', '.')) : datum[label])
+    }));
+
+
+    // Erstellen des gestapelten Balkendiagramms mit Frappe Charts
+    const chartDiv     = document.querySelector('#chart-1');
+    chartDiv.innerHTML = '';
+    const chart        = new frappe.Chart(chartDiv, {
+      title:       `${dataSource} nach Fahrzeugtyp und Jahr: ${sizeClass === 'gesamt' ? 'Alle Größenklassen' : `${sizeClass} t`}`,
+      data:        {
+        labels:   labels,
+        datasets: datasets
+      },
+      type:        'bar',
+      barOptions:  {
+        stacked:    true,
+        spaceRatio: 0.5
+      },
+      height:      400,
+      colors:      seriesNames.map(n => colorMap[n]),
+      axisOptions: {
+        xAxisMode: 'tick',
+        xIsSeries: false
+      }
+    });
+
+    // Erstellen der Legenden-Tabelle
+    const legendTable     = document.querySelector('#tbody_legend_chart');
+    legendTable.innerHTML = '';
+    seriesNames.forEach(name => {
+      const row = legendTable.insertRow();
+
+      // Zelle für Farbmarkierung
+      const colorCell       = row.insertCell();
+      colorCell.innerHTML   = '&#x25A0;';
+      colorCell.style.color = colorMap[name];
+
+      // Zelle für Seriennamen
+      const labelCell       = row.insertCell();
+      labelCell.textContent = name;
+    });
+  }
+
+  // Update the chart
+  updateChart();
+
+  // Update the chart whenever a control in the #chart_settings container is changed by the user
+  document.querySelector('#chart_settings').addEventListener('input', () => updateChart());
+}
+
+
+// start the loading process for the map
 initMap();
+
+// start the loading process for the charts
+initCharts();
+
 

@@ -18,3 +18,15 @@ div#map {
 .leaflet-tooltip.city:before {
   display: none;
 }
+
+
+/**
+ * Hide the frappe chart tooltip, it is ugly
+ */
+.chart-container .graph-svg-tip {
+  display: none;
+}
+
+.chart-container .chart-legend {
+  display: none;
+}
