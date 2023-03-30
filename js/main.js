@@ -126,17 +126,15 @@ async function initMap()
    *
    * @returns {Promise<{features: Map<any, any>, parentLayer: any}>} A promise that resolves to an object containing the parent layer and the map of features.
    */
-  async function addLayer(options)
+  async function addLayer({
+                            url,
+                            lowColor,
+                            highColor,
+                            minValue,
+                            maxValue,
+                            getValueFromFeature,
+                          })
   {
-    const {
-            url,
-            lowColor,
-            highColor,
-            minValue,
-            maxValue,
-            getValueFromFeature,
-          } = options;
-
     // fetch the File and decode it as JSON
     const json        = await (await fetch(url)).json();
     // add a layer to the existing map
@@ -168,7 +166,7 @@ async function initMap()
       lowColor:            '#DDDDDC',
       highColor:           '#292929',
       minValue:            0,
-      maxValue:            15000,
+      maxValue:            23000,
       getValueFromFeature: feature => feature.properties?.Diesel_Wer ?? 0
     }
     ],
@@ -178,7 +176,7 @@ async function initMap()
       lowColor:            '#C3E2FB',
       highColor:           '#073459',
       minValue:            0,
-      maxValue:            15000,
+      maxValue:            13000,
       getValueFromFeature: feature => feature.properties?.BEV_Wert ?? 0
     }
     ],
@@ -188,7 +186,7 @@ async function initMap()
       lowColor:            '#EBF7CE',
       highColor:           '#496010',
       minValue:            0,
-      maxValue:            15000,
+      maxValue:            17000,
       getValueFromFeature: feature => feature.properties?.OLKW_Wert ?? 0
     }
     ],
@@ -198,7 +196,7 @@ async function initMap()
       lowColor:            '#FFD5E8',
       highColor:           '#960045',
       minValue:            0,
-      maxValue:            15000,
+      maxValue:            0,
       getValueFromFeature: feature => feature.properties?.FCEV_Wert ?? 0
     }
     ],
@@ -219,7 +217,7 @@ async function initMap()
   // create table and legend
   const tbody = document.querySelector('#tbody_legend');
 
-  for(const [layerName, options] of layerOptions) {
+  for(const [layerName, { highColor, lowColor, maxValue, minValue }] of layerOptions) {
     // create table row and cells for layer legend
     const row       = tbody.insertRow();
     const nameCell  = row.insertCell();
@@ -230,14 +228,14 @@ async function initMap()
     nameCell.textContent = layerName;
 
     // color legend
-    const gradientColors           = chroma.scale([options.lowColor, options.highColor]).mode('hsl').colors(10).map(color => color);
+    const gradientColors           = chroma.scale([lowColor, highColor]).mode('hsl').colors(10).map(color => color);
     colorCell.style.background     = `linear-gradient(to right, ${gradientColors.join(', ')})`;
     colorCell.style.width          = '120px';
     colorCell.style.padding        = '6px';
     colorCell.style.backgroundClip = 'content-box';
 
     // value range
-    rangeCell.textContent = `${options.minValue} – ${options.maxValue}`;
+    rangeCell.textContent = `${minValue} – ${maxValue}`;
   }
 
 
