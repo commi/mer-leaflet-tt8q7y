@@ -83,42 +83,42 @@
 									<div class="card-body">
 										<h4 class="h5">Anzuzeigende Größe</h4>
 
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_oberleitungsausbau">
-												<label class="form-check-label" for="visible_layer_oberleitungsausbau">
-													Oberleitungsausbau
-												</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_diesel"
-												       data-toggles="Diesel"
-												       checked>
-												<label class="form-check-label" for="visible_layer_diesel">
-													Diesel
-												</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_bev"
-												       data-toggles="BEV">
-												<label class="form-check-label" for="visible_layer_bev">
-													BEV
-												</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_olkw"
-												       data-toggles="OLKW">
-												<label class="form-check-label" for="visible_layer_olkw">
-													OLKW
-												</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_fcev"
-												       data-toggles="FCEV"
-												>
-												<label class="form-check-label" for="visible_layer_fcev">
-													FCEV
-												</label>
-											</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_oberleitungsausbau">
+											<label class="form-check-label" for="visible_layer_oberleitungsausbau">
+												Oberleitungsausbau
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_diesel"
+											       data-toggles="Diesel"
+											       checked>
+											<label class="form-check-label" for="visible_layer_diesel">
+												Diesel
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_bev"
+											       data-toggles="BEV">
+											<label class="form-check-label" for="visible_layer_bev">
+												BEV
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_olkw"
+											       data-toggles="OLKW">
+											<label class="form-check-label" for="visible_layer_olkw">
+												OLKW
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_fcev"
+											       data-toggles="FCEV"
+											>
+											<label class="form-check-label" for="visible_layer_fcev">
+												FCEV
+											</label>
+										</div>
 
 									</div>
 								</div>
@@ -152,11 +152,11 @@
 						<h4 class="h5">Bestand/Neuzulassungen pro Antriebsart </h4>
 
 						<div class="row flex-nowrap">
-							<div class="col flex-fill" style="max-width: calc(100% - 5em)">
+							<div class="col flex-fill" style="max-width: calc(100% - 4em - var(--bs-gutter-x) * 4)">
 								<!-- charts -->
 								<div id="chart-1"></div>
 							</div>
-							<div class="col-auto align-self-center" style="min-width: 5em">
+							<div class="col-auto align-self-center" style="min-width: 4em">
 								<!-- Legende für das Diagramm -->
 								<table>
 									<tbody id="tbody_legend_chart" class="text-nowrap"></tbody>
@@ -180,6 +180,10 @@
 												<div class="form-check">
 													<input class="form-check-input" type="radio" name="datasource" id="input_datasource_Neuzulassungen" value="Neuzulassungen">
 													<label class="form-check-label" for="input_datasource_Neuzulassungen">Neuzulassungen</label>
+												</div>
+												<div class="form-check">
+													<input class="form-check-input" type="radio" name="datasource" id="input_datasource_THG-Emissionen" value="THG-Emissionen">
+													<label class="form-check-label" for="input_datasource_THG-Emissionen">THG-Emissionen</label>
 												</div>
 											</div>
 

@@ -40,16 +40,28 @@ div#map {
 	font-size: 12px
 }
 
+/* disable invalid checkboxs */
+*:has(#input_datasource_THG-Emissionen:checked) ~ * input[name="sizeclass"]:not([value="gesamt"]),
+*:has(#input_datasource_THG-Emissionen:checked) ~ * input[name="sizeclass"]:not([value="gesamt"]) ~ label {
+	opacity: 0.5;
+	filter: grayscale(100%);
+	pointer-events: none;
+}
+
+
 #tbody_legend td {
 	white-space: nowrap;
 	min-width: 1rem;
 }
+
 #tbody_legend td:first-child {
 	padding-inline-start: 0;
 }
+
 #tbody_legend td:last-child {
 	padding-inline-end: 0;
 }
+
 #tbody_legend tr:last-child > td {
 	padding-block-end: 0;
 }

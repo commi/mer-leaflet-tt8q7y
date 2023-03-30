@@ -344,9 +344,15 @@ async function initCharts()
     // Zusammensetzen des Dateinamens aus den ausgewählten Einstellungen
     const filename = `./data/Bestand und Neuzulassungen/${dataSource} ${sizeClass}.json`;
 
-
     // Abrufen der Daten unter Verwendung des Cache
-    const data = await fetchJSON(filename);
+    let data;
+    try {
+      data = await fetchJSON(filename);
+    }
+    catch(error) {
+      console.warn(`Could not fetch ${filename}: ${error}`);
+      return;
+    }
 
     // Mapping für die Farben
     const colorMap = {
@@ -364,11 +370,24 @@ async function initCharts()
       "O-BEV250": "#6D9018",
       "O-BEV300": "#496010",
       FCEV:       '#C00000',
-      Diesel:     '#9A9A9A'
+      Diesel:     '#9A9A9A',
+
+      "Energie BEV":         "#063458",
+      "Energie OLKW":        "#496010",
+      "Energie FCEV":        "#C00000",
+      "Energie Diesel":      "#9A9A9A",
+      "Herstellung  BEV":    "#0D68B1",
+      "Herstellung OLKW":    "#92C020",
+      "Herstellung FCEV":    "#E02020",
+      "Herstellung Diesel":  "#BABABA",
+      "Infrastruktur BEV":   "#88C5F6",
+      "Infrastruktur O-Lkw": "#D7EF9D",
     };
 
     // Extrahieren der Serien-namen
-    const labels = data.map(datum => "'" + datum[dataSource].toString().slice(-2, 100))
+    const labels = data.map(datum => `'${(typeof datum[dataSource] === 'string'
+                                          ? datum[dataSource]
+                                          : datum[dataSource].toString()).slice(-2, 100)}`)
 
     // Filtere die Schlüssel, um die Daten für das Diagramm zu generieren
     const seriesNames = Object.keys(data[0]).filter(key => key !== dataSource);
