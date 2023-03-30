@@ -1,24 +1,27 @@
+:root {
+	hyphens: auto;
+}
 
 .row {
-  --bs-gutter-x: 1rem;
-  --bs-gutter-y: 1rem;
+	--bs-gutter-x: 1rem;
+	--bs-gutter-y: 1rem;
 }
 
 div#map {
-  height: 600px;
+	height: 600px;
 }
 
 /**
  * style for city labels
  */
 .leaflet-tooltip.city {
-  background-color: transparent;
-  border: transparent;
-  box-shadow: none;
+	background-color: transparent;
+	border: transparent;
+	box-shadow: none;
 }
 
 .leaflet-tooltip.city:before {
-  display: none;
+	display: none;
 }
 
 
@@ -26,9 +29,9 @@ div#map {
  * Hide the frappe chart tooltip, it is ugly
  */
 .chart-container .graph-svg-tip {
-  display: none;
+	display: none;
 }
 
 .chart-container .chart-legend {
-  display: none;
+	display: none;
 }

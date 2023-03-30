@@ -53,9 +53,9 @@ async function initMap()
     outlineStatesPromise, highwaysPromise, citiesGermanyPromise, oberleitungPromise
   ]);
 
-  // Add german state borders to background layer
+  // Add german state backgrounds to background layer
   L.geoJSON(outlineStates, {
-    style: { color: '#333', weight: 1, fill: false },
+    style: { color: '#FFF', weight: 1, stroke: false, fillOpacity: 1 },
   }).addTo(hintergundLayer);
 
   // Add german highways to background layer
@@ -65,9 +65,9 @@ async function initMap()
     stroke: '#777',
   }).addTo(hintergundLayer);
 
-  // Add german state backgrounds to background layer
+  // Add german state borders to background layer
   L.geoJSON(outlineStates, {
-    style: { color: '#333', weight: 1, stroke: false },
+    style: { color: '#DDD', weight: 1, fill: false },
   }).addTo(hintergundLayer);
 
   // Add cities to background layer
