@@ -368,7 +368,7 @@ async function initCharts()
     };
 
     // Extrahieren der Serien-namen
-    const labels = data.map(datum => datum[dataSource])
+    const labels = data.map(datum => "'" + datum[dataSource].toString().slice(-2, 100))
 
     // Filtere die Schlüssel, um die Daten für das Diagramm zu generieren
     const seriesNames = Object.keys(data[0]).filter(key => key !== dataSource);
@@ -376,7 +376,6 @@ async function initCharts()
       name:   label,
       values: data.map(datum => typeof datum[label] === 'string' ? parseFloat(datum[label].replace(',', '.')) : datum[label])
     }));
-
 
     // Erstellen des gestapelten Balkendiagramms mit Frappe Charts
     const chartDiv     = document.querySelector('#chart-1');

@@ -35,3 +35,21 @@ div#map {
 .chart-container .chart-legend {
 	display: none;
 }
+
+#tbody_legend_chart td {
+	font-size: 12px
+}
+
+#tbody_legend td {
+	white-space: nowrap;
+	min-width: 1rem;
+}
+#tbody_legend td:first-child {
+	padding-inline-start: 0;
+}
+#tbody_legend td:last-child {
+	padding-inline-end: 0;
+}
+#tbody_legend tr:last-child > td {
+	padding-block-end: 0;
+}
