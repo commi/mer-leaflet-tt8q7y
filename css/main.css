@@ -1,5 +1,7 @@
-* {
-  font-family: sans-serif;
+
+.row {
+  --bs-gutter-x: 1rem;
+  --bs-gutter-y: 1rem;
 }
 
 div#map {
