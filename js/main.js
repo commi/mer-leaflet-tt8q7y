@@ -165,8 +165,8 @@ async function initMap()
     [
       'Diesel', {
       url:                 './data/GeoJSON/Diesel.geojson',
-      lowColor:            '#FFEDA0',
-      highColor:           '#800026',
+      lowColor:            '#DDDDDC',
+      highColor:           '#292929',
       minValue:            0,
       maxValue:            15000,
       getValueFromFeature: feature => feature.properties?.Diesel_Wer ?? 0
@@ -175,8 +175,8 @@ async function initMap()
     [
       'BEV', {
       url:                 './data/GeoJSON/BEV.geojson',
-      lowColor:            '#FFEDA0',
-      highColor:           '#363080',
+      lowColor:            '#C3E2FB',
+      highColor:           '#073459',
       minValue:            0,
       maxValue:            15000,
       getValueFromFeature: feature => feature.properties?.BEV_Wert ?? 0
@@ -185,8 +185,8 @@ async function initMap()
     [
       'OLKW', {
       url:                 './data/GeoJSON/OLKW.geojson',
-      lowColor:            '#FFEDA0',
-      highColor:           '#166010',
+      lowColor:            '#EBF7CE',
+      highColor:           '#496010',
       minValue:            0,
       maxValue:            15000,
       getValueFromFeature: feature => feature.properties?.OLKW_Wert ?? 0
@@ -195,8 +195,8 @@ async function initMap()
     [
       'FCEV', {
       url:                 './data/GeoJSON/FCEV.geojson',
-      lowColor:            '#F7FCF5',
-      highColor:           '#760040',
+      lowColor:            '#FFD5E8',
+      highColor:           '#960045',
       minValue:            0,
       maxValue:            15000,
       getValueFromFeature: feature => feature.properties?.FCEV_Wert ?? 0
@@ -352,21 +352,21 @@ async function initCharts()
 
     // Mapping für die Farben
     const colorMap = {
-      BEV100:     '#003746',
-      BEV200:     '#A2C5D3',
-      BEV300:     '#93C120',
-      BEV400:     '#DEDC00',
-      BEV500:     '#00609C',
-      BEV600:     '#965987',
-      "O-HEV":    '#00212A',
-      "O-BEV50":  "#488198",
-      "O-BEV100": "#587413",
-      "O-BEV150": "#858400",
-      "O-BEV200": "#003A5E",
-      "O-BEV250": "#5A3551",
-      "O-BEV300": "#007C9E",
-      FCEV:       '#B5D1DC',
-      Diesel:     '#B0DF3B'
+      BEV100:     '#C3E2FB',
+      BEV200:     '#88C5F6',
+      BEV300:     '#4CA8F2',
+      BEV400:     '#0D68B1',
+      BEV500:     '#0A4E85',
+      BEV600:     '#063458',
+      "O-HEV":    '#DEC600',
+      "O-BEV50":  "#EBF7CE",
+      "O-BEV100": "#D7EF9D",
+      "O-BEV150": "#C3E66C",
+      "O-BEV200": "#92C020",
+      "O-BEV250": "#6D9018",
+      "O-BEV300": "#496010",
+      FCEV:       '#C00000',
+      Diesel:     '#9A9A9A'
     };
 
     // Extrahieren der Serien-namen
@@ -383,7 +383,7 @@ async function initCharts()
     // Erstellen des gestapelten Balkendiagramms mit Frappe Charts
     const chartDiv     = document.querySelector('#chart-1');
     chartDiv.innerHTML = '';
-    const chart        = new frappe.Chart(chartDiv, {
+    new frappe.Chart(chartDiv, {
       title:       `${dataSource} nach Fahrzeugtyp und Jahr: ${sizeClass === 'gesamt' ? 'Alle Größenklassen' : `${sizeClass} t`}`,
       data:        {
         labels:   labels,
