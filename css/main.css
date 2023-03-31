@@ -41,8 +41,8 @@ div#map {
 }
 
 /* disable invalid checkboxs */
-*:has(#input_datasource_THG-Emissionen:checked) ~ * input[name="sizeclass"]:not([value="gesamt"]),
-*:has(#input_datasource_THG-Emissionen:checked) ~ * input[name="sizeclass"]:not([value="gesamt"]) ~ label {
+*:has(#input_datasource_THG-Emissionen:checked) ~
+* :is(input[name="sizeclass"]:not([value="gesamt"]), input[name="sizeclass"]:not([value="gesamt"]) ~ label) {
 	opacity: 0.5;
 	filter: grayscale(100%);
 	pointer-events: none;
