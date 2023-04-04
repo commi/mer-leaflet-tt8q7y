@@ -70,9 +70,9 @@ class SzenarienComponent extends HTMLElement {
 	<div class="row">
 
 		<!-- linke Card -->
-		<div class="col-5">
+		<div class="col-12 col-lg-5">
 
-			<div class="card">
+			<div class="card mb-3">
 				<div class="card-body" id="form_settings">
 
 					<div class="row align-items-stretch">
@@ -108,7 +108,7 @@ class SzenarienComponent extends HTMLElement {
 						</div>
 
 						<!-- controls for map layer visibility -->
-						<div class="col-6 d-flex align-items-stretch">
+						<div class="col-12 col-md-6 d-flex align-items-stretch">
 							<div class="card flex-fill">
 								<div class="card-body">
 									<h4 class="h5">Anzuzeigende Größe</h4>
@@ -155,7 +155,7 @@ class SzenarienComponent extends HTMLElement {
 						</div>
 
 						<!-- Legende für die Karte -->
-						<div class="col-6 d-flex align-items-stretch">
+						<div class="col-12 col-md-6 d-flex align-items-stretch">
 							<div class="card flex-fill">
 								<div class="card-body">
 									<h4 class="h5">Prognostizierten Fahrten pro Tag pro Abschnitt</h4>
@@ -174,7 +174,7 @@ class SzenarienComponent extends HTMLElement {
 		</div>
 
 		<!-- rechte  Card -->
-		<div class="col-7">
+		<div class="col-12 col-lg-7">
 
 			<div class="card">
 				<div class="card-body">
@@ -265,6 +265,7 @@ class SzenarienComponent extends HTMLElement {
 	}
 
 	/* replacement for bootstrap styles on <body> */
+	/*noinspection CssUnresolvedCustomProperty*/
 	.root {
 		margin: 0;
 		font-family: var(--bs-body-font-family);
