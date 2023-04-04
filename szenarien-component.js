@@ -31,13 +31,21 @@ class SzenarienComponent extends HTMLElement {
 
   async loadDependencies()
   {
-    const externalScripts = [
-      'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
-      'https://unpkg.com/proj4@2.8.0/dist/proj4.js',
-      'https://unpkg.com/proj4leaflet@1.0.2/src/proj4leaflet.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js',
-      'https://unpkg.com/frappe-charts@1.6.1/dist/frappe-charts.min.umd.js'
+    const externalStyles = [
+      './js/leaflet.css',
+      './js/bootstrap.min.css'
     ];
+
+    const externalScripts = [
+      './js/leaflet.js',
+      './js/proj4.js',
+      './js/proj4leaflet.js',
+      './js/chroma.min.js',
+      './js/frappe-charts.min.umd.js'
+    ];
+
+    // Load external styles
+    await Promise.all(externalStyles.map((style) => this.loadCSS(style)));
 
     // Load Leaflet and proj4
     await Promise.all([
@@ -55,8 +63,6 @@ class SzenarienComponent extends HTMLElement {
 
   async connectedCallback()
   {
-    await this.loadDependencies();
-
     const template = document.createElement('template');
 
     /* data-bs-theme="light" to get the css variables from bootstrap */
@@ -253,9 +259,6 @@ class SzenarienComponent extends HTMLElement {
 	</div>
 </div>
 <style>
-	@import 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css';
-	@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css';
-
 	:host {
 		display: contents;
 		hyphens: auto;
@@ -341,11 +344,10 @@ class SzenarienComponent extends HTMLElement {
 </style>
     `;
 
-    {
-      this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-      this.onInit(this.shadowRoot);
-    }
+    await this.loadDependencies();
+    this.onInit(this.shadowRoot);
   }
 
   onInit(document)
