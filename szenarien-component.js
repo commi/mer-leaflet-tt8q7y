@@ -1,11 +1,12 @@
 class SzenarienComponent extends HTMLElement {
   basePath;
+  initialized = false;
 
   constructor()
   {
     super();
     this.attachShadow({ mode: 'open' });
-    this.basePath = new URL('.', import.meta.url).href;
+    this.basePath    = new URL('.', import.meta.url).href;
   }
 
 
@@ -67,6 +68,9 @@ class SzenarienComponent extends HTMLElement {
   // noinspection JSUnusedGlobalSymbols
   async connectedCallback()
   {
+    if(this.initialized) {
+      return;
+    }
     const template = document.createElement('template');
 
     /* data-bs-theme="light" to get the css variables from bootstrap */
@@ -349,6 +353,7 @@ class SzenarienComponent extends HTMLElement {
 </style>
     `;
 
+    this.initialized = true;
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     await this.loadDependencies();
@@ -537,7 +542,7 @@ class SzenarienComponent extends HTMLElement {
           lowColor:            '#C3E2FB',
           highColor:           '#073459',
           minValue:            0,
-          maxValue:            13000,
+          maxValue:            23000,
           getValueFromFeature: feature => feature.properties?.BEV_Wert ?? 0
         }
         ],
@@ -547,7 +552,7 @@ class SzenarienComponent extends HTMLElement {
           lowColor:            '#EBF7CE',
           highColor:           '#496010',
           minValue:            0,
-          maxValue:            17000,
+          maxValue:            23000,
           getValueFromFeature: feature => feature.properties?.OLKW_Wert ?? 0
         }
         ],
@@ -557,7 +562,7 @@ class SzenarienComponent extends HTMLElement {
           lowColor:            '#FFD5E8',
           highColor:           '#960045',
           minValue:            0,
-          maxValue:            0,
+          maxValue:            23000,
           getValueFromFeature: feature => feature.properties?.FCEV_Wert ?? 0
         }
         ],
