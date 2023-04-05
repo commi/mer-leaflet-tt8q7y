@@ -1,8 +1,11 @@
 class SzenarienComponent extends HTMLElement {
+  basePath;
+
   constructor()
   {
     super();
     this.attachShadow({ mode: 'open' });
+    this.basePath = new URL('.', import.meta.url).href;
   }
 
 
@@ -32,16 +35,16 @@ class SzenarienComponent extends HTMLElement {
   async loadDependencies()
   {
     const externalStyles = [
-      './js/leaflet.css',
-      './js/bootstrap.min.css'
+      `${this.basePath}js/leaflet.css`,
+      `${this.basePath}js/bootstrap.min.css`
     ];
 
     const externalScripts = [
-      './js/leaflet.js',
-      './js/proj4.js',
-      './js/proj4leaflet.js',
-      './js/chroma.min.js',
-      './js/frappe-charts.min.umd.js'
+      `${this.basePath}js/leaflet.js`,
+      `${this.basePath}js/proj4.js`,
+      `${this.basePath}js/proj4leaflet.js`,
+      `${this.basePath}js/chroma.min.js`,
+      `${this.basePath}js/frappe-charts.min.umd.js`
     ];
 
     // Load external styles
@@ -61,6 +64,7 @@ class SzenarienComponent extends HTMLElement {
     ]);
   }
 
+  // noinspection JSUnusedGlobalSymbols
   async connectedCallback()
   {
     const template = document.createElement('template');
@@ -274,7 +278,7 @@ class SzenarienComponent extends HTMLElement {
 		line-height: var(--bs-body-line-height);
 		color: var(--bs-body-color);
 		text-align: var(--bs-body-text-align);
-		background-color: var(--bs-body-bg);
+		background-color: transparent;
 		-webkit-text-size-adjust: 100%;
 		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	}
@@ -353,6 +357,8 @@ class SzenarienComponent extends HTMLElement {
 
   onInit(document)
   {
+    const basePath = this.basePath;
+
     /** Function to calculate the color of a feature based on a number
      *
      * @return {string}
@@ -390,18 +396,18 @@ class SzenarienComponent extends HTMLElement {
 
       // Add german state backgrounds
       // fetch GeoJOSN file and decode it as JSON
-      const outlineStatesPromise = fetch('./data/Hintergrundkarte/Grenze%20Bundesländer.geojson').then(res => res.json());
+      const outlineStatesPromise = fetch(`${basePath}/data/Hintergrundkarte/Grenze%20Bundesländer.geojson`).then(res => res.json());
 
       // add german highways
       // fetch GeoJOSN file and decode it as JSON
-      const highwaysPromise = fetch('./data/Hintergrundkarte/TEN-T%20roads.geojson').then(res => res.json());
+      const highwaysPromise = fetch(`${basePath}/data/Hintergrundkarte/TEN-T%20roads.geojson`).then(res => res.json());
 
       // add city dots
       // fetch GeoJOSN file and decode it as JSON
-      const citiesGermanyPromise = fetch('./data/Hintergrundkarte/St%C3%A4dte%20Deutschland.geojson').then(res => res.json());
+      const citiesGermanyPromise = fetch(`${basePath}/data/Hintergrundkarte/St%C3%A4dte%20Deutschland.geojson`).then(res => res.json());
 
       // add oberleitung layer
-      const oberleitungPromise = fetch('./data/Oberleitungsausbau.geojson').then(res => res.json());
+      const oberleitungPromise = fetch(`${basePath}/data/Oberleitungsausbau.geojson`).then(res => res.json());
 
       // Wait for all promises to complete before continuing
       const [outlineStates, highways, citiesGermany, oberleitung] = await Promise.all([
@@ -517,7 +523,7 @@ class SzenarienComponent extends HTMLElement {
       const layerOptions = new Map([
         [
           'Diesel', {
-          url:                 './data/GeoJSON/Diesel.geojson',
+          url:                 `${basePath}/data/GeoJSON/Diesel.geojson`,
           lowColor:            '#DDDDDC',
           highColor:           '#292929',
           minValue:            0,
@@ -527,7 +533,7 @@ class SzenarienComponent extends HTMLElement {
         ],
         [
           'BEV', {
-          url:                 './data/GeoJSON/BEV.geojson',
+          url:                 `${basePath}/data/GeoJSON/BEV.geojson`,
           lowColor:            '#C3E2FB',
           highColor:           '#073459',
           minValue:            0,
@@ -537,7 +543,7 @@ class SzenarienComponent extends HTMLElement {
         ],
         [
           'OLKW', {
-          url:                 './data/GeoJSON/OLKW.geojson',
+          url:                 `${basePath}/data/GeoJSON/OLKW.geojson`,
           lowColor:            '#EBF7CE',
           highColor:           '#496010',
           minValue:            0,
@@ -547,7 +553,7 @@ class SzenarienComponent extends HTMLElement {
         ],
         [
           'FCEV', {
-          url:                 './data/GeoJSON/FCEV.geojson',
+          url:                 `${basePath}/data/GeoJSON/FCEV.geojson`,
           lowColor:            '#FFD5E8',
           highColor:           '#960045',
           minValue:            0,
@@ -697,7 +703,7 @@ class SzenarienComponent extends HTMLElement {
         const sizeClass  = document.querySelector('input[name="sizeclass"]:checked').value;
 
         // Zusammensetzen des Dateinamens aus den ausgewählten Einstellungen
-        const filename = `./data/Bestand und Neuzulassungen/${dataSource} ${sizeClass}.json`;
+        const filename = `${basePath}/data/Bestand und Neuzulassungen/${dataSource} ${sizeClass}.json`;
 
         // Abrufen der Daten unter Verwendung des Cache
         let data;
