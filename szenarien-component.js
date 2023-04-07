@@ -369,10 +369,6 @@ class SzenarienComponent extends HTMLElement {
       #tbody_legend td:last-child {
           padding-inline-end: 0;
       }
-
-      #tbody_legend tr:last-child > td {
-          padding-block-end: 0;
-      }
   </style>
     `;
 
