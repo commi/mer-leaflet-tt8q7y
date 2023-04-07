@@ -75,273 +75,305 @@ class SzenarienComponent extends HTMLElement {
 
     /* data-bs-theme="light" to get the css variables from bootstrap */
     template.innerHTML = `<div class="container-fluid root" data-bs-theme="light">
-	<div class="row">
+  <div class="row">
 
-		<!-- linke Card -->
-		<div class="col-12 col-lg-5">
+    <!-- linke Card -->
+    <div class="col-12 col-lg-5">
 
-			<div class="card mb-3">
-				<div class="card-body" id="form_settings">
+      <div class="card mb-3">
+        <div class="card-body" id="form_settings">
 
-					<div class="row align-items-stretch">
-						<!-- Karte -->
-						<div class="col-12">
+          <div class="row align-items-stretch">
+            <!-- Karte -->
+            <div class="col-12">
 
-							<h4 class="h5">Fahrten pro Antriebsart pro Autobahnabschnitt</h4>
+              <h4 class="h5">Fahrten pro Antriebsart pro Autobahnabschnitt</h4>
 
-							<div class="position-relative">
-								<div id="map" style="background: #B5D1DC"></div>
+              <div class="position-relative">
+                <div id="map" style="background: #B5D1DC"></div>
 
-								<h2 id="label_year" class="position-absolute top-0 end-0 p-2"></h2>
-							</div>
-						</div>
+                <h2 id="label_year" class="position-absolute top-0 end-0 p-2"></h2>
+              </div>
+            </div>
 
-						<!-- controls for year -->
-						<div class="col-12">
-							<div class="row g-3">
+            <!-- controls for year -->
+            <div class="col-12">
+              <div class="row g-3 pt-2">
 
-								<div class="col-auto">
-									<label class="form-label" for="input_year">Jahr</label>
-								</div>
-								<div class="col-auto">
-									<label class="form-label" for="input_year">2023</label>
-								</div>
-								<div class="col">
-									<input class="form-range" type="range" min="2023" max="2050" value="2023" id="input_year">
-								</div>
-								<div class="col-auto">
-									<label class="form-label" for="input_year">2050</label>
-								</div>
-							</div>
-						</div>
+                <div class="col-auto">
+                  <label class="form-label" for="input_year">Jahr</label>
+                </div>
+                <div class="col-auto">
+                  <label class="form-label" for="input_year">2023</label>
+                </div>
+                <div class="col">
+                  <input class="form-range" type="range" min="2023" max="2050" value="2023"
+                         id="input_year">
+                </div>
+                <div class="col-auto">
+                  <label class="form-label" for="input_year">2050</label>
+                </div>
+              </div>
+            </div>
 
-						<!-- controls for map layer visibility -->
-						<div class="col-12 col-md-6 d-flex align-items-stretch">
-							<div class="card flex-fill">
-								<div class="card-body">
-									<h4 class="h5">Anzuzeigende Größe</h4>
+            <!-- controls for map layer visibility -->
+            <div class="col-12 col-md-6 d-flex align-items-stretch">
+              <div class="card flex-fill">
+                <div class="card-body">
+                  <h4 class="h5">Anzuzeigende Größe</h4>
 
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_oberleitungsausbau">
-										<label class="form-check-label" for="visible_layer_oberleitungsausbau">
-											Oberleitungsausbau
-										</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_diesel"
-										       data-toggles="Diesel"
-										       checked>
-										<label class="form-check-label" for="visible_layer_diesel">
-											Diesel
-										</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_bev"
-										       data-toggles="BEV">
-										<label class="form-check-label" for="visible_layer_bev">
-											BEV
-										</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_olkw"
-										       data-toggles="OLKW">
-										<label class="form-check-label" for="visible_layer_olkw">
-											OLKW
-										</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="visible_layer" id="visible_layer_fcev"
-										       data-toggles="FCEV"
-										>
-										<label class="form-check-label" for="visible_layer_fcev">
-											FCEV
-										</label>
-									</div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="visible_layer"
+                           id="visible_layer_oberleitungsausbau">
+                    <label class="form-check-label" for="visible_layer_oberleitungsausbau">
+                      Oberleitungsausbau
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="visible_layer"
+                           id="visible_layer_diesel"
+                           data-toggles="Diesel"
+                           checked>
+                    <label class="form-check-label" for="visible_layer_diesel">
+                      Diesel
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="visible_layer"
+                           id="visible_layer_bev"
+                           data-toggles="BEV">
+                    <label class="form-check-label" for="visible_layer_bev">
+                      BEV
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="visible_layer"
+                           id="visible_layer_olkw"
+                           data-toggles="OLKW">
+                    <label class="form-check-label" for="visible_layer_olkw">
+                      OLKW
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="visible_layer"
+                           id="visible_layer_fcev"
+                           data-toggles="FCEV"
+                    >
+                    <label class="form-check-label" for="visible_layer_fcev">
+                      FCEV
+                    </label>
+                  </div>
 
-								</div>
-							</div>
-						</div>
+                </div>
+              </div>
+            </div>
 
-						<!-- Legende für die Karte -->
-						<div class="col-12 col-md-6 d-flex align-items-stretch">
-							<div class="card flex-fill">
-								<div class="card-body">
-									<h4 class="h5">Prognostizierten Fahrten pro Tag pro Abschnitt</h4>
+            <!-- Legende für die Karte -->
+            <div class="col-12 col-md-6 d-flex align-items-stretch">
+              <div class="card flex-fill">
+                <div class="card-body">
+                  <h4 class="h5">Prognostizierten Fahrten pro Tag pro Abschnitt</h4>
 
-									<table class="table table-borderless table-sm mb-0">
-										<tbody id="tbody_legend"></tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
+                  <table class="table table-borderless table-sm mb-0">
+                    <tbody id="tbody_legend"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
 
-				</div>
-			</div>
+        </div>
+      </div>
 
-		</div>
+    </div>
 
-		<!-- rechte  Card -->
-		<div class="col-12 col-lg-7">
+    <!-- rechte  Card -->
+    <div class="col-12 col-lg-7">
 
-			<div class="card">
-				<div class="card-body">
+      <div class="card">
+        <div class="card-body">
 
-					<h4 class="h5">Bestand/Neuzulassungen pro Antriebsart </h4>
+          <h4 class="h5">Bestand/Neuzulassungen pro Antriebsart </h4>
 
-					<div class="row flex-nowrap">
-						<div class="col flex-fill" style="max-width: calc(100% - 4em - var(--bs-gutter-x) * 4)">
-							<!-- charts -->
-							<div id="chart-1"></div>
-						</div>
-						<div class="col-auto align-self-center" style="min-width: 4em">
-							<!-- Legende für das Diagramm -->
-							<table>
-								<tbody id="tbody_legend_chart" class="text-nowrap"></tbody>
-							</table>
-						</div>
-					</div>
+          <div class="row flex-nowrap">
+            <div class="col flex-fill" style="max-width: calc(100% - 4em - var(--bs-gutter-x) * 4)">
+              <!-- charts -->
+              <div id="chart-1"></div>
+            </div>
+            <div class="col-auto align-self-center" style="min-width: 4em">
+              <!-- Legende für das Diagramm -->
+              <table>
+                <tbody id="tbody_legend_chart" class="text-nowrap"></tbody>
+              </table>
+            </div>
+          </div>
 
-					<div class="row">
-						<div class="col-auto" id="chart_settings">
+          <div class="row mb-3">
+            <div class="col-auto" id="chart_settings">
 
-							<div class="card">
-								<div class="card-body">
+              <div class="card">
+                <div class="card-body">
 
-									<div class="row">
-										<div class="col-auto">
-											<h4 class="h5">Anzuzeigende Größe</h4>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="datasource" id="input_datasource_Bestand" value="Bestand" checked>
-												<label class="form-check-label" for="input_datasource_Bestand">Bestand</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="datasource" id="input_datasource_Neuzulassungen" value="Neuzulassungen">
-												<label class="form-check-label" for="input_datasource_Neuzulassungen">Neuzulassungen</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="datasource" id="input_datasource_THG-Emissionen" value="THG-Emissionen">
-												<label class="form-check-label" for="input_datasource_THG-Emissionen">THG-Emissionen</label>
-											</div>
-										</div>
+                  <div class="row">
+                    <div class="col-auto">
+                      <h4 class="h5">Anzuzeigende Größe</h4>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="datasource"
+                               id="input_datasource_Bestand" value="Bestand" checked>
+                        <label class="form-check-label"
+                               for="input_datasource_Bestand">Bestand</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="datasource"
+                               id="input_datasource_Neuzulassungen" value="Neuzulassungen">
+                        <label class="form-check-label" for="input_datasource_Neuzulassungen">Neuzulassungen</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="datasource"
+                               id="input_datasource_THG-Emissionen" value="THG-Emissionen">
+                        <label class="form-check-label" for="input_datasource_THG-Emissionen">THG-Emissionen</label>
+                      </div>
+                    </div>
 
-										<div class="col-auto">
-											<h4 class="h5">Größenklasse</h4>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_gesamt" value="alle Größenklassen" checked>
-												<label class="form-check-label" for="input_sizeclass_gesamt">Alle Größenklassen</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_3,5-7,5" value="3,5-7,5t">
-												<label class="form-check-label" for="input_sizeclass_3,5-7,5">3,5 – 7,5 t</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_7,5-12" value="7,5-12t">
-												<label class="form-check-label" for="input_sizeclass_7,5-12">7,5 – 12 t</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_12-18" value="12-18t">
-												<label class="form-check-label" for="input_sizeclass_12-18">12 – 18 t</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_18-26" value="18-26t">
-												<label class="form-check-label" for="input_sizeclass_18-26">18 – 26 t</label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_26-40" value="26-40t">
-												<label class="form-check-label" for="input_sizeclass_26-40">&gt; 26 t</label>
-											</div>
-										</div>
-									</div>
+                    <div class="col-auto">
+                      <h4 class="h5">Größenklasse</h4>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sizeclass"
+                               id="input_sizeclass_gesamt" value="alle Größenklassen" checked>
+                        <label class="form-check-label" for="input_sizeclass_gesamt">Alle
+                          Größenklassen</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sizeclass"
+                               id="input_sizeclass_3,5-7,5" value="3,5-7,5t">
+                        <label class="form-check-label" for="input_sizeclass_3,5-7,5">3,5 – 7,5 t</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sizeclass"
+                               id="input_sizeclass_7,5-12" value="7,5-12t">
+                        <label class="form-check-label"
+                               for="input_sizeclass_7,5-12">7,5 – 12 t</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sizeclass"
+                               id="input_sizeclass_12-18" value="12-18t">
+                        <label class="form-check-label"
+                               for="input_sizeclass_12-18">12 – 18 t</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sizeclass"
+                               id="input_sizeclass_18-26" value="18-26t">
+                        <label class="form-check-label"
+                               for="input_sizeclass_18-26">18 – 26 t</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sizeclass"
+                               id="input_sizeclass_26-40" value="26-40t">
+                        <label class="form-check-label"
+                               for="input_sizeclass_26-40">&gt; 26 t</label>
+                      </div>
+                    </div>
+                  </div>
 
-								</div>
-							</div>
-						</div>
-					</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-				</div>
-			</div>
+          <div class="row">
+            <div class="col-auto">
+              <div class="card">
+                <div class="card-body">
+                  Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung
+                    der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer
+                    Antriebe inkl. Mautbefreiung bis 2029 angenommen.
+                </div>
+              </div>
+            </div>
 
-		</div>
+          </div>
+        </div>
 
-	</div>
-</div>
-<style>
-	:host {
-		display: contents;
-		hyphens: auto;
-	}
+      </div>
 
-	/* replacement for bootstrap styles on <body> */
-	/*noinspection CssUnresolvedCustomProperty*/
-	.root {
-		margin: 0;
-		font-family: var(--bs-body-font-family);
-		font-size: var(--bs-body-font-size);
-		font-weight: var(--bs-body-font-weight);
-		line-height: var(--bs-body-line-height);
-		color: var(--bs-body-color);
-		text-align: var(--bs-body-text-align);
-		background-color: transparent;
-		-webkit-text-size-adjust: 100%;
-		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-	}
+    </div>
+  </div>
+  <style>
+      :host {
+          display: contents;
+          hyphens: auto;
+      }
 
-	.row {
-		--bs-gutter-x: 1rem;
-		--bs-gutter-y: 1rem;
-	}
+      /* replacement for bootstrap styles on <body> */
+      /*noinspection CssUnresolvedCustomProperty*/
+      .root {
+          margin: 0;
+          font-family: var(--bs-body-font-family);
+          font-size: var(--bs-body-font-size);
+          font-weight: var(--bs-body-font-weight);
+          line-height: var(--bs-body-line-height);
+          color: var(--bs-body-color);
+          text-align: var(--bs-body-text-align);
+          background-color: transparent;
+          -webkit-text-size-adjust: 100%;
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      }
 
-	div#map {
-		height: 600px;
-	}
+      .row {
+          --bs-gutter-x: 1rem;
+          --bs-gutter-y: 1rem;
+      }
 
-	/**
-	 * style for city labels
-	 */
-	.leaflet-tooltip.city {
-		background-color: transparent;
-		border: transparent;
-		box-shadow: none;
-	}
+      div#map {
+          height: 600px;
+      }
 
-	.leaflet-tooltip.city:before {
-		display: none;
-	}
+      /**
+       * style for city labels
+       */
+      .leaflet-tooltip.city {
+          background-color: transparent;
+          border: transparent;
+          box-shadow: none;
+      }
+
+      .leaflet-tooltip.city:before {
+          display: none;
+      }
 
 
-	/**
-	 * Hide the frappe chart tooltip, it is ugly
-	 */
-	.chart-container .graph-svg-tip {
-		display: none;
-	}
+      /**
+       * Hide the frappe chart tooltip, it is ugly
+       */
+      .chart-container .graph-svg-tip {
+          display: none;
+      }
 
-	.chart-container .chart-legend {
-		display: none;
-	}
+      .chart-container .chart-legend {
+          display: none;
+      }
 
-	#tbody_legend_chart td {
-		font-size: 12px
-	}
+      #tbody_legend_chart td {
+          font-size: 12px
+      }
 
-	#tbody_legend td {
-		white-space: nowrap;
-		min-width: 1rem;
-	}
+      #tbody_legend td {
+          white-space: nowrap;
+          min-width: 1rem;
+      }
 
-	#tbody_legend td:first-child {
-		padding-inline-start: 0;
-	}
+      #tbody_legend td:first-child {
+          padding-inline-start: 0;
+      }
 
-	#tbody_legend td:last-child {
-		padding-inline-end: 0;
-	}
+      #tbody_legend td:last-child {
+          padding-inline-end: 0;
+      }
 
-	#tbody_legend tr:last-child > td {
-		padding-block-end: 0;
-	}
-</style>
+      #tbody_legend tr:last-child > td {
+          padding-block-end: 0;
+      }
+  </style>
     `;
 
     this.initialized = true;
