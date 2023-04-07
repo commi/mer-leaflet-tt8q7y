@@ -6,7 +6,7 @@ class SzenarienComponent extends HTMLElement {
   {
     super();
     this.attachShadow({ mode: 'open' });
-    this.basePath    = new URL('.', import.meta.url).href;
+    this.basePath = new URL('.', import.meta.url).href;
   }
 
 
@@ -68,7 +68,7 @@ class SzenarienComponent extends HTMLElement {
   // noinspection JSUnusedGlobalSymbols
   async connectedCallback()
   {
-    if(this.initialized) {
+    if (this.initialized) {
       return;
     }
     const template = document.createElement('template');
@@ -228,27 +228,27 @@ class SzenarienComponent extends HTMLElement {
 										<div class="col-auto">
 											<h4 class="h5">Größenklasse</h4>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_gesamt" value="gesamt" checked>
+												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_gesamt" value="alle Größenklassen" checked>
 												<label class="form-check-label" for="input_sizeclass_gesamt">Alle Größenklassen</label>
 											</div>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_3,5-7,5" value="3,5-7,5">
+												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_3,5-7,5" value="3,5-7,5t">
 												<label class="form-check-label" for="input_sizeclass_3,5-7,5">3,5 – 7,5 t</label>
 											</div>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_7,5-12" value="7,5-12">
+												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_7,5-12" value="7,5-12t">
 												<label class="form-check-label" for="input_sizeclass_7,5-12">7,5 – 12 t</label>
 											</div>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_12-18" value="12-18">
+												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_12-18" value="12-18t">
 												<label class="form-check-label" for="input_sizeclass_12-18">12 – 18 t</label>
 											</div>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_18-26" value="18-26">
+												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_18-26" value="18-26t">
 												<label class="form-check-label" for="input_sizeclass_18-26">18 – 26 t</label>
 											</div>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_26-40" value="26-40">
+												<input class="form-check-input" type="radio" name="sizeclass" id="input_sizeclass_26-40" value="26-40t">
 												<label class="form-check-label" for="input_sizeclass_26-40">&gt; 26 t</label>
 											</div>
 										</div>
@@ -324,15 +324,6 @@ class SzenarienComponent extends HTMLElement {
 	#tbody_legend_chart td {
 		font-size: 12px
 	}
-
-	/* disable invalid checkboxs */
-	*:has(#input_datasource_THG-Emissionen:checked) ~
-	* :is(input[name="sizeclass"]:not([value="gesamt"]), input[name="sizeclass"]:not([value="gesamt"]) ~ label) {
-		opacity: 0.5;
-		filter: grayscale(100%);
-		pointer-events: none;
-	}
-
 
 	#tbody_legend td {
 		white-space: nowrap;
@@ -426,8 +417,8 @@ class SzenarienComponent extends HTMLElement {
 
       // Add german highways to background layer
       L.Proj.geoJson(highways, {
-        style:  _ => ({ color: '#888' }),
-        fill:   false,
+        style: _ => ({ color: '#888' }),
+        fill: false,
         stroke: '#777',
       }).addTo(hintergundLayer);
 
@@ -439,13 +430,13 @@ class SzenarienComponent extends HTMLElement {
       // Add cities to background layer
       L.geoJSON(citiesGermany, {
         pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
-            radius:      4,
-            fillColor:   '#EEE',
-            color:       '#000',
-            weight:      1,
-            opacity:     1,
-            fillOpacity: 0.8,
-          })
+          radius: 4,
+          fillColor: '#EEE',
+          color: '#000',
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8,
+        })
           // add a label to each city dot
           .bindTooltip(feature.properties.name, {
             permanent: true,
@@ -462,19 +453,19 @@ class SzenarienComponent extends HTMLElement {
       const oberleitungsFeatures = new Map();
 
       L.Proj.geoJson(oberleitung, {
-        pointToLayer:  (feature, latlng) => L.circle(latlng, {
-          radius:      3000, // in meters here
-          fillColor:   '#EDA',
-          stroke:      false,
+        pointToLayer: (feature, latlng) => L.circle(latlng, {
+          radius: 3000, // in meters here
+          fillColor: '#EDA',
+          stroke: false,
           fillOpacity: 1,
         }),
         onEachFeature: (feature, layer) => {
           // add each new layer to the Map, linked with the feature it was created from
           oberleitungsFeatures.set(feature, layer);
         },
-        style:         _ => ({ color: '#888' }),
-        fill:          false,
-        stroke:        '#777',
+        style: _ => ({ color: '#888' }),
+        fill: false,
+        stroke: '#777',
       });
 
       /**
@@ -510,7 +501,7 @@ class SzenarienComponent extends HTMLElement {
 
         // create map layers from GeoJSON
         L.Proj.geoJson(json, {
-          style:         feature => ({
+          style: feature => ({
             // set color of the feature with the value derived from the feature
             "color": getLineColor(lowColor, highColor, minValue, maxValue, getValueFromFeature(feature))
           }),
@@ -518,7 +509,7 @@ class SzenarienComponent extends HTMLElement {
             // add each new layer to the Map, linked with the feature it was created from
             features.set(feature, layer);
           },
-          fill:          false,
+          fill: false,
         });
         return { parentLayer, features };
       }
@@ -528,41 +519,41 @@ class SzenarienComponent extends HTMLElement {
       const layerOptions = new Map([
         [
           'Diesel', {
-          url:                 `${basePath}/data/GeoJSON/Diesel.geojson`,
-          lowColor:            '#DDDDDC',
-          highColor:           '#292929',
-          minValue:            0,
-          maxValue:            23000,
+          url: `${basePath}/data/GeoJSON/Diesel.geojson`,
+          lowColor: '#DDDDDC',
+          highColor: '#292929',
+          minValue: 0,
+          maxValue: 23000,
           getValueFromFeature: feature => feature.properties?.Diesel_Wer ?? 0
         }
         ],
         [
           'BEV', {
-          url:                 `${basePath}/data/GeoJSON/BEV.geojson`,
-          lowColor:            '#C3E2FB',
-          highColor:           '#073459',
-          minValue:            0,
-          maxValue:            23000,
+          url: `${basePath}/data/GeoJSON/BEV.geojson`,
+          lowColor: '#C3E2FB',
+          highColor: '#073459',
+          minValue: 0,
+          maxValue: 23000,
           getValueFromFeature: feature => feature.properties?.BEV_Wert ?? 0
         }
         ],
         [
           'OLKW', {
-          url:                 `${basePath}/data/GeoJSON/OLKW.geojson`,
-          lowColor:            '#EBF7CE',
-          highColor:           '#496010',
-          minValue:            0,
-          maxValue:            23000,
+          url: `${basePath}/data/GeoJSON/OLKW.geojson`,
+          lowColor: '#EBF7CE',
+          highColor: '#496010',
+          minValue: 0,
+          maxValue: 23000,
           getValueFromFeature: feature => feature.properties?.OLKW_Wert ?? 0
         }
         ],
         [
           'FCEV', {
-          url:                 `${basePath}/data/GeoJSON/FCEV.geojson`,
-          lowColor:            '#FFD5E8',
-          highColor:           '#960045',
-          minValue:            0,
-          maxValue:            23000,
+          url: `${basePath}/data/GeoJSON/FCEV.geojson`,
+          lowColor: '#FFD5E8',
+          highColor: '#960045',
+          minValue: 0,
+          maxValue: 23000,
           getValueFromFeature: feature => feature.properties?.FCEV_Wert ?? 0
         }
         ],
@@ -583,7 +574,7 @@ class SzenarienComponent extends HTMLElement {
       // create table and legend
       const tbody = document.querySelector('#tbody_legend');
 
-      for(const [layerName, { highColor, lowColor, maxValue, minValue }] of layerOptions) {
+      for (const [layerName, { highColor, lowColor, maxValue, minValue }] of layerOptions) {
         // create table row and cells for layer legend
         const row       = tbody.insertRow();
         const nameCell  = row.insertCell();
@@ -620,18 +611,17 @@ class SzenarienComponent extends HTMLElement {
 
         // add/remove Oberleitungs-features to berleitungs-layer if the checkbox is checked and the year as before the feature date
         oberleitungsFeatures.forEach((marker, feature) => {
-          if(!radioOberleitungsausbau.checked) {
+          if (!radioOberleitungsausbau.checked) {
             marker.remove();
             return;
           }
           // convert german date to iso date
           const isoDate = feature?.properties?.Time?.replace(/(\d\d)\.(\d\d)\.(\d{4})/, '$3-$2-$1');
           // check if feature is before the selected year
-          if(new Date(isoDate).getFullYear() <= year) {
-            marker.addTo(oberleitungsLayer)
-          }
-          else {
-            marker.remove()
+          if (new Date(isoDate).getFullYear() <= year) {
+            marker.addTo(oberleitungsLayer);
+          } else {
+            marker.remove();
           }
         });
 
@@ -643,18 +633,17 @@ class SzenarienComponent extends HTMLElement {
 
           features?.forEach((layer, feature) => {
             // if the checkbox is not checked, jsut remove the feature
-            if(!layerCheckboxChecked) {
+            if (!layerCheckboxChecked) {
               layer.remove();
               return;
             }
             // convert german date to iso date
             const isoDate = feature?.properties?.Time?.replace(/(\d\d)\.(\d\d)\.(\d{4})/, '$3-$2-$1');
             // check if feature is exaclty in the selected year
-            if(new Date(isoDate).getFullYear() === year) {
-              layer.addTo(parentLayer)
-            }
-            else {
-              layer.remove()
+            if (new Date(isoDate).getFullYear() === year) {
+              layer.addTo(parentLayer);
+            } else {
+              layer.remove();
             }
           });
 
@@ -667,7 +656,7 @@ class SzenarienComponent extends HTMLElement {
       // Update the visibility of all feature whenever a control in the #form_settings container is changed by the user
       let timeoutId;
       document.querySelector('#form_settings').addEventListener('input', () => {
-        if(timeoutId) {
+        if (timeoutId) {
           cancelAnimationFrame(timeoutId);
         }
         timeoutId = requestAnimationFrame(() => {
@@ -684,7 +673,7 @@ class SzenarienComponent extends HTMLElement {
     // Funktion zum Abrufen von JSON-Daten unter Verwendung des Cache
     async function fetchJSON(filename)
     {
-      if(dataCache.has(filename)) {
+      if (dataCache.has(filename)) {
         // Wenn die Daten bereits vorhanden sind, aus dem Cache zurückgeben
         return dataCache.get(filename);
       }
@@ -715,50 +704,51 @@ class SzenarienComponent extends HTMLElement {
         try {
           data = await fetchJSON(filename);
         }
-        catch(error) {
+        catch (error) {
           console.warn(`Could not fetch ${filename}: ${error}`);
           return;
         }
 
         // Mapping für die Farben
         const colorMap = {
-          BEV100:     '#C3E2FB',
-          BEV200:     '#88C5F6',
-          BEV300:     '#4CA8F2',
-          BEV400:     '#0D68B1',
-          BEV500:     '#0A4E85',
-          BEV600:     '#063458',
-          "O-HEV":    '#DEC600',
-          "O-BEV50":  "#EBF7CE",
+          "BEV100": '#C3E2FB',
+          "BEV200": '#88C5F6',
+          "BEV300": '#4CA8F2',
+          "BEV400": '#0D68B1',
+          "BEV500": '#0A4E85',
+          "BEV600": '#063458',
+          "O-HEV": '#DEC600',
+          "O-BEV50": "#EBF7CE",
+          "O-BEV50 ": "#EBF7CE",
           "O-BEV100": "#D7EF9D",
           "O-BEV150": "#C3E66C",
           "O-BEV200": "#92C020",
           "O-BEV250": "#6D9018",
           "O-BEV300": "#496010",
-          FCEV:       '#C00000',
-          Diesel:     '#9A9A9A',
+          "FCEV": '#C00000',
+          "Diesel ": '#9A9A9A',
 
-          "Energie BEV":         "#063458",
-          "Energie OLKW":        "#496010",
-          "Energie FCEV":        "#C00000",
-          "Energie Diesel":      "#9A9A9A",
-          "Herstellung  BEV":    "#0D68B1",
-          "Herstellung OLKW":    "#92C020",
-          "Herstellung FCEV":    "#E02020",
-          "Herstellung Diesel":  "#BABABA",
-          "Infrastruktur BEV":   "#88C5F6",
-          "Infrastruktur O-Lkw": "#D7EF9D",
+          "Strom BEV": "#063458",
+          "Strom O-BEV": "#496010",
+          "H2 FCEV": "#C00000",
+          "Diesel": "#9A9A9A",
+          "Fzg.-Herstellung  BEV": "#0D68B1",
+          "Fzg.-Herstellung O-BEV": "#92C020",
+          "Fzg.-Herstellung FCEV": "#E02020",
+          "Fzg.-Herstellung Diesel": "#BABABA",
+          "Infrastruktur BEV": "#88C5F6",
+          "Infrastruktur O-BEV ": "#D7EF9D",
         };
 
-        // Extrahieren der Serien-namen
+        // Extrahieren der Serien-namen (Jahreszahl)
         const labels = data.map(datum => `'${(typeof datum[dataSource] === 'string'
-                                              ? datum[dataSource]
-                                              : datum[dataSource].toString()).slice(-2, 100)}`)
+          ? datum[dataSource]
+          : datum[dataSource].toString()).slice(-2, 100)}`);
 
         // Filtere die Schlüssel, um die Daten für das Diagramm zu generieren
-        const seriesNames = Object.keys(data[0]).filter(key => key !== dataSource);
+        const seriesNames = Object.keys(data[0]).filter(key => key !== dataSource && key !== 'null');
         const datasets    = seriesNames.map(label => ({
-          name:   label,
+          name: label,
           values: data.map(datum => typeof datum[label] === 'string' ? parseFloat(datum[label].replace(',', '.')) : datum[label])
         }));
 
@@ -766,18 +756,18 @@ class SzenarienComponent extends HTMLElement {
         const chartDiv     = document.querySelector('#chart-1');
         chartDiv.innerHTML = '';
         new frappe.Chart(chartDiv, {
-          title:       `${dataSource} nach Fahrzeugtyp und Jahr: ${sizeClass === 'gesamt' ? 'Alle Größenklassen' : `${sizeClass} t`}`,
-          data:        {
-            labels:   labels,
+          title: `${dataSource} nach Fahrzeugtyp und Jahr: ${sizeClass}`,
+          data: {
+            labels: labels,
             datasets: datasets
           },
-          type:        'bar',
-          barOptions:  {
-            stacked:    true,
+          type: 'bar',
+          barOptions: {
+            stacked: true,
             spaceRatio: 0.5
           },
-          height:      400,
-          colors:      seriesNames.map(n => colorMap[n]),
+          height: 400,
+          colors: seriesNames.map(n => colorMap[n] ?? n),
           axisOptions: {
             xAxisMode: 'tick',
             xIsSeries: false
