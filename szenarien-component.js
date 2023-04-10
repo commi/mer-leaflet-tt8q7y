@@ -90,7 +90,7 @@ class SzenarienComponent extends HTMLElement {
               <h4 class="h5">Fahrten pro Antriebsart pro Autobahnabschnitt</h4>
 
               <div class="position-relative">
-                <div id="map" style="background: #B5D1DC"></div>
+                <div id="map" style="background: #B5D1DC; z-index: 0"></div>
 
                 <h2 id="label_year" class="position-absolute top-0 end-0 p-2"></h2>
               </div>
