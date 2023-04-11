@@ -104,14 +104,14 @@ class SzenarienComponent extends HTMLElement {
                   <label class="form-label" for="input_year">Jahr</label>
                 </div>
                 <div class="col-auto">
-                  <label class="form-label" for="input_year">2023</label>
+                  <label class="form-label" for="input_year">2025</label>
                 </div>
                 <div class="col">
-                  <input class="form-range" type="range" min="2023" max="2050" value="2023"
+                  <input class="form-range" type="range" min="2025" max="2045" value="2025"
                          id="input_year">
                 </div>
                 <div class="col-auto">
-                  <label class="form-label" for="input_year">2050</label>
+                  <label class="form-label" for="input_year">2045</label>
                 </div>
               </div>
             </div>
