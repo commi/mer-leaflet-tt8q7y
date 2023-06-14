@@ -74,8 +74,13 @@ class SzenarienComponent extends HTMLElement {
     const template = document.createElement('template');
 
     /* data-bs-theme="light" to get the css variables from bootstrap */
-    template.innerHTML = `<div class="container-fluid root" data-bs-theme="light">
-  <div class="row">
+    template.innerHTML = `
+<div class="container-fluid d-flex gap-3 root" data-bs-theme="light" data-szenario="1">    
+                 
+  <button id="prev-szenario" data-radio-name="szenario" class="btn btn-outline-primary order-0">◀</button>
+  <button id="next-szenario" data-radio-name="szenario" class="btn btn-outline-primary order-2">▶</button>
+
+  <div class="row order-1">
 
     <!-- linke Card -->
     <div class="col-12 mb-3 col-lg-5 mb-lg-0 d-flex flex-column">
@@ -209,6 +214,21 @@ class SzenarienComponent extends HTMLElement {
               <div id="chart_settings" class="card">
                 <div class="card-body">
   
+                  <div class="d-none">
+                    <h4 class="h5">Szenario</h4>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="szenario"
+                             id="input_szenario_1" value="1" checked>
+                      <label class="form-check-label"
+                             for="input_szenario_1">1</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="szenario"
+                             id="input_szenario_2" value="2">
+                      <label class="form-check-label" for="input_szenario_2">2</label>
+                    </div>       
+                  </div>
+
                   <div class="row">
                     <div class="col-auto">
                       <h4 class="h5">Anzuzeigende Größe</h4>
@@ -275,9 +295,15 @@ class SzenarienComponent extends HTMLElement {
             </div>       
             
             <div class="col-4 p-3 small">
-                Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung
-                der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer
-                Antriebe inkl. Mautbefreiung bis 2029 angenommen.               
+                <p data-szenario="1">
+                  Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung
+                  der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer
+                  Antriebe inkl. Mautbefreiung bis 2029 angenommen.
+                </p>                    
+                
+                <p data-szenario="2">
+                  Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer Antriebe inkl. Mautbefreiung bis 2029 angenommen. Für die Diesel- und Strompreise wurde eine Preisentwicklung in Anlehnung an die Preissteigerungen aufgrund des Krieges in der Ukraine im Frühjahr 2022 unterstellt. Der Preis für Import-Wasserstoff ist im Vergleich zum Basisszenario unverändert.  
+                </p>                               
             </div>
             
           </div>
@@ -361,7 +387,15 @@ class SzenarienComponent extends HTMLElement {
       #tbody_legend td:last-child {
           padding-inline-end: 0;
       }
+      
+      .root[data-szenario="1"] [data-szenario]:not([data-szenario="1"]) {
+        display: none;
+      }
+      .root[data-szenario="2"] [data-szenario]:not([data-szenario="2"]) {
+        display: none;
+      }
   </style>
+</div>  
     `;
 
     this.initialized = true;
@@ -713,11 +747,15 @@ class SzenarienComponent extends HTMLElement {
       async function updateChart()
       {
         // Abrufen der ausgewählten Datenquelle und Größenklasse
+        const szenario = document.querySelector('input[name="szenario"]:checked').value;
         const dataSource = document.querySelector('input[name="datasource"]:checked').value;
-        const sizeClass  = document.querySelector('input[name="sizeclass"]:checked').value;
+        const sizeClass = document.querySelector('input[name="sizeclass"]:checked').value;
+
+        // Update Attribute on root div, to allow different styles to apply
+        document.querySelector('.root').setAttribute('data-szenario', szenario);
 
         // Zusammensetzen des Dateinamens aus den ausgewählten Einstellungen
-        const filename = `${basePath}/data/Bestand und Neuzulassungen/${dataSource} ${sizeClass}.json`;
+        const filename = `${basePath}/data/Bestand und Neuzulassungen/${szenario}/${dataSource} ${sizeClass}.json`;
 
         // Abrufen der Daten unter Verwendung des Cache
         let data;
@@ -816,6 +854,30 @@ class SzenarienComponent extends HTMLElement {
 
       // Update the chart whenever a control in the #chart_settings container is changed by the user
       document.querySelector('#chart_settings').addEventListener('input', () => updateChart());
+
+
+      // init the next/prev szenario buttons
+      function updateRadios(delta, radioName) {
+        const radios = Array.from(document.querySelectorAll(`input[name="${radioName}"]`));
+        let currentIndex = radios.findIndex(radio => radio.checked);
+
+        if (currentIndex < 0) {
+          currentIndex = 0;
+        } else {
+          currentIndex = (currentIndex + delta + radios.length) % radios.length;
+        }
+
+        radios.forEach((radio, index) => radio.checked = index === currentIndex);
+        radios.find(r => r.checked)?.dispatchEvent(new Event('input', {bubbles: true}));
+      }
+
+      document.querySelector('#prev-szenario').addEventListener('click', event => {
+        updateRadios(-1, event.target.dataset.radioName);
+      });
+      document.querySelector('#next-szenario').addEventListener('click', event => {
+        updateRadios(1, event.target.dataset.radioName);
+      });
+      updateRadios();
     }
 
 
