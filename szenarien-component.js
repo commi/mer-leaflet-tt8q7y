@@ -2,39 +2,35 @@ class SzenarienComponent extends HTMLElement {
   basePath;
   initialized = false;
 
-  constructor()
-  {
+  constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({mode: 'open'});
     this.basePath = new URL('.', import.meta.url).href;
   }
 
 
-  loadCSS(url)
-  {
+  loadCSS(url) {
     return new Promise((resolve, reject) => {
-      const link   = document.createElement('link');
-      link.rel     = 'stylesheet';
-      link.href    = url;
-      link.onload  = () => resolve();
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url;
+      link.onload = () => resolve();
       link.onerror = (error) => reject(error);
       this.shadowRoot.appendChild(link);
     });
   }
 
-  loadScript(url)
-  {
+  loadScript(url) {
     return new Promise((resolve, reject) => {
-      const script   = document.createElement('script');
-      script.src     = url;
-      script.onload  = () => resolve();
+      const script = document.createElement('script');
+      script.src = url;
+      script.onload = () => resolve();
       script.onerror = (error) => reject(error);
       this.shadowRoot.appendChild(script);
     });
   }
 
-  async loadDependencies()
-  {
+  async loadDependencies() {
     const externalStyles = [
       `${this.basePath}js/leaflet.css`,
       `${this.basePath}js/bootstrap.min.css`
@@ -66,8 +62,7 @@ class SzenarienComponent extends HTMLElement {
   }
 
   // noinspection JSUnusedGlobalSymbols
-  async connectedCallback()
-  {
+  async connectedCallback() {
     if (this.initialized) {
       return;
     }
@@ -408,8 +403,7 @@ class SzenarienComponent extends HTMLElement {
     this.onInit(this.shadowRoot);
   }
 
-  onInit(document)
-  {
+  onInit(document) {
     const basePath = this.basePath;
 
     /** Function to calculate the color of a feature based on a number
@@ -421,8 +415,7 @@ class SzenarienComponent extends HTMLElement {
      * @param {number} maxWert
      * @param {number} wert
      */
-    function getLineColor(lowColor, highColor, minWert, maxWert, wert)
-    {
+    function getLineColor(lowColor, highColor, minWert, maxWert, wert) {
       // Calculate the proportion of the value between the minimum and maximum values
       const proportion = (wert - minWert) / (maxWert - minWert);
 
@@ -431,8 +424,7 @@ class SzenarienComponent extends HTMLElement {
     }
 
 
-    async function initMap()
-    {
+    async function initMap() {
       // create LeafLet map on the div #map and center it on germany
       const map = L.map(document.querySelector('#map')).setView([51.4, 10.4], 6);
 
@@ -469,19 +461,19 @@ class SzenarienComponent extends HTMLElement {
 
       // Add german state backgrounds to background layer
       L.geoJSON(outlineStates, {
-        style: { color: '#FFF', weight: 1, stroke: false, fillOpacity: 1 },
+        style: {color: '#FFF', weight: 1, stroke: false, fillOpacity: 1},
       }).addTo(hintergundLayer);
 
       // Add german highways to background layer
       L.Proj.geoJson(highways, {
-        style: _ => ({ color: '#888' }),
+        style: _ => ({color: '#888'}),
         fill: false,
         stroke: '#777',
       }).addTo(hintergundLayer);
 
       // Add german state borders to background layer
       L.geoJSON(outlineStates, {
-        style: { color: '#DDD', weight: 1, fill: false },
+        style: {color: '#DDD', weight: 1, fill: false},
       }).addTo(hintergundLayer);
 
       // Add cities to background layer
@@ -505,7 +497,7 @@ class SzenarienComponent extends HTMLElement {
 
 
       // add a layer to the existing map
-      const oberleitungsLayer    = L.layerGroup([]).addTo(map);
+      const oberleitungsLayer = L.layerGroup([]).addTo(map);
       // Map to store features and the map objects created from them outside that map to manipulate them later
       const oberleitungsFeatures = new Map();
 
@@ -520,7 +512,7 @@ class SzenarienComponent extends HTMLElement {
           // add each new layer to the Map, linked with the feature it was created from
           oberleitungsFeatures.set(feature, layer);
         },
-        style: _ => ({ color: '#888' }),
+        style: _ => ({color: '#888'}),
         fill: false,
         stroke: '#777',
       });
@@ -528,7 +520,7 @@ class SzenarienComponent extends HTMLElement {
       /**
        * Function to add a GeoJSON file with MultiLineFeatures to the map.
        * It creates a layer and adds all features as sub-layers to it.
-       * It colors the with the value derived with {@see getValueFromFeature}
+       * It colors the with the value from properties
        *
        * @param {Object} options An object containing the following properties:
        * @param {string} options.url URL to GeoJSON file
@@ -536,7 +528,6 @@ class SzenarienComponent extends HTMLElement {
        * @param {string} options.highColor The color to use for the highest value.
        * @param {number} options.minValue The minimum value of the range.
        * @param {number} options.maxValue The maximum value of the range.
-       * @param {(Object) => Number} options.getValueFromFeature A function to get a scalar value from the GeoJSON feature.
        *
        * @returns {Promise<{features: Map<any, any>, parentLayer: any}>} A promise that resolves to an object containing the parent layer and the map of features.
        */
@@ -546,21 +537,19 @@ class SzenarienComponent extends HTMLElement {
                                 highColor,
                                 minValue,
                                 maxValue,
-                                getValueFromFeature,
-                              })
-      {
+                              }) {
         // fetch the File and decode it as JSON
-        const json        = await (await fetch(url)).json();
+        const json = await (await fetch(url)).json();
         // add a layer to the existing map
         const parentLayer = L.layerGroup([]).addTo(map);
         // Map to store features and the map objects created from them outside that map to manipulate them later
-        const features    = new Map();
+        const features = new Map();
 
         // create map layers from GeoJSON
         L.Proj.geoJson(json, {
           style: feature => ({
             // set color of the feature with the value derived from the feature
-            "color": getLineColor(lowColor, highColor, minValue, maxValue, getValueFromFeature(feature))
+            "color": getLineColor(lowColor, highColor, minValue, maxValue, feature.properties?.value ?? 0)
           }),
           onEachFeature: (feature, layer) => {
             // add each new layer to the Map, linked with the feature it was created from
@@ -568,7 +557,7 @@ class SzenarienComponent extends HTMLElement {
           },
           fill: false,
         });
-        return { parentLayer, features };
+        return {parentLayer, features};
       }
 
 
@@ -581,7 +570,6 @@ class SzenarienComponent extends HTMLElement {
           highColor: '#292929',
           minValue: 0,
           maxValue: 23000,
-          getValueFromFeature: feature => feature.properties?.Diesel_Wer ?? 0
         }
         ],
         [
@@ -591,7 +579,6 @@ class SzenarienComponent extends HTMLElement {
           highColor: '#073459',
           minValue: 0,
           maxValue: 23000,
-          getValueFromFeature: feature => feature.properties?.BEV_Wert ?? 0
         }
         ],
         [
@@ -601,7 +588,6 @@ class SzenarienComponent extends HTMLElement {
           highColor: '#496010',
           minValue: 0,
           maxValue: 23000,
-          getValueFromFeature: feature => feature.properties?.OLKW_Wert ?? 0
         }
         ],
         [
@@ -611,7 +597,6 @@ class SzenarienComponent extends HTMLElement {
           highColor: '#960045',
           minValue: 0,
           maxValue: 23000,
-          getValueFromFeature: feature => feature.properties?.FCEV_Wert ?? 0
         }
         ],
       ]);
@@ -631,10 +616,10 @@ class SzenarienComponent extends HTMLElement {
       // create table and legend
       const tbody = document.querySelector('#tbody_legend');
 
-      for (const [layerName, { highColor, lowColor, maxValue, minValue }] of layerOptions) {
+      for (const [layerName, {highColor, lowColor, maxValue, minValue}] of layerOptions) {
         // create table row and cells for layer legend
-        const row       = tbody.insertRow();
-        const nameCell  = row.insertCell();
+        const row = tbody.insertRow();
+        const nameCell = row.insertCell();
         const colorCell = row.insertCell();
         const rangeCell = row.insertCell();
 
@@ -642,10 +627,10 @@ class SzenarienComponent extends HTMLElement {
         nameCell.textContent = layerName;
 
         // color legend
-        const gradientColors           = chroma.scale([lowColor, highColor]).mode('hsl').colors(10).map(color => color);
-        colorCell.style.background     = `linear-gradient(to right, ${gradientColors.join(', ')})`;
-        colorCell.style.width          = '120px';
-        colorCell.style.padding        = '6px';
+        const gradientColors = chroma.scale([lowColor, highColor]).mode('hsl').colors(10).map(color => color);
+        colorCell.style.background = `linear-gradient(to right, ${gradientColors.join(', ')})`;
+        colorCell.style.width = '120px';
+        colorCell.style.padding = '6px';
         colorCell.style.backgroundClip = 'content-box';
 
         // value range
@@ -654,13 +639,12 @@ class SzenarienComponent extends HTMLElement {
 
 
       // get references to controls from HTML
-      const yearSlider              = document.querySelector('#input_year');
-      const yearLabel               = document.querySelector('#label_year');
+      const yearSlider = document.querySelector('#input_year');
+      const yearLabel = document.querySelector('#label_year');
       const radioOberleitungsausbau = document.querySelector('#visible_layer_oberleitungsausbau');
 
       // show / hide Layer depending on seleted year and selected checkboxes
-      function updateLayerVisibility()
-      {
+      function updateLayerVisibility() {
         const year = yearSlider.valueAsNumber;
 
         // show year in on the map
@@ -683,7 +667,7 @@ class SzenarienComponent extends HTMLElement {
         });
 
         // add/remove Diesel/FCEV/…-features to their respective layer if the checkbox is checked and the year matches the feature date
-        layers.forEach(({ features, parentLayer }, name) => {
+        layers.forEach(({features, parentLayer}, name) => {
 
           // get the checked state of the checkbox associated with this layer with the matching 'data-toggles' attribut
           let layerCheckboxChecked = document.querySelector(`input[data-toggles="${name}"]`).checked;
@@ -728,8 +712,7 @@ class SzenarienComponent extends HTMLElement {
     const dataCache = new Map();
 
     // Funktion zum Abrufen von JSON-Daten unter Verwendung des Cache
-    async function fetchJSON(filename)
-    {
+    async function fetchJSON(filename) {
       if (dataCache.has(filename)) {
         // Wenn die Daten bereits vorhanden sind, aus dem Cache zurückgeben
         return dataCache.get(filename);
@@ -744,11 +727,9 @@ class SzenarienComponent extends HTMLElement {
     }
 
 
-    async function initCharts()
-    {
+    async function initCharts() {
       // Funktion zum Aktualisieren der Sichtbarkeit der Kartenfunktionen basierend auf den ausgewählten Einstellungen
-      async function updateChart()
-      {
+      async function updateChart() {
         // Abrufen der ausgewählten Datenquelle und Größenklasse
         const szenario = document.querySelector('input[name="szenario"]:checked').value;
         const dataSource = document.querySelector('input[name="datasource"]:checked').value;
@@ -764,8 +745,7 @@ class SzenarienComponent extends HTMLElement {
         let data;
         try {
           data = await fetchJSON(filename);
-        }
-        catch (error) {
+        } catch (error) {
           console.warn(`Could not fetch ${filename}: ${error}`);
           return;
         }
@@ -808,13 +788,13 @@ class SzenarienComponent extends HTMLElement {
 
         // Filtere die Schlüssel, um die Daten für das Diagramm zu generieren
         const seriesNames = Object.keys(data[0]).filter(key => key !== dataSource && key !== 'null');
-        const datasets    = seriesNames.map(label => ({
+        const datasets = seriesNames.map(label => ({
           name: label,
           values: data.map(datum => typeof datum[label] === 'string' ? parseFloat(datum[label].replace(',', '.')) : datum[label])
         }));
 
         // Erstellen des gestapelten Balkendiagramms mit Frappe Charts
-        const chartDiv     = document.querySelector('#chart-1');
+        const chartDiv = document.querySelector('#chart-1');
         chartDiv.innerHTML = '';
         new frappe.Chart(chartDiv, {
           title: `${dataSource} nach Fahrzeugtyp und Jahr: ${sizeClass}`,
@@ -836,18 +816,18 @@ class SzenarienComponent extends HTMLElement {
         });
 
         // Erstellen der Legenden-Tabelle
-        const legendTable     = document.querySelector('#tbody_legend_chart');
+        const legendTable = document.querySelector('#tbody_legend_chart');
         legendTable.innerHTML = '';
         seriesNames.forEach(name => {
           const row = legendTable.insertRow();
 
           // Zelle für Farbmarkierung
-          const colorCell       = row.insertCell();
-          colorCell.innerHTML   = '&#x25A0;';
+          const colorCell = row.insertCell();
+          colorCell.innerHTML = '&#x25A0;';
           colorCell.style.color = colorMap[name];
 
           // Zelle für Seriennamen
-          const labelCell       = row.insertCell();
+          const labelCell = row.insertCell();
           labelCell.textContent = name;
         });
       }
