@@ -78,9 +78,9 @@ class SzenarienComponent extends HTMLElement {
   <div class="row">
 
     <!-- linke Card -->
-    <div class="col-12 col-lg-5">
+    <div class="col-12 mb-3 col-lg-5 mb-lg-0 d-flex flex-column">
 
-      <div class="card mb-3">
+      <div class="card flex-grow-1">
         <div class="card-body" id="form_settings">
 
           <div class="row align-items-stretch">
@@ -117,7 +117,7 @@ class SzenarienComponent extends HTMLElement {
             </div>
 
             <!-- controls for map layer visibility -->
-            <div class="col-12 col-md-6 d-flex align-items-stretch">
+            <div class="col-12 mb-3 col-md-6 mb-md-0 d-flex align-items-stretch">
               <div class="card flex-fill">
                 <div class="card-body">
                   <h4 class="h5">Anzuzeigende Größe</h4>
@@ -188,32 +188,27 @@ class SzenarienComponent extends HTMLElement {
     </div>
 
     <!-- rechte  Card -->
-    <div class="col-12 col-lg-7">
+    <div class="col-12 col-lg-7 d-flex flex-column">
 
-      <div class="card">
-        <div class="card-body">
+      <div class="card flex-grow-1">
+        <div class="card-body d-flex flex-column gap-3 align-content-stretch">
 
-          <h4 class="h5">Bestand/Neuzulassungen pro Antriebsart </h4>
+          <h4 class="h5 mb-0">Bestand/Neuzulassungen pro Antriebsart</h4>
+          
+          <!-- charts -->
+          <div id="chart-1"></div>
+          
+          <!-- Legende für das Diagramm -->
+          <table class="card">
+            <tbody id="tbody_legend_chart" class="card-body text-nowrap small"></tbody>
+          </table>
 
-          <div class="row flex-nowrap">
-            <div class="col flex-fill" style="max-width: calc(100% - 4em - var(--bs-gutter-x) * 4)">
-              <!-- charts -->
-              <div id="chart-1"></div>
-            </div>
-            <div class="col-auto align-self-center" style="min-width: 4em">
-              <!-- Legende für das Diagramm -->
-              <table>
-                <tbody id="tbody_legend_chart" class="text-nowrap"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-auto" id="chart_settings">
-
-              <div class="card">
+          <div class="row flex-wrap flex-md-nowrap">
+          
+            <div class="col-8">
+              <div id="chart_settings" class="card">
                 <div class="card-body">
-
+  
                   <div class="row">
                     <div class="col-auto">
                       <h4 class="h5">Anzuzeigende Größe</h4>
@@ -234,7 +229,7 @@ class SzenarienComponent extends HTMLElement {
                         <label class="form-check-label" for="input_datasource_THG-Emissionen">THG-Emissionen</label>
                       </div>
                     </div>
-
+  
                     <div class="col-auto">
                       <h4 class="h5">Größenklasse</h4>
                       <div class="form-check">
@@ -274,24 +269,19 @@ class SzenarienComponent extends HTMLElement {
                       </div>
                     </div>
                   </div>
-
+  
                 </div>
-              </div>
+              </div> 
+            </div>       
+            
+            <div class="col-4 p-3 small">
+                Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung
+                der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer
+                Antriebe inkl. Mautbefreiung bis 2029 angenommen.               
             </div>
+            
           </div>
 
-          <div class="row">
-            <div class="col-auto">
-              <div class="card">
-                <div class="card-body">
-                  Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung
-                    der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer
-                    Antriebe inkl. Mautbefreiung bis 2029 angenommen.
-                </div>
-              </div>
-            </div>
-
-          </div>
         </div>
 
       </div>
@@ -354,8 +344,9 @@ class SzenarienComponent extends HTMLElement {
           display: none;
       }
 
-      #tbody_legend_chart td {
-          font-size: 12px
+      #tbody_legend_chart {
+          display: block;
+          column-count: 3;
       }
 
       #tbody_legend td {
