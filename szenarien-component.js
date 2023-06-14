@@ -317,6 +317,7 @@ class SzenarienComponent extends HTMLElement {
           background-color: transparent;
           -webkit-text-size-adjust: 100%;
           -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+          --bs-primary: #94C012 !important;
       }
 
       .row {
