@@ -374,6 +374,9 @@ class SzenarienComponent extends HTMLElement {
           display: block;
           column-count: 3;
       }
+      #tbody_legend_chart > tr {
+          display: flex;
+      }
 
       #tbody_legend td {
           white-space: nowrap;
