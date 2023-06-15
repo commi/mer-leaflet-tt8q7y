@@ -72,8 +72,11 @@ class SzenarienComponent extends HTMLElement {
     template.innerHTML = `
 <div class="container-fluid d-flex gap-3 root" data-bs-theme="light" data-szenario="1">    
                  
-  <button id="prev-szenario" data-radio-name="szenario" class="btn btn-outline-primary order-0">◀</button>
-  <button id="next-szenario" data-radio-name="szenario" class="btn btn-outline-primary order-2">▶</button>
+  <select id="szenario-select" data-radio-name="szenario"  
+          class="form-control order-0 align-self-start" style="width: min-content">
+    <option value="1" selected>Referenz</option>
+    <option value="2">Krise</option>
+  </select>
 
   <div class="row order-1">
 
@@ -842,27 +845,17 @@ class SzenarienComponent extends HTMLElement {
 
 
       // init the next/prev szenario buttons
-      function updateRadios(delta, radioName) {
+
+      function updateRadios(selectedValue, radioName) {
         const radios = Array.from(document.querySelectorAll(`input[name="${radioName}"]`));
-        let currentIndex = radios.findIndex(radio => radio.checked);
 
-        if (currentIndex < 0) {
-          currentIndex = 0;
-        } else {
-          currentIndex = (currentIndex + delta + radios.length) % radios.length;
-        }
-
-        radios.forEach((radio, index) => radio.checked = index === currentIndex);
+        radios.forEach((radio) => radio.checked = radio.value === selectedValue);
         radios.find(r => r.checked)?.dispatchEvent(new Event('input', {bubbles: true}));
       }
 
-      document.querySelector('#prev-szenario').addEventListener('click', event => {
-        updateRadios(-1, event.target.dataset.radioName);
+      document.querySelector('#szenario-select').addEventListener('change', event => {
+        updateRadios(event.target.value, event.target.dataset.radioName);
       });
-      document.querySelector('#next-szenario').addEventListener('click', event => {
-        updateRadios(1, event.target.dataset.radioName);
-      });
-      updateRadios();
     }
 
 
