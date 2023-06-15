@@ -426,7 +426,9 @@ class SzenarienComponent extends HTMLElement {
 
     async function initMap() {
       // create LeafLet map on the div #map and center it on germany
-      const map = L.map(document.querySelector('#map')).setView([51.4, 10.4], 6);
+      const map = L.map(document.querySelector('#map'), {
+        scrollWheelZoom: false
+      }).setView([51.4, 10.4], 6);
 
       // define projection definition used in the GeoJSOn files
       proj4.defs('EPSG:3034',
