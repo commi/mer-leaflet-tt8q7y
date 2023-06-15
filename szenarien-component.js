@@ -203,7 +203,7 @@ class SzenarienComponent extends HTMLElement {
           
           <!-- Legende für das Diagramm -->
           <table class="card">
-            <tbody id="tbody_legend_chart" class="card-body text-nowrap small"></tbody>
+            <tbody id="tbody_legend_chart" class="card-body text-nowrap small row"></tbody>
           </table>
 
           <div class="row flex-wrap flex-md-nowrap">
@@ -369,8 +369,8 @@ class SzenarienComponent extends HTMLElement {
       }
 
       #tbody_legend_chart {
-          display: block;
-          column-count: 3;
+          display: flex;
+          flex-direction: row;
       }
       #tbody_legend_chart > tr {
           display: flex;
@@ -823,8 +823,16 @@ class SzenarienComponent extends HTMLElement {
         // Erstellen der Legenden-Tabelle
         const legendTable = document.querySelector('#tbody_legend_chart');
         legendTable.innerHTML = '';
+        let prevName = '';
         seriesNames.forEach(name => {
+          // insert flex wrapper
+          if (prevName && name.at(0) != prevName.at(0)) {
+            const row = legendTable.insertRow();
+            row.classList.add('col-12');
+          }
+
           const row = legendTable.insertRow();
+          row.classList.add('col-auto');
 
           // Zelle für Farbmarkierung
           const colorCell = row.insertCell();
@@ -834,6 +842,7 @@ class SzenarienComponent extends HTMLElement {
           // Zelle für Seriennamen
           const labelCell = row.insertCell();
           labelCell.textContent = name;
+          prevName = name;
         });
       }
 
