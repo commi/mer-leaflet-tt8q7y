@@ -70,332 +70,343 @@ class SzenarienComponent extends HTMLElement {
 
     /* data-bs-theme="light" to get the css variables from bootstrap */
     template.innerHTML = `
-<div class="container-fluid d-flex gap-3 root" data-bs-theme="light" data-szenario="1">    
-                 
-  <select id="szenario-select" data-radio-name="szenario"  
-          class="form-control order-0 align-self-start" style="width: min-content">
-    <option value="1" selected>Referenz</option>
-    <option value="2">Krise</option>
-  </select>
+<div class="container-fluid d-flex gap-3 root" data-bs-theme="light" data-szenario="1">
 
-  <div class="row order-1">
-
-    <!-- linke Card -->
-    <div class="col-12 mb-3 col-lg-5 mb-lg-0 d-flex flex-column">
-
-      <div class="card flex-grow-1">
-        <div class="card-body" id="form_settings">
-
-          <div class="row align-items-stretch">
-            <!-- Karte -->
-            <div class="col-12">
-
-              <h4 class="h5">Fahrten pro Antriebsart pro Autobahnabschnitt</h4>
-
-              <div class="position-relative">
-                <div id="map" style="background: #B5D1DC; z-index: 0"></div>
-
-                <h2 id="label_year" class="position-absolute top-0 end-0 p-2"></h2>
-              </div>
-            </div>
-
-            <!-- controls for year -->
-            <div class="col-12">
-              <div class="row g-3 pt-2">
-
-                <div class="col-auto">
-                  <label class="form-label" for="input_year">Jahr</label>
-                </div>
-                <div class="col-auto">
-                  <label class="form-label" for="input_year">2025</label>
-                </div>
-                <div class="col">
-                  <input class="form-range" type="range" min="2025" max="2045" value="2025"
-                         id="input_year">
-                </div>
-                <div class="col-auto">
-                  <label class="form-label" for="input_year">2045</label>
-                </div>
-              </div>
-            </div>
-
-            <!-- controls for map layer visibility -->
-            <div class="col-12 mb-3 col-md-6 mb-md-0 d-flex align-items-stretch">
-              <div class="card flex-fill">
-                <div class="card-body">
-                  <h4 class="h5">Anzuzeigende Größe</h4>
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="visible_layer"
-                           id="visible_layer_oberleitungsausbau">
-                    <label class="form-check-label" for="visible_layer_oberleitungsausbau">
-                      Oberleitungsausbau
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="visible_layer"
-                           id="visible_layer_diesel"
-                           data-toggles="Diesel"
-                           checked>
-                    <label class="form-check-label" for="visible_layer_diesel">
-                      Diesel
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="visible_layer"
-                           id="visible_layer_bev"
-                           data-toggles="BEV">
-                    <label class="form-check-label" for="visible_layer_bev">
-                      BEV
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="visible_layer"
-                           id="visible_layer_olkw"
-                           data-toggles="OLKW">
-                    <label class="form-check-label" for="visible_layer_olkw">
-                      OLKW
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="visible_layer"
-                           id="visible_layer_fcev"
-                           data-toggles="FCEV"
-                    >
-                    <label class="form-check-label" for="visible_layer_fcev">
-                      FCEV
-                    </label>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            <!-- Legende für die Karte -->
-            <div class="col-12 col-md-6 d-flex align-items-stretch">
-              <div class="card flex-fill">
-                <div class="card-body">
-                  <h4 class="h5">Prognostizierten Fahrten pro Tag pro Abschnitt</h4>
-
-                  <table class="table table-borderless table-sm mb-0">
-                    <tbody id="tbody_legend"></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
+    <div class="order-0 align-self-start">
+        <label for="szenario-select" class="h6">Auswahl Szenarien</label>
+        <select id="szenario-select" data-radio-name="szenario"
+                class="form-select form-select-lg" style="width: min-content">
+            <option value="1" selected>Referenz</option>
+            <option value="2">Krise</option>
+        </select>
     </div>
 
-    <!-- rechte  Card -->
-    <div class="col-12 col-lg-7 d-flex flex-column">
+    <div class="row order-1">
 
-      <div class="card flex-grow-1">
-        <div class="card-body d-flex flex-column gap-3 align-content-stretch">
+        <!-- linke Card -->
+        <div class="col-12 mb-3 col-lg-5 mb-lg-0 d-flex flex-column">
 
-          <h4 class="h5 mb-0">Bestand/Neuzulassungen pro Antriebsart</h4>
-          
-          <!-- charts -->
-          <div id="chart-1"></div>
-          
-          <!-- Legende für das Diagramm -->
-          <table class="card">
-            <tbody id="tbody_legend_chart" class="card-body text-nowrap small row"></tbody>
-          </table>
+            <div class="card flex-grow-1">
+                <div class="card-body" id="form_settings">
 
-          <div class="row flex-wrap flex-md-nowrap">
-          
-            <div class="col-8">
-              <div id="chart_settings" class="card">
-                <div class="card-body">
-  
-                  <div class="d-none">
-                    <h4 class="h5">Szenario</h4>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="szenario"
-                             id="input_szenario_1" value="1" checked>
-                      <label class="form-check-label"
-                             for="input_szenario_1">1</label>
+                    <div class="row align-items-stretch">
+                        <!-- Karte -->
+                        <div class="col-12">
+
+                            <h4 class="h5">Fahrten pro Antriebsart pro Autobahnabschnitt</h4>
+
+                            <div class="position-relative">
+                                <div id="map" style="background: #B5D1DC; z-index: 0"></div>
+
+                                <h2 id="label_year" class="position-absolute top-0 end-0 p-2"></h2>
+                            </div>
+                        </div>
+
+                        <!-- controls for year -->
+                        <div class="col-12">
+                            <div class="row g-3 pt-2">
+
+                                <div class="col-auto">
+                                    <label class="form-label" for="input_year">Jahr</label>
+                                </div>
+                                <div class="col-auto">
+                                    <label class="form-label" for="input_year">2025</label>
+                                </div>
+                                <div class="col">
+                                    <input class="form-range" type="range" min="2025" max="2045" value="2025"
+                                           id="input_year">
+                                </div>
+                                <div class="col-auto">
+                                    <label class="form-label" for="input_year">2045</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- controls for map layer visibility -->
+                        <div class="col-12 mb-3 col-md-6 mb-md-0 d-flex align-items-stretch">
+                            <div class="card flex-fill">
+                                <div class="card-body">
+                                    <h4 class="h5">Anzuzeigende Größe</h4>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="visible_layer"
+                                               id="visible_layer_oberleitungsausbau">
+                                        <label class="form-check-label" for="visible_layer_oberleitungsausbau">
+                                            Oberleitungsausbau
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="visible_layer"
+                                               id="visible_layer_diesel"
+                                               data-toggles="Diesel"
+                                               checked>
+                                        <label class="form-check-label" for="visible_layer_diesel">
+                                            Diesel
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="visible_layer"
+                                               id="visible_layer_bev"
+                                               data-toggles="BEV">
+                                        <label class="form-check-label" for="visible_layer_bev">
+                                            BEV
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="visible_layer"
+                                               id="visible_layer_olkw"
+                                               data-toggles="OLKW">
+                                        <label class="form-check-label" for="visible_layer_olkw">
+                                            OLKW
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="visible_layer"
+                                               id="visible_layer_fcev"
+                                               data-toggles="FCEV"
+                                        >
+                                        <label class="form-check-label" for="visible_layer_fcev">
+                                            FCEV
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Legende für die Karte -->
+                        <div class="col-12 col-md-6 d-flex align-items-stretch">
+                            <div class="card flex-fill">
+                                <div class="card-body">
+                                    <h4 class="h5">Prognostizierten Fahrten pro Tag pro Abschnitt</h4>
+
+                                    <table class="table table-borderless table-sm mb-0">
+                                        <tbody id="tbody_legend"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="szenario"
-                             id="input_szenario_2" value="2">
-                      <label class="form-check-label" for="input_szenario_2">2</label>
-                    </div>       
-                  </div>
 
-                  <div class="row">
-                    <div class="col-auto">
-                      <h4 class="h5">Anzuzeigende Größe</h4>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="datasource"
-                               id="input_datasource_Bestand" value="Bestand" checked>
-                        <label class="form-check-label"
-                               for="input_datasource_Bestand">Bestand</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="datasource"
-                               id="input_datasource_Neuzulassungen" value="Neuzulassungen">
-                        <label class="form-check-label" for="input_datasource_Neuzulassungen">Neuzulassungen</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="datasource"
-                               id="input_datasource_THG-Emissionen" value="THG-Emissionen">
-                        <label class="form-check-label" for="input_datasource_THG-Emissionen">THG-Emissionen</label>
-                      </div>
-                    </div>
-  
-                    <div class="col-auto">
-                      <h4 class="h5">Größenklasse</h4>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sizeclass"
-                               id="input_sizeclass_gesamt" value="alle Größenklassen" checked>
-                        <label class="form-check-label" for="input_sizeclass_gesamt">Alle
-                          Größenklassen</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sizeclass"
-                               id="input_sizeclass_3,5-7,5" value="3,5-7,5t">
-                        <label class="form-check-label" for="input_sizeclass_3,5-7,5">3,5 – 7,5 t</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sizeclass"
-                               id="input_sizeclass_7,5-12" value="7,5-12t">
-                        <label class="form-check-label"
-                               for="input_sizeclass_7,5-12">7,5 – 12 t</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sizeclass"
-                               id="input_sizeclass_12-18" value="12-18t">
-                        <label class="form-check-label"
-                               for="input_sizeclass_12-18">12 – 18 t</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sizeclass"
-                               id="input_sizeclass_18-26" value="18-26t">
-                        <label class="form-check-label"
-                               for="input_sizeclass_18-26">18 – 26 t</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sizeclass"
-                               id="input_sizeclass_26-40" value="26-40t">
-                        <label class="form-check-label"
-                               for="input_sizeclass_26-40">&gt; 26 t</label>
-                      </div>
-                    </div>
-                  </div>
-  
                 </div>
-              </div> 
-            </div>       
-            
-            <div class="col-4 p-3 small">
-                <p data-szenario="1">
-                  Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung
-                  der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer
-                  Antriebe inkl. Mautbefreiung bis 2029 angenommen.
-                </p>                    
-                
-                <p data-szenario="2">
-                  Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer Antriebe inkl. Mautbefreiung bis 2029 angenommen. Für die Diesel- und Strompreise wurde eine Preisentwicklung in Anlehnung an die Preissteigerungen aufgrund des Krieges in der Ukraine im Frühjahr 2022 unterstellt. Der Preis für Import-Wasserstoff ist im Vergleich zum Basisszenario unverändert.  
-                </p>                               
             </div>
-            
-          </div>
 
         </div>
 
-      </div>
+        <!-- rechte  Card -->
+        <div class="col-12 col-lg-7 d-flex flex-column">
 
+            <div class="card flex-grow-1">
+                <div class="card-body d-flex flex-column gap-3 align-content-stretch">
+
+                    <h4 class="h5 mb-0">Bestand/Neuzulassungen pro Antriebsart</h4>
+
+                    <!-- charts -->
+                    <div id="chart-1"></div>
+
+                    <!-- Legende für das Diagramm -->
+                    <table class="card">
+                        <tbody id="tbody_legend_chart" class="card-body text-nowrap small row"></tbody>
+                    </table>
+
+                    <div class="row flex-wrap flex-md-nowrap">
+
+                        <div class="col-8">
+                            <div id="chart_settings" class="card">
+                                <div class="card-body">
+
+                                    <div class="d-none">
+                                        <h4 class="h5">Szenario</h4>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="szenario"
+                                                   id="input_szenario_1" value="1" checked>
+                                            <label class="form-check-label"
+                                                   for="input_szenario_1">1</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="szenario"
+                                                   id="input_szenario_2" value="2">
+                                            <label class="form-check-label" for="input_szenario_2">2</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <h4 class="h5">Anzuzeigende Größe</h4>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="datasource"
+                                                       id="input_datasource_Bestand" value="Bestand" checked>
+                                                <label class="form-check-label"
+                                                       for="input_datasource_Bestand">Bestand</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="datasource"
+                                                       id="input_datasource_Neuzulassungen" value="Neuzulassungen">
+                                                <label class="form-check-label" for="input_datasource_Neuzulassungen">Neuzulassungen</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="datasource"
+                                                       id="input_datasource_THG-Emissionen" value="THG-Emissionen">
+                                                <label class="form-check-label" for="input_datasource_THG-Emissionen">THG-Emissionen<br>
+                                                    <small class="text-muted">(WTW+Fzg.Herstellung)</small></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <h4 class="h5">Größenklasse</h4>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="sizeclass"
+                                                       id="input_sizeclass_gesamt" value="alle Größenklassen" checked>
+                                                <label class="form-check-label" for="input_sizeclass_gesamt">Alle
+                                                    Größenklassen</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="sizeclass"
+                                                       id="input_sizeclass_3,5-7,5" value="3,5-7,5t">
+                                                <label class="form-check-label" for="input_sizeclass_3,5-7,5">3,5 – 7,5 t</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="sizeclass"
+                                                       id="input_sizeclass_7,5-12" value="7,5-12t">
+                                                <label class="form-check-label"
+                                                       for="input_sizeclass_7,5-12">7,5 – 12 t</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="sizeclass"
+                                                       id="input_sizeclass_12-18" value="12-18t">
+                                                <label class="form-check-label"
+                                                       for="input_sizeclass_12-18">12 – 18 t</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="sizeclass"
+                                                       id="input_sizeclass_18-26" value="18-26t">
+                                                <label class="form-check-label"
+                                                       for="input_sizeclass_18-26">18 – 26 t</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="sizeclass"
+                                                       id="input_sizeclass_26-40" value="26-40t">
+                                                <label class="form-check-label"
+                                                       for="input_sizeclass_26-40">&gt; 26 t</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 p-3 small">
+                            <p data-szenario="1">
+                                Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung
+                                der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer
+                                Antriebe inkl. Mautbefreiung bis 2029 angenommen.
+                            </p>
+
+                            <p data-szenario="2">
+                                Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung der
+                                Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer Antriebe
+                                inkl. Mautbefreiung bis 2029 angenommen. Für die Diesel- und Strompreise wurde eine
+                                Preisentwicklung in Anlehnung an die Preissteigerungen aufgrund des Krieges in der
+                                Ukraine im Frühjahr 2022 unterstellt. Der Preis für Import-Wasserstoff ist im Vergleich
+                                zum Basisszenario unverändert.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
     </div>
-  </div>
-  <style>
-      :host {
-          display: contents;
-          hyphens: auto;
-      }
+    <style>
+        :host {
+            display: contents;
+            hyphens: auto;
+        }
 
-      /* replacement for bootstrap styles on <body> */
-      /*noinspection CssUnresolvedCustomProperty*/
-      .root {
-          margin: 0;
-          font-family: var(--bs-body-font-family);
-          font-size: var(--bs-body-font-size);
-          font-weight: var(--bs-body-font-weight);
-          line-height: var(--bs-body-line-height);
-          color: var(--bs-body-color);
-          text-align: var(--bs-body-text-align);
-          background-color: transparent;
-          -webkit-text-size-adjust: 100%;
-          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-          --bs-primary: #94C012 !important;
-      }
+        /* replacement for bootstrap styles on <body> */
+        /*noinspection CssUnresolvedCustomProperty*/
+        .root {
+            margin: 0;
+            font-family: var(--bs-body-font-family), sans-serif;
+            font-size: var(--bs-body-font-size);
+            font-weight: var(--bs-body-font-weight);
+            line-height: var(--bs-body-line-height);
+            color: var(--bs-body-color);
+            text-align: var(--bs-body-text-align);
+            background-color: transparent;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            --bs-primary: #94C012 !important;
+        }
 
-      .row {
-          --bs-gutter-x: 1rem;
-          --bs-gutter-y: 1rem;
-      }
+        .row {
+            --bs-gutter-x: 1rem;
+            --bs-gutter-y: 1rem;
+        }
 
-      div#map {
-          height: 600px;
-      }
+        div#map {
+            height: 600px;
+        }
 
-      /**
-       * style for city labels
-       */
-      .leaflet-tooltip.city {
-          background-color: transparent;
-          border: transparent;
-          box-shadow: none;
-      }
+        /**
+         * style for city labels
+         */
+        .leaflet-tooltip.city {
+            background-color: transparent;
+            border: transparent;
+            box-shadow: none;
+        }
 
-      .leaflet-tooltip.city:before {
-          display: none;
-      }
+        .leaflet-tooltip.city:before {
+            display: none;
+        }
 
 
-      /**
-       * Hide the frappe chart tooltip, it is ugly
-       */
-      .chart-container .graph-svg-tip {
-          display: none;
-      }
+        /**
+         * Hide the frappe chart tooltip, it is ugly
+         */
+        .chart-container .graph-svg-tip {
+            display: none;
+        }
 
-      .chart-container .chart-legend {
-          display: none;
-      }
+        .chart-container .chart-legend {
+            display: none;
+        }
 
-      #tbody_legend_chart {
-          display: flex;
-          flex-direction: row;
-      }
-      #tbody_legend_chart > tr {
-          display: flex;
-      }
+        #tbody_legend_chart {
+            display: flex;
+            flex-direction: row;
+        }
 
-      #tbody_legend td {
-          white-space: nowrap;
-          min-width: 1rem;
-      }
+        #tbody_legend_chart > tr {
+            display: flex;
+        }
 
-      #tbody_legend td:first-child {
-          padding-inline-start: 0;
-      }
+        #tbody_legend td {
+            white-space: nowrap;
+            min-width: 1rem;
+        }
 
-      #tbody_legend td:last-child {
-          padding-inline-end: 0;
-      }
-      
-      .root[data-szenario="1"] [data-szenario]:not([data-szenario="1"]) {
-        display: none;
-      }
-      .root[data-szenario="2"] [data-szenario]:not([data-szenario="2"]) {
-        display: none;
-      }
-  </style>
+        #tbody_legend td:first-child {
+            padding-inline-start: 0;
+        }
+
+        #tbody_legend td:last-child {
+            padding-inline-end: 0;
+        }
+
+        .root[data-szenario="1"] [data-szenario]:not([data-szenario="1"]) {
+            display: none;
+        }
+
+        .root[data-szenario="2"] [data-szenario]:not([data-szenario="2"]) {
+            display: none;
+        }
+    </style>
 </div>  
     `;
 
@@ -826,7 +837,7 @@ class SzenarienComponent extends HTMLElement {
         let prevName = '';
         seriesNames.forEach(name => {
           // insert flex wrapper
-          if (prevName && name.at(0) != prevName.at(0)) {
+          if (prevName && name.at(0) !== prevName.at(0)) {
             const row = legendTable.insertRow();
             row.classList.add('col-12');
           }
