@@ -86,7 +86,7 @@ class SzenarienComponent extends HTMLElement {
 		<div class="col-12 mb-3 col-lg-5 mb-lg-0 d-flex flex-column">
 
 			<div class="card flex-grow-1">
-				<div class="card-body" id="form_settings">
+				<form class="card-body" id="form_settings">
 
 					<div class="row align-items-stretch">
 						<!-- Karte -->
@@ -123,7 +123,23 @@ class SzenarienComponent extends HTMLElement {
 
 						<!-- controls for map layer visibility -->
 						<div class="col-12 mb-3 col-md-6 mb-md-0 d-flex align-items-stretch">
-							<div class="card flex-fill">
+							<div class="card flex-fill">   
+							 
+								<div class="d-none">
+									<h4 class="h5">Szenario</h4>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="szenario"
+													 id="input_szenario_1" value="1" checked>
+										<label class="form-check-label"
+													 for="input_szenario_1">1</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="szenario"
+													 id="input_szenario_2" value="2">
+										<label class="form-check-label" for="input_szenario_2">2</label>
+									</div>
+								</div>
+									
 								<div class="card-body">
 									<h4 class="h5">Anzuzeigende Größe</h4>
 
@@ -187,7 +203,7 @@ class SzenarienComponent extends HTMLElement {
 						</div>
 					</div>
 
-				</div>
+				</form>
 			</div>
 
 		</div>
@@ -211,7 +227,7 @@ class SzenarienComponent extends HTMLElement {
 					<div class="row flex-wrap flex-md-nowrap">
 
 						<div class="col-8">
-							<div id="chart_settings" class="card">
+							<form id="chart_settings" class="card">
 								<div class="card-body">
 
 									<div class="d-none">
@@ -292,7 +308,7 @@ class SzenarienComponent extends HTMLElement {
 									</div>
 
 								</div>
-							</div>
+							</form>
 						</div>
 
 						<div class="col-4 p-3 small">
@@ -576,91 +592,148 @@ class SzenarienComponent extends HTMLElement {
 			}
 
 
-			// create layer options as a Map with layer names as keys
-			const layerOptions = new Map([
-				[
-					'Diesel', {
-					url: `${basePath}/data/GeoJSON/Diesel.geojson`,
-					lowColor: '#DDDDDC',
-					highColor: '#292929',
-					minValue: 0,
-					maxValue: 23000,
-				}
-				],
-				[
-					'BEV', {
-					url: `${basePath}/data/GeoJSON/BEV.geojson`,
-					lowColor: '#C3E2FB',
-					highColor: '#073459',
-					minValue: 0,
-					maxValue: 23000,
-				}
-				],
-				[
-					'OLKW', {
-					url: `${basePath}/data/GeoJSON/OLKW.geojson`,
-					lowColor: '#EBF7CE',
-					highColor: '#496010',
-					minValue: 0,
-					maxValue: 23000,
-				}
-				],
-				[
-					'FCEV', {
-					url: `${basePath}/data/GeoJSON/FCEV.geojson`,
-					lowColor: '#FFD5E8',
-					highColor: '#960045',
-					minValue: 0,
-					maxValue: 23000,
-				}
-				],
-			]);
+			const layerOptions = [
+				// Szenario 1
+				{
+					name: 'Diesel',
+					options: {
+						url: `${basePath}/data/GeoJSON/1/Diesel.geojson`,
+						szenario: 1,
+						lowColor: '#DDDDDC',
+						highColor: '#292929',
+						minValue: 0,
+						maxValue: 23000,
+					},
+				},
+				{
+					name: 'BEV',
+					options: {
+						url: `${basePath}/data/GeoJSON/1/BEV.geojson`,
+						szenario: 1,
+						lowColor: '#C3E2FB',
+						highColor: '#073459',
+						minValue: 0,
+						maxValue: 23000,
+					},
+				},
+				{
+					name: 'OLKW',
+					options: {
+						url: `${basePath}/data/GeoJSON/1/OLKW.geojson`,
+						szenario: 1,
+						lowColor: '#EBF7CE',
+						highColor: '#496010',
+						minValue: 0,
+						maxValue: 23000,
+					},
+				},
+				{
+					name: 'FCEV',
+					options: {
+						url: `${basePath}/data/GeoJSON/1/FCEV.geojson`,
+						szenario: 1,
+						lowColor: '#FFD5E8',
+						highColor: '#960045',
+						minValue: 0,
+						maxValue: 23000,
+					},
+				},
+				// Szenario 2
+				{
+					name: 'Diesel',
+					options: {
+						url: `${basePath}/data/GeoJSON/2/Diesel.geojson`,
+						szenario: 2,
+						lowColor: '#DDDDDC',
+						highColor: '#292929',
+						minValue: 0,
+						maxValue: 23000,
+					},
+				},
+				{
+					name: 'BEV',
+					options: {
+						url: `${basePath}/data/GeoJSON/2/BEV.geojson`,
+						szenario: 2,
+						lowColor: '#C3E2FB',
+						highColor: '#073459',
+						minValue: 0,
+						maxValue: 23000,
+					},
+				},
+				{
+					name: 'OLKW',
+					options: {
+						url: `${basePath}/data/GeoJSON/2/OLKW.geojson`,
+						szenario: 2,
+						lowColor: '#EBF7CE',
+						highColor: '#496010',
+						minValue: 0,
+						maxValue: 23000,
+					},
+				},
+				{
+					name: 'FCEV',
+					options: {
+						url: `${basePath}/data/GeoJSON/2/FCEV.geojson`,
+						szenario: 2,
+						lowColor: '#FFD5E8',
+						highColor: '#960045',
+						minValue: 0,
+						maxValue: 23000,
+					},
+				},
+			];
 
-
-			// Map with names and layers that are added to the map
-			const layers = new Map();
-
-			// create and add layers using layer options
-			const promises = Array.from(layerOptions)
-				.map(([layerName, options]) => addLayer(options).then(layer => [layerName, layer]));
-
-			(await Promise.all(promises))
-				.forEach(([layerName, layer]) => layers.set(layerName, layer));
+			const layers = [];
+			const promises = layerOptions.map(({name, options}) =>
+				addLayer(options).then(layer => [name, options, layer])
+			);
+			(await Promise.all(promises)).forEach(([name, options, layer]) => layers.push({name, layer, options}));
 
 
 			// create table and legend
 			const tbody = document.querySelector('#tbody_legend');
 
-			for (const [layerName, {highColor, lowColor, maxValue, minValue}] of layerOptions) {
-				// create table row and cells for layer legend
+			for (const {name, options} of layerOptions) {
+				// Destructure options object
+				const {highColor, lowColor, maxValue, minValue} = options;
+
+				// Create table row and cells for layer legend
 				const row = tbody.insertRow();
+				row.setAttribute('data-szenario', options.szenario);
 				const nameCell = row.insertCell();
 				const colorCell = row.insertCell();
 				const rangeCell = row.insertCell();
 
-				// layer name
-				nameCell.textContent = layerName;
+				// Layer name
+				nameCell.textContent = name;
 
-				// color legend
+				// Color legend
 				const gradientColors = chroma.scale([lowColor, highColor]).mode('hsl').colors(10).map(color => color);
 				colorCell.style.background = `linear-gradient(to right, ${gradientColors.join(', ')})`;
 				colorCell.style.width = '120px';
 				colorCell.style.padding = '6px';
 				colorCell.style.backgroundClip = 'content-box';
 
-				// value range
+				// Value range
 				rangeCell.textContent = `${minValue} – ${maxValue}`;
 			}
 
 
 			// get references to controls from HTML
-			const yearSlider = document.querySelector('#input_year');
+			const mapSettingsForm = document.querySelector('#form_settings');
+
+			const yearSlider = mapSettingsForm.querySelector('#input_year');
 			const yearLabel = document.querySelector('#label_year');
-			const radioOberleitungsausbau = document.querySelector('#visible_layer_oberleitungsausbau');
+			const radioOberleitungsausbau = mapSettingsForm.querySelector('#visible_layer_oberleitungsausbau');
+			const szenarioRadio = mapSettingsForm.querySelectorAll('input[name="szenario"]');
+
 
 			// show / hide Layer depending on seleted year and selected checkboxes
 			function updateLayerVisibility() {
 				const year = yearSlider.valueAsNumber;
+				const szenario = Array.from(szenarioRadio).find(r => r.checked)?.value;
 
 				// show year in on the map
 				yearLabel.textContent = year;
@@ -682,27 +755,33 @@ class SzenarienComponent extends HTMLElement {
 				});
 
 				// add/remove Diesel/FCEV/…-features to their respective layer if the checkbox is checked and the year matches the feature date
-				layers.forEach(({features, parentLayer}, name) => {
-
-					// get the checked state of the checkbox associated with this layer with the matching 'data-toggles' attribut
-					let layerCheckboxChecked = document.querySelector(`input[data-toggles="${name}"]`).checked;
+				layers.forEach(({name, options, layer: {features, parentLayer}}) => {
+					// Get the checked state of the checkbox associated with this layer
+					const layerCheckboxChecked = document.querySelector(`input[data-toggles="${name}"]`).checked;
+					// Get if the szenario of this layer is selected
+					const szenarioSelected = options.szenario == szenario;
 
 					features?.forEach((layer, feature) => {
-						// if the checkbox is not checked, jsut remove the feature
+						// If the checkbox is not checked, just remove the feature
 						if (!layerCheckboxChecked) {
 							layer.remove();
 							return;
 						}
-						// convert german date to iso date
+						// If the matching szenario is not checked, just remove the feature
+						if (!szenarioSelected) {
+							layer.remove();
+							return;
+						}
+
+						// Convert German date to ISO date
 						const isoDate = feature?.properties?.Time?.replace(/(\d\d)\.(\d\d)\.(\d{4})/, '$3-$2-$1');
-						// check if feature is exaclty in the selected year
+						// Check if the feature is exactly in the selected year
 						if (new Date(isoDate).getFullYear() === year) {
 							layer.addTo(parentLayer);
 						} else {
 							layer.remove();
 						}
 					});
-
 				});
 			}
 
@@ -711,7 +790,7 @@ class SzenarienComponent extends HTMLElement {
 
 			// Update the visibility of all feature whenever a control in the #form_settings container is changed by the user
 			let timeoutId;
-			document.querySelector('#form_settings').addEventListener('input', () => {
+			mapSettingsForm.addEventListener('input', () => {
 				if (timeoutId) {
 					cancelAnimationFrame(timeoutId);
 				}
@@ -743,15 +822,15 @@ class SzenarienComponent extends HTMLElement {
 
 
 		async function initCharts() {
+
+			const chartSettingsForm = document.querySelector('#chart_settings');
+
 			// Funktion zum Aktualisieren der Sichtbarkeit der Kartenfunktionen basierend auf den ausgewählten Einstellungen
 			async function updateChart() {
 				// Abrufen der ausgewählten Datenquelle und Größenklasse
-				const szenario = document.querySelector('input[name="szenario"]:checked').value;
-				const dataSource = document.querySelector('input[name="datasource"]:checked').value;
-				const sizeClass = document.querySelector('input[name="sizeclass"]:checked').value;
-
-				// Update Attribute on root div, to allow different styles to apply
-				document.querySelector('.root').setAttribute('data-szenario', szenario);
+				const szenario = chartSettingsForm.querySelector('input[name="szenario"]:checked').value;
+				const dataSource = chartSettingsForm.querySelector('input[name="datasource"]:checked').value;
+				const sizeClass = chartSettingsForm.querySelector('input[name="sizeclass"]:checked').value;
 
 				// Zusammensetzen des Dateinamens aus den ausgewählten Einstellungen
 				const filename = `${basePath}/data/Bestand und Neuzulassungen/${szenario}/${dataSource} ${sizeClass}.json`;
@@ -860,19 +939,21 @@ class SzenarienComponent extends HTMLElement {
 			updateChart();
 
 			// Update the chart whenever a control in the #chart_settings container is changed by the user
-			document.querySelector('#chart_settings').addEventListener('input', () => updateChart());
+			chartSettingsForm.addEventListener('input', () => updateChart());
 
 
-			// init the next/prev szenario buttons
-
+			// init the szenario select box as proxy for the szenario radio buttons
 			function updateRadios(selectedValue, radioName) {
 				const radios = Array.from(document.querySelectorAll(`input[name="${radioName}"]`));
 
-				radios.forEach((radio) => radio.checked = radio.value === selectedValue);
-				radios.find(r => r.checked)?.dispatchEvent(new Event('input', {bubbles: true}));
+				radios.forEach(radio => radio.checked = radio.value === selectedValue);
+				radios.filter(radio => radio.checked)
+					.forEach(radio => radio.dispatchEvent(new Event('input', {bubbles: true})));
 			}
 
 			document.querySelector('#szenario-select').addEventListener('change', event => {
+				// Update Attribute on root div, to allow different styles to apply
+				document.querySelector('.root').setAttribute('data-szenario', event.target.value);
 				updateRadios(event.target.value, event.target.dataset.radioName);
 			});
 		}
