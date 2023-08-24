@@ -864,16 +864,16 @@ class SzenarienComponent extends HTMLElement {
 					"FCEV": '#C00000',
 					"Diesel ": '#9A9A9A',
 
-					"Strom BEV": "#063458",
-					"Strom O-BEV": "#496010",
+					"Strom BEV": "#4CA8F2",
+					"Strom O-BEV": "#92C020",
 					"H2 FCEV": "#C00000",
-					"Diesel": "#9A9A9A",
-					"Fzg.-Herstellung  BEV": "#0D68B1",
-					"Fzg.-Herstellung O-BEV": "#92C020",
+					"Diesel": "#7F7F7F",
+					"Fzg.-Herstellung  BEV": "#88C5F6",
+					"Fzg.-Herstellung O-BEV": "#D7EF9D",
 					"Fzg.-Herstellung FCEV": "#E02020",
-					"Fzg.-Herstellung Diesel": "#BABABA",
-					"Infrastruktur BEV": "#88C5F6",
-					"Infrastruktur O-BEV ": "#D7EF9D",
+					"Fzg.-Herstellung Diesel": "#BABAB9",
+					"Infrastruktur BEV": "#0D68B1",
+					"Infrastruktur O-BEV ": "#6D9018",
 				};
 
 				// Extrahieren der Serien-namen (Jahreszahl)
