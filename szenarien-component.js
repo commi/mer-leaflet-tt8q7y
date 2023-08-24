@@ -439,18 +439,31 @@ class SzenarienComponent extends HTMLElement {
 		/** Function to calculate the color of a feature based on a number
 		 *
 		 * @return {string}
-		 * @param {string} lowColor
-		 * @param {string} highColor
-		 * @param {number} minWert
-		 * @param {number} maxWert
+		 * @param {Object} colorMap
 		 * @param {number} wert
 		 */
-		function getLineColor(lowColor, highColor, minWert, maxWert, wert) {
-			// Calculate the proportion of the value between the minimum and maximum values
-			const proportion = (wert - minWert) / (maxWert - minWert);
+		function getLineColor(colorMap, wert) {
+			// Get the keys and sort them
+			const keys = Object.keys(colorMap).map(Number).sort((a, b) => a - b);
+
+			// Clamp the value to the range defined by the minimum and maximum keys
+			const clampedWert = Math.min(Math.max(wert, keys[0]), keys[keys.length - 1]);
+
+			// Find the keys that are nearest to the clamped value
+			let lowKey, highKey;
+			for (let i = 0; i < keys.length - 1; i++) {
+				if (keys[i] <= clampedWert && clampedWert <= keys[i + 1]) {
+					lowKey = keys[i];
+					highKey = keys[i + 1];
+					break;
+				}
+			}
+
+			// Calculate the proportion of the value between the nearest keys
+			const proportion = (clampedWert - lowKey) / (highKey - lowKey);
 
 			// Interpolate between the two colors based on the proportion, return the color as a string
-			return chroma.interpolate(lowColor, highColor, proportion, 'hsl').hex();
+			return chroma.interpolate(colorMap[lowKey], colorMap[highKey], proportion, 'hsl').hex();
 		}
 
 
@@ -536,7 +549,7 @@ class SzenarienComponent extends HTMLElement {
 			L.Proj.geoJson(oberleitung, {
 				pointToLayer: (feature, latlng) => L.circle(latlng, {
 					radius: 3000, // in meters here
-					fillColor: '#EDA',
+					fillColor: '#FA9C1B',
 					stroke: false,
 					fillOpacity: 1,
 				}),
@@ -556,19 +569,13 @@ class SzenarienComponent extends HTMLElement {
 			 *
 			 * @param {Object} options An object containing the following properties:
 			 * @param {string} options.url URL to GeoJSON file
-			 * @param {string} options.lowColor The color to use for the lowest value.
-			 * @param {string} options.highColor The color to use for the highest value.
-			 * @param {number} options.minValue The minimum value of the range.
-			 * @param {number} options.maxValue The maximum value of the range.
+			 * @param {string} options.colors Map of colors for certain values.
 			 *
 			 * @returns {Promise<{features: Map<any, any>, parentLayer: any}>} A promise that resolves to an object containing the parent layer and the map of features.
 			 */
 			async function addLayer({
 																url,
-																lowColor,
-																highColor,
-																minValue,
-																maxValue,
+																colors,
 															}) {
 				// fetch the File and decode it as JSON
 				const json = await (await fetch(url)).json();
@@ -581,7 +588,7 @@ class SzenarienComponent extends HTMLElement {
 				L.Proj.geoJson(json, {
 					style: feature => ({
 						// set color of the feature with the value derived from the feature
-						"color": getLineColor(lowColor, highColor, minValue, maxValue, feature.properties?.value ?? 0)
+						"color": getLineColor(colors, feature.properties?.value ?? 0)
 					}),
 					onEachFeature: (feature, layer) => {
 						// add each new layer to the Map, linked with the feature it was created from
@@ -600,10 +607,7 @@ class SzenarienComponent extends HTMLElement {
 					options: {
 						url: `${basePath}/data/GeoJSON/1/Diesel.geojson`,
 						szenario: 1,
-						lowColor: '#DDDDDC',
-						highColor: '#292929',
-						minValue: 0,
-						maxValue: 23000,
+						colors: {0: '#DDD', 1: '#DDDDDC', 23000: '#292929'},
 					},
 				},
 				{
@@ -611,10 +615,7 @@ class SzenarienComponent extends HTMLElement {
 					options: {
 						url: `${basePath}/data/GeoJSON/1/BEV.geojson`,
 						szenario: 1,
-						lowColor: '#C3E2FB',
-						highColor: '#073459',
-						minValue: 0,
-						maxValue: 23000,
+						colors: {0: '#DDD', 1: '#C3E2FB', 23000: '#073459'},
 					},
 				},
 				{
@@ -622,10 +623,7 @@ class SzenarienComponent extends HTMLElement {
 					options: {
 						url: `${basePath}/data/GeoJSON/1/OLKW.geojson`,
 						szenario: 1,
-						lowColor: '#EBF7CE',
-						highColor: '#496010',
-						minValue: 0,
-						maxValue: 23000,
+						colors: {0: '#DDD', 1: '#EBF7CE', 23000: '#496010'},
 					},
 				},
 				{
@@ -633,10 +631,7 @@ class SzenarienComponent extends HTMLElement {
 					options: {
 						url: `${basePath}/data/GeoJSON/1/FCEV.geojson`,
 						szenario: 1,
-						lowColor: '#FFD5E8',
-						highColor: '#960045',
-						minValue: 0,
-						maxValue: 23000,
+						colors: {0: '#DDD', 1: '#FFD5E8', 23000: '#960045'},
 					},
 				},
 				// Szenario 2
@@ -645,10 +640,7 @@ class SzenarienComponent extends HTMLElement {
 					options: {
 						url: `${basePath}/data/GeoJSON/2/Diesel.geojson`,
 						szenario: 2,
-						lowColor: '#DDDDDC',
-						highColor: '#292929',
-						minValue: 0,
-						maxValue: 23000,
+						colors: {0: '#DDD', 1: '#DDDDDC', 23000: '#292929'},
 					},
 				},
 				{
@@ -656,10 +648,7 @@ class SzenarienComponent extends HTMLElement {
 					options: {
 						url: `${basePath}/data/GeoJSON/2/BEV.geojson`,
 						szenario: 2,
-						lowColor: '#C3E2FB',
-						highColor: '#073459',
-						minValue: 0,
-						maxValue: 23000,
+						colors: {0: '#DDD', 1: '#C3E2FB', 23000: '#073459'},
 					},
 				},
 				{
@@ -667,10 +656,7 @@ class SzenarienComponent extends HTMLElement {
 					options: {
 						url: `${basePath}/data/GeoJSON/2/OLKW.geojson`,
 						szenario: 2,
-						lowColor: '#EBF7CE',
-						highColor: '#496010',
-						minValue: 0,
-						maxValue: 23000,
+						colors: {0: '#DDD', 1: '#EBF7CE', 23000: '#496010'},
 					},
 				},
 				{
@@ -678,10 +664,7 @@ class SzenarienComponent extends HTMLElement {
 					options: {
 						url: `${basePath}/data/GeoJSON/2/FCEV.geojson`,
 						szenario: 2,
-						lowColor: '#FFD5E8',
-						highColor: '#960045',
-						minValue: 0,
-						maxValue: 23000,
+						colors: {0: '#DDD', 1: '#FFD5E8', 23000: '#960045'},
 					},
 				},
 			];
@@ -698,7 +681,7 @@ class SzenarienComponent extends HTMLElement {
 
 			for (const {name, options} of layerOptions) {
 				// Destructure options object
-				const {highColor, lowColor, maxValue, minValue} = options;
+				const {colors} = options;
 
 				// Create table row and cells for layer legend
 				const row = tbody.insertRow();
@@ -711,14 +694,28 @@ class SzenarienComponent extends HTMLElement {
 				nameCell.textContent = name;
 
 				// Color legend
-				const gradientColors = chroma.scale([lowColor, highColor]).mode('hsl').colors(10).map(color => color);
+				const keys = Object.keys(colors);
+				const maxKey = Math.max(...keys);
+				const minKey = Math.min(...keys);
+				const steps = 15;
+				const gradientColors = keys.map(Number)
+					.flatMap((key, i, keys) => {
+						if (i === keys.length - 1) return [];
+						return Array.from({length: steps + 2}, (_, step) => {
+							const color = chroma.interpolate(colors[key], colors[keys[i + 1]], step / (steps + 1), 'hsl').css();
+							const pos = key + (keys[i + 1] - key) * step / (steps + 1);
+							return `${color} ${(pos / maxKey) * 100}%`;
+						});
+					});
+
+				// Construct the linear gradient for the color cell
 				colorCell.style.background = `linear-gradient(to right, ${gradientColors.join(', ')})`;
 				colorCell.style.width = '120px';
 				colorCell.style.padding = '6px';
 				colorCell.style.backgroundClip = 'content-box';
 
 				// Value range
-				rangeCell.textContent = `${minValue} – ${maxValue}`;
+				rangeCell.textContent = `${minKey} – ${maxKey}`;
 			}
 
 
