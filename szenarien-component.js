@@ -72,7 +72,7 @@ class SzenarienComponent extends HTMLElement {
 		template.innerHTML = `<div class="container-fluid d-flex gap-3 root" data-bs-theme="light" data-szenario="1">
 
 	<div class="order-0 align-self-start">
-		<label for="szenario-select" class="h6">Auswahl Szenarien</label>
+		<label for="szenario-select" class="h6">Auswahl<br/>Szenarien</label>
 		<select id="szenario-select" data-radio-name="szenario"
 						class="form-select form-select-lg" style="width: min-content">
 			<option value="1" selected>Referenz</option>
@@ -218,6 +218,7 @@ class SzenarienComponent extends HTMLElement {
 
 					<!-- charts -->
 					<div id="chart-1"></div>
+					<div class="text-center small" style="margin-block-start: -4rem;">Jahr</div>
 
 					<!-- Legende für das Diagramm -->
 					<table class="card">
