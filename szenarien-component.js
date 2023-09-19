@@ -69,18 +69,25 @@ class SzenarienComponent extends HTMLElement {
 		const template = document.createElement('template');
 
 		/* data-bs-theme="light" to get the css variables from bootstrap */
-		template.innerHTML = `<div class="container-fluid d-flex gap-3 root" data-bs-theme="light" data-szenario="1">
+		template.innerHTML = `<div class="container-fluid d-flex flex-column gap-3 root" data-bs-theme="light" data-szenario="1">
 
-	<div class="order-0 align-self-start">
-		<label for="szenario-select" class="h6">Auswahl<br/>Szenarien</label>
-		<select id="szenario-select" data-radio-name="szenario"
-						class="form-select form-select-lg" style="width: min-content">
-			<option value="1" selected>Referenz</option>
-			<option value="2">Krise</option>
-		</select>
+	<div class="card">
+		<div class="card-body d-flex gap-4 align-items-center">
+			<label for="szenario-select" class="card-title h5 mb-0 flex-shrink-0">Szenario:</label>
+			<select id="szenario-select" data-radio-name="szenario"
+							class="form-select form-select-lg" style="width: min-content">
+				<option value="1" selected>Referenz</option>
+				<option value="2">Krise</option>
+			</select>
+			<p class="card-text flex-shrink-1">
+				Die Szenarien unterscheiden sich hinsichtlich der Entwicklung des Strom- und Dieselpreises. Das Szenario „Referenz“
+				unterstellt, dass sich die Auswirkungen der Energiekrise 2022 auf die Energiepreise weitgehend zurückbilden werden.
+				Das Szenario "Krise" hingegen bildet ein Verharren der Energiepreise auf dem Krisenniveau ab.
+			</p>
+		</div>
 	</div>
 
-	<div class="row order-1">
+	<div class="row">
 
 		<!-- linke Card -->
 		<div class="col-12 mb-3 col-lg-5 mb-lg-0 d-flex flex-column">
