@@ -319,23 +319,6 @@ class SzenarienComponent extends HTMLElement {
 							</form>
 						</div>
 
-						<div class="col-4 p-3 small">
-							<p data-szenario="1">
-								Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung
-								der Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer
-								Antriebe inkl. Mautbefreiung bis 2029 angenommen.
-							</p>
-
-							<p data-szenario="2">
-								Dieses Szenario bildet die TCO-basierte Flottenentwicklung ohne Berücksichtigung der
-								Infrastrukturkosten ab. Dabei wurde eine degressive Förderung alternativer Antriebe
-								inkl. Mautbefreiung bis 2029 angenommen. Für die Diesel- und Strompreise wurde eine
-								Preisentwicklung in Anlehnung an die Preissteigerungen aufgrund des Krieges in der
-								Ukraine im Frühjahr 2022 unterstellt. Der Preis für Import-Wasserstoff ist im Vergleich
-								zum Basisszenario unverändert.
-							</p>
-						</div>
-
 					</div>
 
 				</div>
