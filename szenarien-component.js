@@ -41,7 +41,7 @@ class SzenarienComponent extends HTMLElement {
 			`${this.basePath}js/proj4.js`,
 			`${this.basePath}js/proj4leaflet.js`,
 			`${this.basePath}js/chroma.min.js`,
-			`${this.basePath}js/frappe-charts.min.umd.js`
+			`${this.basePath}js/frappe-charts.umd.js`
 		];
 
 		// Load external styles
@@ -854,12 +854,13 @@ class SzenarienComponent extends HTMLElement {
 					"Strom BEV": "#4CA8F2",
 					"Strom O-BEV": "#92C020",
 					"H2 FCEV": "#C00000",
-					"Diesel": "#7F7F7F",
+					"Diesel": "#9A9A9A",
 					"Fzg.-Herstellung  BEV": "#88C5F6",
 					"Fzg.-Herstellung O-BEV": "#D7EF9D",
 					"Fzg.-Herstellung FCEV": "#E02020",
 					"Fzg.-Herstellung Diesel": "#BABAB9",
 					"Infrastruktur BEV": "#0D68B1",
+					"Infrastruktur O-BEV": "#6D9018",
 					"Infrastruktur O-BEV ": "#6D9018",
 				};
 
