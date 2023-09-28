@@ -45,7 +45,7 @@ class SzenarienComponent extends HTMLElement {
 		];
 
 		// Load external styles
-		await Promise.all(externalStyles.map((style) => this.loadCSS(style)));
+		externalStyles.map((style) => this.loadCSS(style));
 
 		// Load Leaflet and proj4
 		await Promise.all([
