@@ -82,7 +82,7 @@ class SzenarienComponent extends HTMLElement {
 			<p class="card-text flex-shrink-1">
 				Die Szenarien unterscheiden sich hinsichtlich der Entwicklung des Strom- und Dieselpreises. Das Szenario „Referenz“
 				unterstellt, dass sich die Auswirkungen der Energiekrise 2022 auf die Energiepreise weitgehend zurückbilden werden.
-				Das Szenario "Krise" hingegen bildet ein Verharren der Energiepreise auf dem Krisenniveau ab.
+				Das Szenario „Krise“ hingegen bildet ein Verharren der Energiepreise auf dem Krisenniveau ab.
 			</p>
 		</div>
 	</div>
