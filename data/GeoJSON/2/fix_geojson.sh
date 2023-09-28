@@ -47,6 +47,9 @@ convert_file() {
   # Projektion ändern und Genauigkeit der Koordinaten reduzieren
   ogr2ogr -f "GeoJSON" -t_srs "$target_projection" /vsistdout/ "$input_file" | \
     ogr2ogr -f "GeoJSON" -lco COORDINATE_PRECISION=$coordinate_precision "$output_file" /vsistdin/
+    
+  # normalize value property  
+  sed -E -i 's/"([A-Za-z]+_[A-Za-z]+)"/"value"/g' "$output_file"  
 
   echo "Die Projektion von $input_file wurde geändert und die Genauigkeit der Koordinaten wurde reduziert. Die neue Datei ist $output_file."
 }
