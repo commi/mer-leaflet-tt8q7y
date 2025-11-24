@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-body d-flex gap-4 align-items-center">
+    <label for="szenario-select" class="card-title h5 mb-0 flex-shrink-0">Szenario:</label>
+    <select id="szenario-select"
+            class="form-select form-select-lg"
+            style="width: min-content"
+            [ngModel]="scenarioState.scenario$ | async"
+            (ngModelChange)="scenarioState.scenario$.next($event)">
+      <option value="1">Referenz</option>
+      <option value="2">Krise</option>
+    </select>
+    <p class="card-text flex-shrink-1">
+      Die Szenarien unterscheiden sich hinsichtlich der Entwicklung des Strom- und Dieselpreises. Das Szenario „Referenz"
+      unterstellt, dass sich die Auswirkungen der Energiekrise 2022 auf die Energiepreise weitgehend zurückbilden werden.
+      Das Szenario „Krise" hingegen bildet ein Verharren der Energiepreise auf dem Krisenniveau ab.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'leaflet/dist/leaflet.css';
+
+/* Additional custom styles */
+.leaflet-tooltip.city {
+  background-color: transparent;
+  border: transparent;
+  box-shadow: none;
+}
+
+.leaflet-tooltip.city:before {
+  display: none;
+}
+
+.chart-container .graph-svg-tip {
+  display: none;
+}
+
+.chart-container .chart-legend {
+  display: none;
+}
+
+#tbody_legend_chart {
+  display: flex;
+  flex-direction: row;
+}
+
+#tbody_legend_chart > tr {
+  display: flex;
+}
+
+#tbody_legend td {
+  white-space: nowrap;
+  min-width: 1rem;
+}
+
+#tbody_legend td:first-child {
+  padding-inline-start: 0;
+}
+
+#tbody_legend td:last-child {
+  padding-inline-end: 0;
+}

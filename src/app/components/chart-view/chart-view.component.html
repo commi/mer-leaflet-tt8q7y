@@ -1,0 +1,107 @@
+<div class="card flex-grow-1">
+  <div class="card-body d-flex flex-column gap-3 align-content-stretch">
+    <h4 class="h5 mb-0">Bestand/Neuzulassungen pro Antriebsart</h4>
+
+    <!-- Chart -->
+    <div #chartContainer id="chart-1"></div>
+    <div class="text-center small" style="margin-block-start: -4rem;">Jahr</div>
+
+    <!-- Legende für das Diagramm -->
+    <div class="card">
+      <div id="chart-legend" class="card-body small">
+        @for (group of legendGroups; track group; let isFirst = $first) {
+          <div class="legend-group">
+            @for (item of group; track item.name) {
+              <div class="legend-item">
+                <span class="legend-color" [style.color]="item.color">&#x25A0;</span>
+                <span class="legend-label">{{item.name}}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="row flex-wrap flex-md-nowrap">
+      <div class="col-8">
+        <form id="chart_settings" class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-auto">
+                <h4 class="h5">Anzuzeigende Größe</h4>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="datasource"
+                         id="input_datasource_Bestand" value="Bestand"
+                         [ngModel]="scenarioState.chartDataSource$ | async"
+                         (ngModelChange)="scenarioState.chartDataSource$.next($event)">
+                  <label class="form-check-label" for="input_datasource_Bestand">Bestand</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="datasource"
+                         id="input_datasource_Neuzulassungen" value="Neuzulassungen"
+                         [ngModel]="scenarioState.chartDataSource$ | async"
+                         (ngModelChange)="scenarioState.chartDataSource$.next($event)">
+                  <label class="form-check-label" for="input_datasource_Neuzulassungen">Neuzulassungen</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="datasource"
+                         id="input_datasource_THG-Emissionen" value="THG-Emissionen"
+                         [ngModel]="scenarioState.chartDataSource$ | async"
+                         (ngModelChange)="scenarioState.chartDataSource$.next($event)">
+                  <label class="form-check-label" for="input_datasource_THG-Emissionen">THG-Emissionen<br>
+                    <small class="text-muted">(WTW+Fzg.Herstellung)</small></label>
+                </div>
+              </div>
+
+              <div class="col-auto">
+                <h4 class="h5">Größenklasse</h4>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sizeclass"
+                         id="input_sizeclass_gesamt" value="alle Größenklassen"
+                         [ngModel]="scenarioState.chartSizeClass$ | async"
+                         (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+                  <label class="form-check-label" for="input_sizeclass_gesamt">Alle Größenklassen</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sizeclass"
+                         id="input_sizeclass_3,5-7,5" value="3,5-7,5t"
+                         [ngModel]="scenarioState.chartSizeClass$ | async"
+                         (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+                  <label class="form-check-label" for="input_sizeclass_3,5-7,5">3,5 – 7,5 t</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sizeclass"
+                         id="input_sizeclass_7,5-12" value="7,5-12t"
+                         [ngModel]="scenarioState.chartSizeClass$ | async"
+                         (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+                  <label class="form-check-label" for="input_sizeclass_7,5-12">7,5 – 12 t</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sizeclass"
+                         id="input_sizeclass_12-18" value="12-18t"
+                         [ngModel]="scenarioState.chartSizeClass$ | async"
+                         (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+                  <label class="form-check-label" for="input_sizeclass_12-18">12 – 18 t</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sizeclass"
+                         id="input_sizeclass_18-26" value="18-26t"
+                         [ngModel]="scenarioState.chartSizeClass$ | async"
+                         (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+                  <label class="form-check-label" for="input_sizeclass_18-26">18 – 26 t</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sizeclass"
+                         id="input_sizeclass_26-40" value="26-40t"
+                         [ngModel]="scenarioState.chartSizeClass$ | async"
+                         (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+                  <label class="form-check-label" for="input_sizeclass_26-40">&gt; 26 t</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

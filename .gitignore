@@ -1,4 +1,13 @@
+# IDE
 .idea
+.vscode
+
+# Angular
+.angular/
+dist/
+node_modules/
+
+# System files
 *~
 .fuse_hidden*
 .directory
