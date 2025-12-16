@@ -9,6 +9,7 @@ import { ScenarioSelectorComponent } from './components/scenario-selector/scenar
 import { ChartViewComponent } from './components/chart-view/chart-view.component';
 import { AbbreviationsLegendComponent } from './components/abbreviations-legend/abbreviations-legend.component';
 import { SizeClassSelectorComponent } from './components/size-class-selector/size-class-selector.component';
+import { ChartLegendComponent } from './components/chart-legend/chart-legend.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { SizeClassSelectorComponent } from './components/size-class-selector/siz
     ScenarioSelectorComponent,
     ChartViewComponent,
     AbbreviationsLegendComponent,
-    SizeClassSelectorComponent
+    SizeClassSelectorComponent,
+    ChartLegendComponent
   ],
   imports: [
     CommonModule,

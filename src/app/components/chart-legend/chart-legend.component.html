@@ -1,0 +1,13 @@
+<div class="card mt-2">
+  <div class="card-body p-2 small">
+    @for (group of legendGroups; track group) {
+      <div class="mb-1">
+        @for (item of group; track item.name) {
+          <span class="me-2 text-nowrap">
+            <span [style.color]="item.color">■</span> {{item.name}}
+          </span>
+        }
+      </div>
+    }
+  </div>
+</div>
