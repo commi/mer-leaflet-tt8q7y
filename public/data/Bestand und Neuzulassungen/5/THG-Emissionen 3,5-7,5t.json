@@ -1,0 +1,212 @@
+[
+  {
+    "THG-Emissionen": "2025",
+    "Fzg.-Herstellung Diesel": "0.280445434",
+    "Fzg.-Herstellung  BEV": "0.010927193",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "3.40365358",
+    "Strom BEV": "0.024427327",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.000306572 "
+  },
+  {
+    "THG-Emissionen": "2026",
+    "Fzg.-Herstellung Diesel": "0.27979678",
+    "Fzg.-Herstellung  BEV": "0.015317115",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "3.31011158",
+    "Strom BEV": "0.063004047",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.000878677 "
+  },
+  {
+    "THG-Emissionen": "2027",
+    "Fzg.-Herstellung Diesel": "0.276538808",
+    "Fzg.-Herstellung  BEV": "0.029060854",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "3.191848693",
+    "Strom BEV": "0.110865772",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.001736589 "
+  },
+  {
+    "THG-Emissionen": "2028",
+    "Fzg.-Herstellung Diesel": "0.26986516",
+    "Fzg.-Herstellung  BEV": "0.038543514",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "3.051066994",
+    "Strom BEV": "0.161382622",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.00287751 "
+  },
+  {
+    "THG-Emissionen": "2029",
+    "Fzg.-Herstellung Diesel": "0.260516863",
+    "Fzg.-Herstellung  BEV": "0.051630527",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "2.895800113",
+    "Strom BEV": "0.205374012",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.004239882 "
+  },
+  {
+    "THG-Emissionen": "2030",
+    "Fzg.-Herstellung Diesel": "0.249169343",
+    "Fzg.-Herstellung  BEV": "0.061430383",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "2.728099236",
+    "Strom BEV": "0.237476315",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.005810901 "
+  },
+  {
+    "THG-Emissionen": "2031",
+    "Fzg.-Herstellung Diesel": "0.233679866",
+    "Fzg.-Herstellung  BEV": "0.081658417",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "2.552154723",
+    "Strom BEV": "0.28332256",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.007517752 "
+  },
+  {
+    "THG-Emissionen": "2032",
+    "Fzg.-Herstellung Diesel": "0.217877498",
+    "Fzg.-Herstellung  BEV": "0.095390725",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "2.380709312",
+    "Strom BEV": "0.319447525",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.009253945 "
+  },
+  {
+    "THG-Emissionen": "2033",
+    "Fzg.-Herstellung Diesel": "0.202487876",
+    "Fzg.-Herstellung  BEV": "0.111878422",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "2.226662573",
+    "Strom BEV": "0.339956579",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.010830668 "
+  },
+  {
+    "THG-Emissionen": "2034",
+    "Fzg.-Herstellung Diesel": "0.187178254",
+    "Fzg.-Herstellung  BEV": "0.126153298",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "2.066672182",
+    "Strom BEV": "0.353451795",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.012503903 "
+  },
+  {
+    "THG-Emissionen": "2035",
+    "Fzg.-Herstellung Diesel": "0.172610694",
+    "Fzg.-Herstellung  BEV": "0.149898763",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "1.909208965",
+    "Strom BEV": "0.356954289",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.014187636 "
+  },
+  {
+    "THG-Emissionen": "2036",
+    "Fzg.-Herstellung Diesel": "0.157786178",
+    "Fzg.-Herstellung  BEV": "0.163407942",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "1.748589846",
+    "Strom BEV": "0.364192848",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.015958235 "
+  },
+  {
+    "THG-Emissionen": "2037",
+    "Fzg.-Herstellung Diesel": "0.143984527",
+    "Fzg.-Herstellung  BEV": "0.184586009",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "1.590882947",
+    "Strom BEV": "0.363218299",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.017731686 "
+  },
+  {
+    "THG-Emissionen": "2038",
+    "Fzg.-Herstellung Diesel": "0.130388077",
+    "Fzg.-Herstellung  BEV": "0.20589031",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "1.43025987",
+    "Strom BEV": "0.355438018",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.019582233 "
+  },
+  {
+    "THG-Emissionen": "2039",
+    "Fzg.-Herstellung Diesel": "0.116734647",
+    "Fzg.-Herstellung  BEV": "0.226562103",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "1.270881675",
+    "Strom BEV": "0.339690116",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.021469829 "
+  },
+  {
+    "THG-Emissionen": "2040",
+    "Fzg.-Herstellung Diesel": "0.104840121",
+    "Fzg.-Herstellung  BEV": "0.250090831",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "1.129752341",
+    "Strom BEV": "0.312697083",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.02316512 "
+  },
+  {
+    "THG-Emissionen": "2041",
+    "Fzg.-Herstellung Diesel": "0.091697653",
+    "Fzg.-Herstellung  BEV": "0.273622096",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "0.97862753",
+    "Strom BEV": "0.301297625",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.025024131 "
+  },
+  {
+    "THG-Emissionen": "2042",
+    "Fzg.-Herstellung Diesel": "0.080003252",
+    "Fzg.-Herstellung  BEV": "0.283136015",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "0.848606986",
+    "Strom BEV": "0.28205924",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.026633314 "
+  },
+  {
+    "THG-Emissionen": "2043",
+    "Fzg.-Herstellung Diesel": "0.070850481",
+    "Fzg.-Herstellung  BEV": "0.301980264",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "0.74659571",
+    "Strom BEV": "0.255130611",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.02789073 "
+  },
+  {
+    "THG-Emissionen": "2044",
+    "Fzg.-Herstellung Diesel": "0.06179739",
+    "Fzg.-Herstellung  BEV": "0.315739328",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "0.642048658",
+    "Strom BEV": "0.225141588",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.029204389 "
+  },
+  {
+    "THG-Emissionen": "2045",
+    "Fzg.-Herstellung Diesel": "0.055532767",
+    "Fzg.-Herstellung  BEV": "0.329923082",
+    "Fzg.-Herstellung FCEV": "0",
+    "Diesel": "0.571694177",
+    "Strom BEV": "0.188687698",
+    "H2 FCEV": "0",
+    "Infrastruktur BEV ": "0.030068513 "
+  }
+]
