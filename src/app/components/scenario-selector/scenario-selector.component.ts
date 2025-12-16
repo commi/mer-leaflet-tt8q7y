@@ -1,5 +1,7 @@
 import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { ScenarioStateService } from '../../services/scenario-state.service';
+import { SCENARIOS, ScenarioConfig } from '../../models/scenario.model';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-scenario-selector',
@@ -10,4 +12,16 @@ import { ScenarioStateService } from '../../services/scenario-state.service';
 })
 export class ScenarioSelectorComponent {
   scenarioState = inject(ScenarioStateService);
+
+  scenarios = SCENARIOS;
+  showInfo = false;
+
+  // Map current scenario to its config
+  selectedScenarioConfig$ = this.scenarioState.scenario$.pipe(
+    map(scenarioId => this.scenarios.find(s => s.id === scenarioId))
+  );
+
+  toggleInfoBox(): void {
+    this.showInfo = !this.showInfo;
+  }
 }
