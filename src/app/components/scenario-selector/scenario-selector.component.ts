@@ -14,14 +14,9 @@ export class ScenarioSelectorComponent {
   scenarioState = inject(ScenarioStateService);
 
   scenarios = SCENARIOS;
-  showInfo = false;
 
   // Map current scenario to its config
   selectedScenarioConfig$ = this.scenarioState.scenario$.pipe(
     map(scenarioId => this.scenarios.find(s => s.id === scenarioId))
   );
-
-  toggleInfoBox(): void {
-    this.showInfo = !this.showInfo;
-  }
 }
