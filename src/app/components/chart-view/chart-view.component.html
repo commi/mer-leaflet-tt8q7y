@@ -8,36 +8,18 @@
           <div class="col-lg-6 mb-4">
             <!-- Bestand Chart -->
             <div class="mb-4">
-              <div #bestandChartContainer class="chart-container"></div>
-              <div class="text-center small mt-2">{{chartConfigs[0].unitLabel}}</div>
-
-              <!-- Bestand Legend -->
-              @if (legendGroupsByChart.get('bestand'); as legendGroups) {
-                <app-chart-legend [legendGroups]="legendGroups"></app-chart-legend>
-              }
+              <app-bestand-chart></app-bestand-chart>
             </div>
 
             <!-- Kosten Chart -->
             <div>
-              <div #kostenChartContainer class="chart-container"></div>
-              <div class="text-center small mt-2">{{chartConfigs[1].unitLabel}}</div>
-
-              <!-- Kosten Legend -->
-              @if (legendGroupsByChart.get('kosten'); as legendGroups) {
-                <app-chart-legend [legendGroups]="legendGroups"></app-chart-legend>
-              }
+              <app-kosten-chart></app-kosten-chart>
             </div>
           </div>
 
           <!-- Right column: THG -->
           <div class="col-lg-6 mb-4">
-            <div #thgChartContainer class="chart-container"></div>
-            <div class="text-center small mt-2">{{chartConfigs[2].unitLabel}}</div>
-
-            <!-- THG Legend -->
-            @if (legendGroupsByChart.get('thg'); as legendGroups) {
-              <app-chart-legend [legendGroups]="legendGroups"></app-chart-legend>
-            }
+            <app-thg-chart></app-thg-chart>
           </div>
         </div>
       </div>
