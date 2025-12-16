@@ -30,8 +30,6 @@ export class ChartViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   chartConfigs = CHART_CONFIGS;
-  sizeClasses = SIZE_CLASSES;
-
   legendGroupsByChart = new Map<string, Array<Array<{name: string, color: string}>>>();
 
   ngOnInit(): void {
@@ -364,32 +362,4 @@ export class ChartViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.legendGroupsByChart.set(chartId, legendGroups);
   }
 
-  toggleSizeClass(sizeClass: string): void {
-    const currentSelection = this.scenarioState.chartSizeClass$.value;
-
-    // Special handling: "alle Größenklassen" is mutually exclusive
-    if (sizeClass === 'alle Größenklassen') {
-      this.scenarioState.chartSizeClass$.next(['alle Größenklassen']);
-      return;
-    }
-
-    // Remove "alle Größenklassen" if selecting specific size class
-    const filtered = currentSelection.filter(s => s !== 'alle Größenklassen');
-
-    if (filtered.includes(sizeClass)) {
-      // Deselect
-      const updated = filtered.filter(s => s !== sizeClass);
-      // If nothing left, default to "alle"
-      this.scenarioState.chartSizeClass$.next(
-        updated.length > 0 ? updated : ['alle Größenklassen']
-      );
-    } else {
-      // Select
-      this.scenarioState.chartSizeClass$.next([...filtered, sizeClass]);
-    }
-  }
-
-  isSizeClassSelected(sizeClass: string): boolean {
-    return this.scenarioState.chartSizeClass$.value.includes(sizeClass);
-  }
 }
