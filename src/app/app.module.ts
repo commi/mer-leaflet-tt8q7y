@@ -10,6 +10,9 @@ import { ChartViewComponent } from './components/chart-view/chart-view.component
 import { AbbreviationsLegendComponent } from './components/abbreviations-legend/abbreviations-legend.component';
 import { SizeClassSelectorComponent } from './components/size-class-selector/size-class-selector.component';
 import { ChartLegendComponent } from './components/chart-legend/chart-legend.component';
+import { BestandChartComponent } from './components/bestand-chart/bestand-chart.component';
+import { KostenChartComponent } from './components/kosten-chart/kosten-chart.component';
+import { ThgChartComponent } from './components/thg-chart/thg-chart.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { ChartLegendComponent } from './components/chart-legend/chart-legend.com
     ChartViewComponent,
     AbbreviationsLegendComponent,
     SizeClassSelectorComponent,
-    ChartLegendComponent
+    ChartLegendComponent,
+    BestandChartComponent,
+    KostenChartComponent,
+    ThgChartComponent
   ],
   imports: [
     CommonModule,
