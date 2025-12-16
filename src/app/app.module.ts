@@ -6,14 +6,12 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { ScenarioSelectorComponent } from './components/scenario-selector/scenario-selector.component';
-import { MapViewComponent } from './components/map-view/map-view.component';
 import { ChartViewComponent } from './components/chart-view/chart-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ScenarioSelectorComponent,
-    MapViewComponent,
     ChartViewComponent
   ],
   imports: [
