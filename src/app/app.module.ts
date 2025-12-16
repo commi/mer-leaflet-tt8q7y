@@ -7,12 +7,14 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { ScenarioSelectorComponent } from './components/scenario-selector/scenario-selector.component';
 import { ChartViewComponent } from './components/chart-view/chart-view.component';
+import { AbbreviationsLegendComponent } from './components/abbreviations-legend/abbreviations-legend.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ScenarioSelectorComponent,
-    ChartViewComponent
+    ChartViewComponent,
+    AbbreviationsLegendComponent
   ],
   imports: [
     CommonModule,

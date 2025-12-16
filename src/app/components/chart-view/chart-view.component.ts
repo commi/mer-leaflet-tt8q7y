@@ -3,6 +3,7 @@ import { Chart } from 'frappe-charts';
 import { ScenarioStateService } from '../../services/scenario-state.service';
 import { DataService } from '../../services/data.service';
 import { CHART_CONFIGS, ChartConfig } from '../../models/chart-config.model';
+import { getSeriesColor, SIZE_CLASSES } from '../../utils/color.util';
 import { Subscription, combineLatest, forkJoin, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
@@ -29,46 +30,9 @@ export class ChartViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   chartConfigs = CHART_CONFIGS;
-  sizeClasses = [
-    'alle Größenklassen',
-    '3,5-7,5t',
-    '7,5-12t',
-    '12-18t',
-    '18-26t',
-    '26-40t'
-  ];
+  sizeClasses = SIZE_CLASSES;
 
   legendGroupsByChart = new Map<string, Array<Array<{name: string, color: string}>>>();
-
-  colorMap: { [key: string]: string } = {
-    "BEV100": '#C3E2FB',
-    "BEV200": '#88C5F6',
-    "BEV300": '#4CA8F2',
-    "BEV400": '#0D68B1',
-    "BEV500": '#0A4E85',
-    "BEV600": '#063458',
-    "O-HEV": '#DEC600',
-    "O-BEV50": "#EBF7CE",
-    "O-BEV50 ": "#EBF7CE",
-    "O-BEV100": "#D7EF9D",
-    "O-BEV150": "#C3E66C",
-    "O-BEV200": "#92C020",
-    "O-BEV250": "#6D9018",
-    "O-BEV300": "#496010",
-    "FCEV": '#C00000',
-    "Diesel ": '#9A9A9A',
-    "Strom BEV": "#4CA8F2",
-    "Strom O-BEV": "#92C020",
-    "H2 FCEV": "#C00000",
-    "Diesel": "#9A9A9A",
-    "Fzg.-Herstellung  BEV": "#88C5F6",
-    "Fzg.-Herstellung O-BEV": "#D7EF9D",
-    "Fzg.-Herstellung FCEV": "#E02020",
-    "Fzg.-Herstellung Diesel": "#BABAB9",
-    "Infrastruktur BEV": "#0D68B1",
-    "Infrastruktur O-BEV": "#6D9018",
-    "Infrastruktur O-BEV ": "#6D9018",
-  };
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -122,36 +86,141 @@ export class ChartViewComponent implements OnInit, AfterViewInit, OnDestroy {
     sizeClasses: string[]
   ): { labels: string[], datasets: Array<{name: string, values: number[]}> } {
 
-    // If only "alle Größenklassen" selected, return as-is (no suffix needed)
+    // If only "alle Größenklassen" selected, aggregate by technology (no suffix needed)
     if (sizeClasses.length === 1 && sizeClasses[0] === 'alle Größenklassen') {
       const result = results[0];
       if (!result.data) return { labels: [], datasets: [] };
-      return this.extractChartData(result.data, config, null);
+      const extracted = this.extractChartData(result.data, config, null);
+
+      // Aggregate by technology
+      const techGroups = this.aggregateByTechnology(extracted.datasets);
+
+      // Convert back to dataset format
+      const datasets = techGroups.map(({ technology, values }) => ({
+        name: technology,
+        values
+      }));
+
+      // Sort by technology
+      const sortedDatasets = this.sortDatasetsByTechnology(datasets);
+
+      return {
+        labels: extracted.labels,
+        datasets: sortedDatasets
+      };
     }
 
-    // Multi-select: combine with suffixes
+    // Multi-select: combine with suffixes and aggregate by technology
     const allLabels = new Set<string>();
-    const datasetsBySeries = new Map<string, number[]>();
+    const datasetsByTechAndSize = new Map<string, number[]>();
 
     results.forEach(({ sizeClass, data }) => {
       if (!data || !Array.isArray(data) || data.length === 0) return;
 
-      const extracted = this.extractChartData(data, config, sizeClass);
+      // Extract data WITHOUT suffix first
+      const extracted = this.extractChartData(data, config, null);
       extracted.labels.forEach(label => allLabels.add(label));
 
-      extracted.datasets.forEach(series => {
-        const seriesName = `${series.name}_${sizeClass}`;
-        datasetsBySeries.set(seriesName, series.values);
+      // Group by technology and aggregate values
+      const techGroups = this.aggregateByTechnology(extracted.datasets);
+
+      // Add suffix for size class
+      techGroups.forEach(({ technology, values }) => {
+        const seriesName = `${technology}_${sizeClass}`;
+        datasetsByTechAndSize.set(seriesName, values);
       });
     });
 
     const labels = Array.from(allLabels).sort();
-    const datasets = Array.from(datasetsBySeries.entries()).map(([name, values]) => ({
+    let datasets = Array.from(datasetsByTechAndSize.entries()).map(([name, values]) => ({
       name,
       values
     }));
 
+    // Sort by technology
+    datasets = this.sortDatasetsByTechnology(datasets);
+
     return { labels, datasets };
+  }
+
+  /**
+   * Aggregate datasets by technology group
+   * All series with same technology are summed together:
+   * - BEV100 + BEV200 + BEV300 → BEV
+   * - Strom BEV + Fzg.-Herstellung BEV + Infrastruktur BEV → BEV
+   * - Diesel + Fzg.-Herstellung Diesel → Diesel
+   */
+  private aggregateByTechnology(datasets: Array<{name: string, values: number[]}>): Array<{technology: string, values: number[]}> {
+    const techMap = new Map<string, number[]>();
+
+    datasets.forEach(({ name, values }) => {
+      // Extract technology from series name (last matching word)
+      let tech = 'Unknown';
+
+      if (name.includes('Diesel')) tech = 'Diesel';
+      else if (name.includes('BEV')) tech = 'BEV';  // Catches: BEV100, Strom BEV, Fzg.-Herstellung BEV, etc.
+      else if (name.includes('BWS')) tech = 'BWS';
+      else if (name.includes('O-BEV')) tech = 'OL';  // Check O-BEV before O-HEV
+      else if (name.includes('O-HEV')) tech = 'OL';
+      else if (name.includes('FCEV')) tech = 'FCEV';  // Catches: FCEV, H2 FCEV
+      else if (name.includes('H2')) tech = 'FCEV';
+
+      // Sum values for this technology
+      if (!techMap.has(tech)) {
+        techMap.set(tech, [...values]);
+      } else {
+        const existing = techMap.get(tech)!;
+        techMap.set(tech, existing.map((v, i) => v + (values[i] || 0)));
+      }
+    });
+
+    return Array.from(techMap.entries()).map(([technology, values]) => ({
+      technology,
+      values
+    }));
+  }
+
+  /**
+   * Sort datasets by technology prefix to group same technologies together
+   * Order: Diesel → BEV → BWS → OL/O-BEV/O-HEV → FCEV/H2
+   * Also handles energy categories like "Strom BEV", "Fzg.-Herstellung BEV", etc.
+   */
+  private sortDatasetsByTechnology(datasets: Array<{name: string, values: number[]}>): Array<{name: string, values: number[]}> {
+    const getTechOrder = (name: string): number => {
+      // Split by underscore to remove size class suffix
+      const baseName = name.split('_')[0];
+
+      // Check for energy/infrastructure categories (e.g., "Strom BEV", "Fzg.-Herstellung BEV")
+      // These should be grouped with their technology
+      if (baseName.includes('Diesel')) return 0;
+      if (baseName.includes('BEV')) return 1;
+      if (baseName.includes('BWS')) return 2;
+      if (baseName.includes('O-HEV') || baseName.includes('O-BEV') || baseName.includes('OL')) return 3;
+      if (baseName.includes('H2') || baseName.includes('FCEV')) return 4;
+
+      // Direct matches (for simple series names like "BEV100", "Diesel", etc.)
+      if (baseName.startsWith('Diesel')) return 0;
+      if (baseName.startsWith('BEV')) return 1;
+      if (baseName.startsWith('BWS')) return 2;
+      if (baseName.startsWith('O-HEV') || baseName.startsWith('O-BEV') || baseName.startsWith('OL')) return 3;
+      if (baseName.startsWith('H2') || baseName.startsWith('FCEV')) return 4;
+
+      return 999; // Unknown
+    };
+
+    return datasets.sort((a, b) => {
+      const orderA = getTechOrder(a.name);
+      const orderB = getTechOrder(b.name);
+
+      // Sort by technology order first
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+
+      // Within same technology, sort by series name
+      // This keeps BEV100, BEV200, BEV300... in order
+      return a.name.localeCompare(b.name, undefined, { numeric: true });
+    });
   }
 
   private extractChartData(
@@ -240,22 +309,40 @@ export class ChartViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getSeriesColor(seriesName: string): string {
-    // Strip suffix if present (e.g., "BEV100_3,5-7,5t" -> "BEV100")
-    const baseName = seriesName.split('_')[0];
-    return this.colorMap[baseName] || this.colorMap[seriesName] || '#CCCCCC';
+    return getSeriesColor(seriesName);
   }
 
   private updateLegend(chartId: string, seriesNames: string[]): void {
-    // Group by first character
+    // Group by technology using same logic as sortDatasetsByTechnology
+    const getTechOrder = (name: string): number => {
+      const baseName = name.split('_')[0];
+
+      // Check for energy/infrastructure categories
+      if (baseName.includes('Diesel')) return 0;
+      if (baseName.includes('BEV')) return 1;
+      if (baseName.includes('BWS')) return 2;
+      if (baseName.includes('O-HEV') || baseName.includes('O-BEV') || baseName.includes('OL')) return 3;
+      if (baseName.includes('H2') || baseName.includes('FCEV')) return 4;
+
+      // Direct matches
+      if (baseName.startsWith('Diesel')) return 0;
+      if (baseName.startsWith('BEV')) return 1;
+      if (baseName.startsWith('BWS')) return 2;
+      if (baseName.startsWith('O-HEV') || baseName.startsWith('O-BEV') || baseName.startsWith('OL')) return 3;
+      if (baseName.startsWith('H2') || baseName.startsWith('FCEV')) return 4;
+
+      return 999;
+    };
+
     const legendGroups: Array<Array<{name: string, color: string}>> = [];
     let currentGroup: Array<{name: string, color: string}> = [];
-    let prevFirstChar = '';
+    let prevOrder = -1;
 
     seriesNames.forEach(name => {
-      const firstChar = name.at(0) || '';
+      const techOrder = getTechOrder(name);
 
-      if (prevFirstChar && firstChar !== prevFirstChar) {
-        // Start new group
+      if (prevOrder !== -1 && techOrder !== prevOrder) {
+        // Start new group (different technology)
         if (currentGroup.length > 0) {
           legendGroups.push(currentGroup);
         }
@@ -266,7 +353,7 @@ export class ChartViewComponent implements OnInit, AfterViewInit, OnDestroy {
         name: name,
         color: this.getSeriesColor(name)
       });
-      prevFirstChar = firstChar;
+      prevOrder = techOrder;
     });
 
     // Push last group
