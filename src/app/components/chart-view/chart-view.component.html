@@ -84,23 +84,10 @@
         <app-abbreviations-legend></app-abbreviations-legend>
 
         <!-- Size Class Controls -->
-        <div class="card">
-          <div class="card-body">
-            <h5 class="h6 mb-2">Größenklassen</h5>
-            @for (sizeClass of sizeClasses; track sizeClass) {
-              <div class="form-check">
-                <input class="form-check-input"
-                       type="checkbox"
-                       [id]="'size-' + sizeClass"
-                       [checked]="isSizeClassSelected(sizeClass)"
-                       (change)="toggleSizeClass(sizeClass)">
-                <label class="form-check-label" [for]="'size-' + sizeClass">
-                  {{sizeClass === 'alle Größenklassen' ? 'Alle Größenklassen' : sizeClass.replace('t', ' t')}}
-                </label>
-              </div>
-            }
-          </div>
-        </div>
+        <app-size-class-selector
+          [ngModel]="scenarioState.chartSizeClass$ | async"
+          (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+        </app-size-class-selector>
       </div>
     </div>
   </div>
