@@ -5,9 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ScenarioStateService {
+  // Scenario selection (1-8)
   scenario$ = new BehaviorSubject<string>('1');
-  year$ = new BehaviorSubject<number>(2025);
-  visibleLayer$ = new BehaviorSubject<string>('Diesel'); // Can be: 'Oberleitungsausbau' | 'Diesel' | 'BEV' | 'OLKW' | 'FCEV'
-  chartDataSource$ = new BehaviorSubject<string>('Bestand');
-  chartSizeClass$ = new BehaviorSubject<string>('alle Größenklassen');
+
+  // Size class multi-select (array of selected size classes)
+  // Can include: 'alle Größenklassen', '3,5-7,5t', '7,5-12t', '12-18t', '18-26t', '26-40t'
+  chartSizeClass$ = new BehaviorSubject<string[]>(['alle Größenklassen']);
 }
