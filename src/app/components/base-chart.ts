@@ -3,6 +3,7 @@ import { Chart } from 'frappe-charts';
 import { DataService } from '../services/data.service';
 import { ScenarioStateService } from '../services/scenario-state.service';
 import { ChartConfig } from '../models/chart-config.model';
+import { DataRow, hasGroessenklasse } from '../models/data.model';
 import { getSeriesColor } from '../utils/color.util';
 import { LegendItem } from './chart-legend/chart-legend.component';
 import { Subscription, combineLatest, of } from 'rxjs';
@@ -57,12 +58,12 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
     // Fetch single data file (new format: all data in one file)
     const filename = `/data/${this.chartConfig.dataSource}.json`;
 
-    this.dataService.fetchJSON(filename).pipe(
+    this.dataService.fetchJSON<DataRow[]>(filename).pipe(
       catchError(error => {
         console.warn(`Failed to load ${filename}:`, error);
-        return of([]);
+        return of<DataRow[]>([]);
       })
-    ).subscribe((data: any[]) => {
+    ).subscribe(data => {
       const chartData = this.transformData(data, scenario, sizeClasses);
       this.renderChart(chartData);
     });
@@ -74,7 +75,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
    * Chart format: {labels: ['25, '26, ...], datasets: [{name, values}]}
    */
   private transformData(
-    rawData: any[],
+    rawData: DataRow[],
     scenario: string,
     sizeClasses: string[]
   ): { labels: string[], datasets: Array<{name: string, values: number[]}> } {
@@ -84,7 +85,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
 
     // Determine key names based on data structure
     const dataKey = this.chartConfig.dataKey; // 'Bestand', 'Kosten', or 'THG'
-    const hasSizeClass = filtered.length > 0 && 'Groessenklasse' in filtered[0];
+    const hasSizeClass = filtered.length > 0 && hasGroessenklasse(filtered[0]);
     const techKey = hasSizeClass ? 'Technologie' : 'Komponente';
 
     // Filter by size classes (only for Bestand/Kosten, not THG)
@@ -92,7 +93,12 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
     if (hasSizeClass && this.useSizeClassFilter) {
       const shouldFilter = !sizeClasses.includes('alle Größenklassen');
       if (shouldFilter) {
-        filtered = filtered.filter(row => sizeClasses.includes(row.Groessenklasse));
+        filtered = filtered.filter(row => {
+          if (hasGroessenklasse(row)) {
+            return sizeClasses.includes(row.Groessenklasse);
+          }
+          return false;
+        });
       }
     }
 
@@ -104,15 +110,30 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
     const datasetMap = new Map<string, number[]>();
 
     filtered.forEach(row => {
-      const tech = row[techKey]?.trim() || 'Unknown';
+      // Get technology/component name with type safety
+      let tech: string;
+      if (hasGroessenklasse(row)) {
+        tech = row.Technologie?.trim() || 'Unknown';
+      } else {
+        tech = row.Komponente?.trim() || 'Unknown';
+      }
+
       const year = row.Jahr;
-      const value = parseFloat(row[dataKey]) / this.chartConfig.unitDivisor;
+
+      // Get value from correct field with type safety
+      let rawValue: string | undefined;
+      if (hasGroessenklasse(row)) {
+        rawValue = dataKey === 'Bestand' ? row.Bestand : row.Kosten;
+      } else {
+        rawValue = row.THG;
+      }
+      const value = parseFloat(rawValue || '0') / this.chartConfig.unitDivisor;
 
       // Create series name with size class suffix (if applicable)
       // Add suffix only when multiple specific size classes selected (not "alle Größenklassen")
       let seriesName = tech;
       const hasAlleGK = sizeClasses.includes('alle Größenklassen');
-      if (hasSizeClass && this.useSizeClassFilter && !hasAlleGK && sizeClasses.length > 1) {
+      if (hasSizeClass && this.useSizeClassFilter && !hasAlleGK && sizeClasses.length > 1 && hasGroessenklasse(row)) {
         seriesName = `${tech} ${row.Groessenklasse}`;
       }
 

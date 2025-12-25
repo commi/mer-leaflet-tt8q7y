@@ -111,8 +111,9 @@ const COLOR_MAP: { [key: string]: string } = {};
     ];
 
     SIZE_CLASSES.forEach((sizeClass, index) => {
-      const key = `${tech.prefix}_${sizeClass}`;
-      COLOR_MAP[key] = sizeClassColors[index] || tech.primary;
+      // Support both underscore and space separators
+      COLOR_MAP[`${tech.prefix}_${sizeClass}`] = sizeClassColors[index] || tech.primary;
+      COLOR_MAP[`${tech.prefix} ${sizeClass}`] = sizeClassColors[index] || tech.primary;
     });
   });
 })();

@@ -15,12 +15,12 @@ export class DataService {
    * @param filename URL to the JSON file
    * @returns Observable with the JSON data
    */
-  fetchJSON(filename: string): Observable<any> {
+  fetchJSON<T = unknown>(filename: string): Observable<T> {
     if (this.dataCache.has(filename)) {
       return of(this.dataCache.get(filename));
     }
 
-    return this.http.get(filename).pipe(
+    return this.http.get<T>(filename).pipe(
       tap(data => this.dataCache.set(filename, data))
     );
   }
