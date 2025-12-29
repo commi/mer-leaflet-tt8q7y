@@ -113,7 +113,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
       let seriesName = tech;
       const hasAlleGK = sizeClasses.includes('alle Größenklassen');
       if (hasSizeClass && this.useSizeClassFilter && !hasAlleGK && sizeClasses.length > 1) {
-        seriesName = `${tech}_${row.Groessenklasse}`;
+        seriesName = `${tech} ${row.Groessenklasse}`;
       }
 
       // Initialize array if not exists
@@ -181,14 +181,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
       this.chart.destroy();
     }
 
-    // Handle empty data
-    if (chartData.labels.length === 0 || chartData.datasets.length === 0) {
-      this.chartContainer.nativeElement.innerHTML = '<div class="alert alert-warning">Keine Daten verfügbar</div>';
-      return;
-    }
-
     // Create new chart
-    this.chartContainer.nativeElement.innerHTML = '';
     this.chart = new Chart(this.chartContainer.nativeElement, {
       title: `${this.chartConfig.title} nach Fahrzeugtyp`,
       data: {

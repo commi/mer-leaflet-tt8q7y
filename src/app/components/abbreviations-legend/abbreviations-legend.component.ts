@@ -8,18 +8,33 @@ import { getTechnologyColor } from '../../utils/color.util';
     <div class="card mb-3">
       <div class="card-body">
         <h5 class="h6 mb-2">Abkürzungen</h5>
-        <div class="small">
+        <dl class="abbreviations-grid small">
           @for (abbr of abbreviations; track abbr.tech) {
-            <div class="mb-1">
-              <span [style.color]="abbr.color">■</span>
-              <strong>{{abbr.tech}}</strong>{{abbr.description ? ' = ' + abbr.description : ''}}
-            </div>
+            <dt><span [style.color]="abbr.color">■</span> <strong>{{abbr.tech}}</strong></dt>
+            <dd>{{abbr.description}}</dd>
           }
-        </div>
+        </dl>
       </div>
     </div>
   `,
-  styles: ``
+  styles: `
+    .abbreviations-grid {
+      display: grid;
+      grid-template-columns: auto auto 1fr;
+      align-items: center;
+      gap: 0.25rem 0.5rem;
+      margin-bottom: 0;
+    }
+
+    .abbreviations-grid dt {
+      display: contents;
+      font-weight: unset;
+    }
+
+    .abbreviations-grid dd {
+      margin-bottom: 0;
+    }
+  `
 })
 export class AbbreviationsLegendComponent {
   abbreviations = [

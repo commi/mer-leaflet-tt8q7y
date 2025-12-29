@@ -9,41 +9,41 @@ export const SCENARIOS: ScenarioConfig[] = [
   {
     id: '1',
     name: 'Batterie-Lkw',
-    infoText: '[TBD - Text kommt noch vom Team]'
+    infoText: '[Text kommt noch]'
   },
   {
     id: '2',
     name: 'Batterie-Lkw ohne Verzögerung',
-    infoText: '[TBD - Text kommt noch vom Team]'
+    infoText: '[Text kommt noch]'
   },
   {
     id: '3',
     name: 'Batterie-Lkw mit Ladeinfrastruktur-Restriktion',
-    infoText: '[TBD - Text kommt noch vom Team]'
+    infoText: '[Text kommt noch]'
   },
   {
     id: '4',
     name: 'Mit Batteriewechsel-Lkw',
-    infoText: '[TBD - Text kommt noch vom Team]'
+    infoText: '[Text kommt noch]'
   },
   {
     id: '5',
     name: 'Mit Batteriewechsel-Lkw und Batterie-Lkw mit max. 1000 km Reichweite',
-    infoText: '[TBD - Text kommt noch vom Team]'
+    infoText: '[Text kommt noch]'
   },
   {
     id: '6',
     name: 'Mit Oberleitungs-Lkw',
-    infoText: '[TBD - Text kommt noch vom Team]'
+    infoText: '[Text kommt noch]'
   },
   {
     id: '7',
     name: 'Mit Brennstoffzellen-Lkw',
-    infoText: '[TBD - Text kommt noch vom Team]'
+    infoText: '[Text kommt noch]'
   },
   {
     id: '8',
     name: 'Mit Brennstoffzellen-Lkw und H2-Mix',
-    infoText: '[TBD - Text kommt noch vom Team]'
+    infoText: '[Text kommt noch]'
   }
 ];

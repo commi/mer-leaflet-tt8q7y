@@ -1,5 +1,5 @@
 <div class="card">
-  <div class="card-body d-flex gap-4 align-items-start">
+  <div class="card-body d-flex gap-4 align-items-center">
     <label for="szenario-select" class="card-title h5 mb-0 flex-shrink-0">Szenario:</label>
     <select id="szenario-select"
             class="form-select form-select-lg"
@@ -11,13 +11,11 @@
       }
     </select>
   </div>
-</div>
-@if (selectedScenarioConfig$ | async; as config) {
-  <div class="card mt-3">
+  @if (selectedScenarioConfig$ | async; as config) {
     <div class="card-body border-top">
       <p class="card-text mb-0">
         {{ config.infoText }}
       </p>
     </div>
-  </div>
-}
+  }
+</div>

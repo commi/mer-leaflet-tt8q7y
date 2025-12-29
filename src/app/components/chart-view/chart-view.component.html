@@ -1,35 +1,16 @@
 <div class="card flex-grow-1">
-  <div class="card-body d-flex flex-column gap-3">
-    <div class="row">
-      <!-- LEFT: 3 Charts (col-lg-9) -->
-      <div class="col-lg-9">
-        <div class="row">
-          <!-- Left column: Bestand + Kosten -->
-          <div class="col-lg-6 mb-4">
-            <!-- Bestand Chart -->
-            <div class="mb-4">
-              <app-bestand-chart></app-bestand-chart>
-            </div>
+  <div class="card-body">
+    <div class="charts-grid">
 
-            <!-- Kosten Chart -->
-            <div>
-              <app-kosten-chart></app-kosten-chart>
-            </div>
-          </div>
+      <app-bestand-chart class="chart-area-bestand"></app-bestand-chart>
 
-          <!-- Right column: THG -->
-          <div class="col-lg-6 mb-4">
-            <app-thg-chart></app-thg-chart>
-          </div>
-        </div>
-      </div>
+      <app-kosten-chart class="chart-area-kosten"></app-kosten-chart>
 
-      <!-- RIGHT SIDEBAR: Legend & Controls (col-lg-3) -->
-      <div class="col-lg-3">
-        <!-- Global Legend -->
+      <app-thg-chart class="chart-area-thg"></app-thg-chart>
+
+      <!-- Right sidebar: Controls -->
+      <div class="sidebar-controls">
         <app-abbreviations-legend></app-abbreviations-legend>
-
-        <!-- Size Class Controls -->
         <app-size-class-selector
           [ngModel]="scenarioState.chartSizeClass$ | async"
           (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
