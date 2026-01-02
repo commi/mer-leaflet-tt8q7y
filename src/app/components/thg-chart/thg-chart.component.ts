@@ -12,4 +12,5 @@ export class ThgChartComponent extends BaseChartComponent {
   @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;
 
   chartConfig = CHART_CONFIGS[2]; // THG config
+  protected override useSizeClassFilter = false; // THG has no size classes
 }

@@ -43,6 +43,7 @@ export class SizeClassSelectorComponent implements ControlValueAccessor {
     if (sizeClass === 'alle Größenklassen') {
       this.selectedSizeClasses = ['alle Größenklassen'];
       this.onChange(this.selectedSizeClasses);
+      this.onTouched();
       return;
     }
 

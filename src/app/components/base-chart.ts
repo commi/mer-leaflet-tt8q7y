@@ -5,12 +5,12 @@ import { ScenarioStateService } from '../services/scenario-state.service';
 import { ChartConfig } from '../models/chart-config.model';
 import { getSeriesColor } from '../utils/color.util';
 import { LegendItem } from './chart-legend/chart-legend.component';
-import { Subscription, combineLatest, forkJoin, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Subscription, combineLatest, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Directive()
 export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() selectedSizeClasses: string[] = ['alle Größenklassen'];
+  @Input() selectedSizeClasses: string[] = [];
 
   protected scenarioState = inject(ScenarioStateService);
   protected dataService = inject(DataService);
@@ -23,6 +23,8 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
   // Abstract properties that child components must provide
   abstract chartConfig: ChartConfig;
   abstract chartContainer: ElementRef<HTMLDivElement>;
+  // Override this in THG chart to skip size class filtering
+  protected useSizeClassFilter = true;
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -52,128 +54,103 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
     const scenario = this.scenarioState.scenario$.value;
     const sizeClasses = this.scenarioState.chartSizeClass$.value;
 
-    // Fetch data for all selected size classes
-    const requests = sizeClasses.map(sizeClass => {
-      const filename = `/data/Bestand und Neuzulassungen/${scenario}/${this.chartConfig.dataSource} ${sizeClass}.json`;
-      return this.dataService.fetchJSON(filename).pipe(
-        map(data => ({ sizeClass, data })),
-        catchError(error => {
-          console.warn(`Failed to load ${filename}:`, error);
-          return of({ sizeClass, data: null });
-        })
-      );
-    });
+    // Fetch single data file (new format: all data in one file)
+    const filename = `/data/${this.chartConfig.dataSource}.json`;
 
-    forkJoin(requests).subscribe(results => {
-      const combinedData = this.combineMultiSizeClassData(results, sizeClasses);
-      this.renderChart(combinedData);
+    this.dataService.fetchJSON(filename).pipe(
+      catchError(error => {
+        console.warn(`Failed to load ${filename}:`, error);
+        return of([]);
+      })
+    ).subscribe((data: any[]) => {
+      const chartData = this.transformData(data, scenario, sizeClasses);
+      this.renderChart(chartData);
     });
   }
 
-  private combineMultiSizeClassData(
-    results: Array<{sizeClass: string, data: any}>,
+  /**
+   * Transform new data format (long format) to chart format
+   * New format: [{Szenario, Groessenklasse, Technologie/Komponente, Jahr, Value}]
+   * Chart format: {labels: ['25, '26, ...], datasets: [{name, values}]}
+   */
+  private transformData(
+    rawData: any[],
+    scenario: string,
     sizeClasses: string[]
   ): { labels: string[], datasets: Array<{name: string, values: number[]}> } {
 
-    // If only "alle Größenklassen" selected, aggregate by technology (no suffix needed)
-    if (sizeClasses.length === 1 && sizeClasses[0] === 'alle Größenklassen') {
-      const result = results[0];
-      if (!result.data) return { labels: [], datasets: [] };
-      const extracted = this.extractChartData(result.data, null);
+    // Filter by scenario
+    let filtered = rawData.filter(row => row.Szenario === scenario);
 
-      // Aggregate by technology
-      const techGroups = this.aggregateByTechnology(extracted.datasets);
+    // Determine key names based on data structure
+    const dataKey = this.chartConfig.dataKey; // 'Bestand', 'Kosten', or 'THG'
+    const hasSizeClass = filtered.length > 0 && 'Groessenklasse' in filtered[0];
+    const techKey = hasSizeClass ? 'Technologie' : 'Komponente';
 
-      // Convert back to dataset format
-      const datasets = techGroups.map(({ technology, values }) => ({
-        name: technology,
-        values
-      }));
-
-      // Sort by technology
-      const sortedDatasets = this.sortDatasetsByTechnology(datasets);
-
-      return {
-        labels: extracted.labels,
-        datasets: sortedDatasets
-      };
+    // Filter by size classes (only for Bestand/Kosten, not THG)
+    // "alle Größenklassen" means no filtering (include all available)
+    if (hasSizeClass && this.useSizeClassFilter) {
+      const shouldFilter = !sizeClasses.includes('alle Größenklassen');
+      if (shouldFilter) {
+        filtered = filtered.filter(row => sizeClasses.includes(row.Groessenklasse));
+      }
     }
 
-    // Multi-select: combine with suffixes and aggregate by technology
-    const allLabels = new Set<string>();
-    const datasetsByTechAndSize = new Map<string, number[]>();
+    // Get unique years (sorted)
+    const years = [...new Set(filtered.map(row => row.Jahr))].sort();
+    const labels = years.map(year => `'${year.toString().slice(-2)}`);
 
-    results.forEach(({ sizeClass, data }) => {
-      if (!data || !Array.isArray(data) || data.length === 0) return;
+    // Build datasets
+    const datasetMap = new Map<string, number[]>();
 
-      // Extract data WITHOUT suffix first
-      const extracted = this.extractChartData(data, null);
-      extracted.labels.forEach(label => allLabels.add(label));
+    filtered.forEach(row => {
+      const tech = row[techKey]?.trim() || 'Unknown';
+      const year = row.Jahr;
+      const value = parseFloat(row[dataKey]) / this.chartConfig.unitDivisor;
 
-      // Group by technology and aggregate values
-      const techGroups = this.aggregateByTechnology(extracted.datasets);
+      // Create series name with size class suffix (if applicable)
+      // Add suffix only when multiple specific size classes selected (not "alle Größenklassen")
+      let seriesName = tech;
+      const hasAlleGK = sizeClasses.includes('alle Größenklassen');
+      if (hasSizeClass && this.useSizeClassFilter && !hasAlleGK && sizeClasses.length > 1) {
+        seriesName = `${tech}_${row.Groessenklasse}`;
+      }
 
-      // Add suffix for size class
-      techGroups.forEach(({ technology, values }) => {
-        const seriesName = `${technology}_${sizeClass}`;
-        datasetsByTechAndSize.set(seriesName, values);
-      });
+      // Initialize array if not exists
+      if (!datasetMap.has(seriesName)) {
+        datasetMap.set(seriesName, new Array(years.length).fill(0));
+      }
+
+      // Add value at correct year index
+      const yearIndex = years.indexOf(year);
+      if (yearIndex !== -1) {
+        const existing = datasetMap.get(seriesName)!;
+        existing[yearIndex] += value;
+      }
     });
 
-    const labels = Array.from(allLabels).sort();
-    let datasets = Array.from(datasetsByTechAndSize.entries()).map(([name, values]) => ({
+    // Convert to array and sort by technology
+    let datasets = Array.from(datasetMap.entries()).map(([name, values]) => ({
       name,
       values
     }));
 
-    // Sort by technology
     datasets = this.sortDatasetsByTechnology(datasets);
 
     return { labels, datasets };
   }
 
-  private aggregateByTechnology(datasets: Array<{name: string, values: number[]}>): Array<{technology: string, values: number[]}> {
-    const techMap = new Map<string, number[]>();
-
-    datasets.forEach(({ name, values }) => {
-      // Determine technology group based on which technology is mentioned
-      // IMPORTANT: Check most specific prefixes first (O-BEV before BEV!)
-      let tech = '';
-
-      if (name.includes('O-BEV')) tech = 'OL';  // Must check BEFORE 'BEV'!
-      else if (name.includes('O-HEV')) tech = 'OL';
-      else if (name.includes('BWS')) tech = 'BWS';
-      else if (name.includes('BEV')) tech = 'BEV';  // Catches: BEV100, Strom BEV, Fzg.-Herstellung BEV, etc.
-      else if (name.includes('FCEV')) tech = 'FCEV';  // Catches: FCEV, H2 FCEV
-      else if (name.includes('H2')) tech = 'FCEV';
-      else if (name.includes('Diesel')) tech = 'Diesel';
-      else tech = name; // Fallback: use original name
-
-      // Sum values for this technology
-      if (!techMap.has(tech)) {
-        techMap.set(tech, [...values]);
-      } else {
-        const existing = techMap.get(tech)!;
-        techMap.set(tech, existing.map((v, i) => v + (values[i] || 0)));
-      }
-    });
-
-    return Array.from(techMap.entries()).map(([technology, values]) => ({
-      technology,
-      values
-    }));
-  }
-
   private sortDatasetsByTechnology(datasets: Array<{name: string, values: number[]}>): Array<{name: string, values: number[]}> {
     const getTechOrder = (name: string): number => {
       // Split by underscore to remove size class suffix
-      const baseName = name.split('_')[0];
+      const baseName = name.split('_')[0].trim();
 
-      // IMPORTANT: Check most specific prefixes first (O-BEV before BEV!)
-      if (baseName.includes('O-BEV') || baseName.includes('O-HEV') || baseName.includes('OL')) return 3;
-      if (baseName.includes('BWS')) return 2;
+      // IMPORTANT: Check most specific prefixes first!
+      // Order: Diesel (0) → BEV (1) → BWS (2) → OL (3) → FCEV (4)
+      if (baseName.includes('OL-BEV')) return 3;
+      if (baseName.includes('BWS-BEV') || baseName.includes('BWS')) return 2;
       if (baseName.includes('BEV')) return 1;
-      if (baseName.includes('H2') || baseName.includes('FCEV')) return 4;
+      if (baseName.includes('FCEV') || baseName.includes('H2')) return 4;
       if (baseName.includes('Diesel')) return 0;
 
       return 999; // Unknown
@@ -189,40 +166,8 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
       }
 
       // Within same technology, sort by series name
-      // This keeps BEV100, BEV200, BEV300... in order
       return a.name.localeCompare(b.name, undefined, { numeric: true });
     });
-  }
-
-  private extractChartData(
-    data: any[],
-    sizeClassSuffix: string | null
-  ): { labels: string[], datasets: Array<{name: string, values: number[]}> } {
-
-    // Extract labels (years with ' prefix)
-    const labels = data.map(datum => {
-      const year = typeof datum[this.chartConfig.dataSource] === 'string'
-        ? datum[this.chartConfig.dataSource]
-        : datum[this.chartConfig.dataSource].toString();
-      return `'${year.slice(-2)}`;
-    });
-
-    // Extract series names (exclude dataSource key and 'null')
-    const seriesNames = Object.keys(data[0])
-      .filter(key => key !== this.chartConfig.dataSource && key !== 'null');
-
-    // Create datasets with unit conversion
-    const datasets = seriesNames.map(name => ({
-      name: sizeClassSuffix ? `${name}_${sizeClassSuffix}` : name,
-      values: data.map(datum => {
-        const value = typeof datum[name] === 'string'
-          ? parseFloat(datum[name].replace(',', '.'))
-          : datum[name];
-        return value / this.chartConfig.unitDivisor;
-      })
-    }));
-
-    return { labels, datasets };
   }
 
   private renderChart(
@@ -270,13 +215,13 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
   private updateLegend(seriesNames: string[]): void {
     // Group by technology using same logic as sortDatasetsByTechnology
     const getTechOrder = (name: string): number => {
-      const baseName = name.split('_')[0];
+      const baseName = name.split('_')[0].trim();
 
-      // IMPORTANT: Check most specific prefixes first (O-BEV before BEV!)
-      if (baseName.includes('O-BEV') || baseName.includes('O-HEV') || baseName.includes('OL')) return 3;
-      if (baseName.includes('BWS')) return 2;
+      // IMPORTANT: Check most specific prefixes first!
+      if (baseName.includes('OL-BEV')) return 3;
+      if (baseName.includes('BWS-BEV') || baseName.includes('BWS')) return 2;
       if (baseName.includes('BEV')) return 1;
-      if (baseName.includes('H2') || baseName.includes('FCEV')) return 4;
+      if (baseName.includes('FCEV') || baseName.includes('H2')) return 4;
       if (baseName.includes('Diesel')) return 0;
 
       return 999;

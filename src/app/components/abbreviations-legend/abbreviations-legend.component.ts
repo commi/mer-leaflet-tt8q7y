@@ -25,8 +25,8 @@ export class AbbreviationsLegendComponent {
   abbreviations = [
     { tech: 'Diesel', description: '', color: getTechnologyColor('Diesel') },
     { tech: 'BEV', description: 'Batterieelektrisch', color: getTechnologyColor('BEV') },
-    { tech: 'BWS', description: 'Batteriewechselsystem', color: getTechnologyColor('BWS') },
-    { tech: 'OL', description: 'Oberleitung', color: getTechnologyColor('OL') },
+    { tech: 'BWS', description: 'Batteriewechselsystem', color: getTechnologyColor('BWS-BEV') },
+    { tech: 'OL', description: 'Oberleitung', color: getTechnologyColor('OL-BEV') },
     { tech: 'FCEV', description: 'H₂-Brennstoffzelle', color: getTechnologyColor('FCEV') }
   ];
 }

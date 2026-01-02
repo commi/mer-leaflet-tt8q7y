@@ -44,40 +44,90 @@ export interface TechnologyColor {
 
 // Designer color palette from enERSyn brand guidelines
 export const TECHNOLOGY_COLORS: TechnologyColor[] = [
+  // Primary technologies (longest prefixes first for matching!)
+  { prefix: 'OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
+  { prefix: 'BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
   { prefix: 'Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
   { prefix: 'BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'BWS', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
-  { prefix: 'OL', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'O-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'O-HEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
   { prefix: 'FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'H2 FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'H2', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'Strom BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'Strom O-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'Fzg.-Herstellung BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'Fzg.-Herstellung O-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'Fzg.-Herstellung FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'Fzg.-Herstellung Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
+  // THG component categories
+  { prefix: 'Fahrzeug Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
+  { prefix: 'Fahrzeug BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
+  { prefix: 'Fahrzeug BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
+  { prefix: 'Fahrzeug OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
+  { prefix: 'Fahrzeug FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
+  { prefix: 'Energie Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
+  { prefix: 'Energie BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
+  { prefix: 'Energie BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
+  { prefix: 'Energie OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
+  { prefix: 'Energie FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
+  { prefix: 'Energie_TTW Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
   { prefix: 'Infrastruktur BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'Infrastruktur O-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' }
+  { prefix: 'Infrastruktur BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
+  { prefix: 'Infrastruktur OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
+  { prefix: 'Infrastruktur FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
+  { prefix: 'Akku BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
+  { prefix: 'Akku BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
+  { prefix: 'Akku OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
+  { prefix: 'Akku FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
+  { prefix: 'Wartung BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
+  { prefix: 'Wartung BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
+  { prefix: 'Wartung Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
+  { prefix: 'Wartung FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
+  { prefix: 'Wartung OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
+  { prefix: 'EoL BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
+  { prefix: 'EoL BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
+  { prefix: 'EoL Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
+  { prefix: 'EoL FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
+  { prefix: 'EoL OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' }
 ];
 
+// Size classes from enERSyn data
 export const SIZE_CLASSES = [
   'alle Größenklassen',
-  '3,5-7,5t',
-  '7,5-12t',
-  '12-18t',
-  '18-26t',
-  '26-40t'
+  '3,5-12 t',
+  '12-26 t',
+  'Lastzüge',
+  'Sattelzüge'
 ];
 
+// Static color mapping: Technology + Size Class → Fixed Color
+// This ensures consistent colors regardless of which size classes are selected
+const COLOR_MAP: { [key: string]: string } = {};
+
+// Build static color map on module load
+(() => {
+  TECHNOLOGY_COLORS.forEach(tech => {
+    // No suffix (or "alle Größenklassen") → primary color
+    COLOR_MAP[tech.prefix] = tech.primary;
+
+    // Each size class gets a fixed shade
+    const sizeClassColors = [
+      tech.primary,     // "alle Größenklassen" or no suffix
+      tech.light,       // "3,5-12 t"
+      tech.primary,     // "12-26 t"
+      tech.dark,        // "Lastzüge"
+      chroma.mix(tech.primary, tech.dark, 0.5, 'lab').hex()  // "Sattelzüge"
+    ];
+
+    SIZE_CLASSES.forEach((sizeClass, index) => {
+      const key = `${tech.prefix}_${sizeClass}`;
+      COLOR_MAP[key] = sizeClassColors[index] || tech.primary;
+    });
+  });
+})();
+
 /**
- * Get color for a series name, with automatic shading for size classes
- * @param seriesName Full series name (e.g., "BEV" or "BEV_3,5-7,5t")
+ * Get color for a series name with static tech + size class mapping
+ * @param seriesName Full series name (e.g., "BEV" or "BEV_3,5-12 t")
  * @returns Hex color string
  */
 export function getSeriesColor(seriesName: string): string {
+  // Check static map first
+  if (COLOR_MAP[seriesName]) {
+    return COLOR_MAP[seriesName];
+  }
+
   // Find matching technology color by prefix (longest match first)
   const sortedColors = [...TECHNOLOGY_COLORS].sort((a, b) => b.prefix.length - a.prefix.length);
   const techColor = sortedColors.find(tc =>
@@ -89,46 +139,8 @@ export function getSeriesColor(seriesName: string): string {
     return '#CCCCCC';
   }
 
-  // Extract size class suffix if present
-  const hasSuffix = seriesName.includes('_');
-  if (!hasSuffix) {
-    // No suffix = return primary color
-    return techColor.primary;
-  }
-
-  // Parse suffix to determine shade index
-  const suffix = seriesName.split('_')[1];
-  const shadeIndex = getSizeClassIndex(suffix);
-
-  // Use designer colors: light → primary → dark
-  return getShadeFromPalette(techColor, shadeIndex, SIZE_CLASSES.length);
-}
-
-/**
- * Get index of size class for shading
- */
-function getSizeClassIndex(sizeClass: string): number {
-  const index = SIZE_CLASSES.indexOf(sizeClass);
-  return index >= 0 ? index : 0;
-}
-
-/**
- * Get shade from designer palette based on size class index
- */
-function getShadeFromPalette(techColor: TechnologyColor, index: number, totalShades: number): string {
-  // If "alle Größenklassen" (index 0), return primary color
-  if (index === 0) {
-    return techColor.primary;
-  }
-
-  // Interpolate between light → primary → dark
-  const scale = chroma.scale([
-    techColor.light,
-    techColor.primary,
-    techColor.dark
-  ]).mode('lab').colors(totalShades);
-
-  return scale[index];
+  // Return primary color as fallback
+  return techColor.primary;
 }
 
 /**

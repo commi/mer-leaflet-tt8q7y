@@ -9,7 +9,7 @@
                [checked]="isSizeClassSelected(sizeClass)"
                (change)="toggleSizeClass(sizeClass)">
         <label class="form-check-label" [for]="'size-' + sizeClass">
-          {{sizeClass === 'alle Größenklassen' ? 'Alle Größenklassen' : sizeClass.replace('t', ' t')}}
+          {{sizeClass}}
         </label>
       </div>
     }
