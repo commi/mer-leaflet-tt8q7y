@@ -82,9 +82,12 @@ export const TECHNOLOGY_COLORS: TechnologyColor[] = [
   { prefix: 'EoL OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' }
 ];
 
+// Special size class value for "all size classes"
+export const ALL_SIZE_CLASSES = 'alle Größenklassen';
+
 // Size classes from enERSyn data
 export const SIZE_CLASSES = [
-  'alle Größenklassen',
+  ALL_SIZE_CLASSES,
   '3,5-12 t',
   '12-26 t',
   'Lastzüge',

@@ -4,7 +4,7 @@ import { DataService } from '../services/data.service';
 import { ScenarioStateService } from '../services/scenario-state.service';
 import { ChartConfig } from '../models/chart-config.model';
 import { DataRow, hasGroessenklasse } from '../models/data.model';
-import { getSeriesColor } from '../utils/color.util';
+import { getSeriesColor, ALL_SIZE_CLASSES } from '../utils/color.util';
 import { LegendItem } from './chart-legend/chart-legend.component';
 import { Subscription, combineLatest, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -86,12 +86,11 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
     // Determine key names based on data structure
     const dataKey = this.chartConfig.dataKey; // 'Bestand', 'Kosten', or 'THG'
     const hasSizeClass = filtered.length > 0 && hasGroessenklasse(filtered[0]);
-    const techKey = hasSizeClass ? 'Technologie' : 'Komponente';
 
     // Filter by size classes (only for Bestand/Kosten, not THG)
-    // "alle Größenklassen" means no filtering (include all available)
+    // ALL_SIZE_CLASSES means no filtering (include all available)
     if (hasSizeClass && this.useSizeClassFilter) {
-      const shouldFilter = !sizeClasses.includes('alle Größenklassen');
+      const shouldFilter = !sizeClasses.includes(ALL_SIZE_CLASSES);
       if (shouldFilter) {
         filtered = filtered.filter(row => {
           if (hasGroessenklasse(row)) {
@@ -130,9 +129,9 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
       const value = parseFloat(rawValue || '0') / this.chartConfig.unitDivisor;
 
       // Create series name with size class suffix (if applicable)
-      // Add suffix only when multiple specific size classes selected (not "alle Größenklassen")
+      // Add suffix only when multiple specific size classes selected (not ALL_SIZE_CLASSES)
       let seriesName = tech;
-      const hasAlleGK = sizeClasses.includes('alle Größenklassen');
+      const hasAlleGK = sizeClasses.includes(ALL_SIZE_CLASSES);
       if (hasSizeClass && this.useSizeClassFilter && !hasAlleGK && sizeClasses.length > 1 && hasGroessenklasse(row)) {
         seriesName = `${tech} ${row.Groessenklasse}`;
       }

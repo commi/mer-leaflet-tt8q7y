@@ -1,6 +1,6 @@
 import { Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { SIZE_CLASSES } from '../../utils/color.util';
+import { SIZE_CLASSES, ALL_SIZE_CLASSES } from '../../utils/color.util';
 
 @Component({
   selector: 'app-size-class-selector',
@@ -17,7 +17,7 @@ import { SIZE_CLASSES } from '../../utils/color.util';
 })
 export class SizeClassSelectorComponent implements ControlValueAccessor {
   sizeClasses = SIZE_CLASSES;
-  selectedSizeClasses: string[] = ['alle Größenklassen'];
+  selectedSizeClasses: string[] = [ALL_SIZE_CLASSES];
 
   private onChange: (value: string[]) => void = () => {};
   private onTouched: () => void = () => {};
@@ -39,22 +39,22 @@ export class SizeClassSelectorComponent implements ControlValueAccessor {
   toggleSizeClass(sizeClass: string): void {
     const currentSelection = [...this.selectedSizeClasses];
 
-    // Special handling: "alle Größenklassen" is mutually exclusive
-    if (sizeClass === 'alle Größenklassen') {
-      this.selectedSizeClasses = ['alle Größenklassen'];
+    // Special handling: ALL_SIZE_CLASSES is mutually exclusive
+    if (sizeClass === ALL_SIZE_CLASSES) {
+      this.selectedSizeClasses = [ALL_SIZE_CLASSES];
       this.onChange(this.selectedSizeClasses);
       this.onTouched();
       return;
     }
 
-    // Remove "alle Größenklassen" if selecting specific size class
-    const filtered = currentSelection.filter(s => s !== 'alle Größenklassen');
+    // Remove ALL_SIZE_CLASSES if selecting specific size class
+    const filtered = currentSelection.filter(s => s !== ALL_SIZE_CLASSES);
 
     if (filtered.includes(sizeClass)) {
       // Deselect
       const updated = filtered.filter(s => s !== sizeClass);
-      // If nothing left, default to "alle"
-      this.selectedSizeClasses = updated.length > 0 ? updated : ['alle Größenklassen'];
+      // If nothing left, default to ALL_SIZE_CLASSES
+      this.selectedSizeClasses = updated.length > 0 ? updated : [ALL_SIZE_CLASSES];
     } else {
       // Select
       this.selectedSizeClasses = [...filtered, sizeClass];
