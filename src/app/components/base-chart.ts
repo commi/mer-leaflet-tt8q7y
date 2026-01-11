@@ -203,7 +203,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
 
     // Create new chart
     this.chart = new Chart(this.chartContainer.nativeElement, {
-      title: `${this.chartConfig.title} nach Fahrzeugtyp`,
+      title: `${this.chartConfig.title} ${this.chartConfig.unitLabel}`,
       data: {
         labels: chartData.labels,
         datasets: chartData.datasets
