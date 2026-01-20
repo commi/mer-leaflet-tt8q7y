@@ -1,0 +1,86 @@
+name: Angular Build & Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'angular.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/angular-build-release.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build Angular app
+        run: npm run build
+
+      - name: Generate version identifier
+        id: version
+        run: |
+          # Format: YYYY-MM-DD-SHORT_SHA (e.g., 2026-01-21-a1b2c3d)
+          VERSION=$(date +%Y-%m-%d)-$(git rev-parse --short HEAD)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated version: $VERSION"
+
+      - name: Create Release ZIP
+        run: |
+          cd dist/szenarienexplorer/browser
+          zip -r ../../../szenarienexplorer-${{ steps.version.outputs.VERSION }}.zip .
+          cd ../../..
+          ls -lh szenarienexplorer-*.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.VERSION }}
+          name: Release v${{ steps.version.outputs.VERSION }}
+          files: szenarienexplorer-${{ steps.version.outputs.VERSION }}.zip
+          body: |
+            # MeR Szenarienexplorer Release v${{ steps.version.outputs.VERSION }}
+
+            **Build Date**: ${{ github.event.head_commit.timestamp }}
+            **Commit**: ${{ github.sha }}
+            **Branch**: ${{ github.ref_name }}
+
+            ## Installation
+            1. Download `szenarienexplorer-${{ steps.version.outputs.VERSION }}.zip`
+            2. Extract to your web server
+            3. Embed with:
+            ```html
+            <link rel="stylesheet" href="styles.css">
+            <szenarien-component></szenarien-component>
+            <script src="polyfills.js" type="module"></script>
+            <script src="main.js" type="module"></script>
+            ```
+
+      - name: Deploy to GitHub Pages (/angular/)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/szenarienexplorer/browser
+          destination_dir: angular
+          keep_files: true
+          commit_message: 'Deploy Angular app v${{ steps.version.outputs.VERSION }}'
