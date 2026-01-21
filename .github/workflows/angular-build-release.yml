@@ -83,7 +83,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist/szenarienexplorer/browser
-          publish_branch: vanillajs-legacy
+          publish_branch: gh-pages
           destination_dir: angular
           keep_files: true
           commit_message: 'Deploy Angular app v${{ steps.version.outputs.VERSION }}'
