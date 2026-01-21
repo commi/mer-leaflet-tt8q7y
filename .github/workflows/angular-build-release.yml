@@ -1,0 +1,127 @@
+# GitHub Actions Workflow: Angular Build & Release
+
+# Dieser Workflow wird automatisch bei jedem Push auf den main Branch ausgeführt.
+# Er baut die Angular Anwendung, erstellt ein Release und deployed die App
+# auf GitHub Pages unter /angular/.
+#
+
+# GitHub Actions sind das Automatisierungstool von GitHub, das Code bei bestimmten Events ausführt
+
+name: Angular Build & Release
+
+# WANN wird dieser Workflow ausgeführt?
+on:
+  push:
+    branches:
+      - main  # Nur bei Pushes auf den main Branch
+    paths:
+      # Nur wenn diese Dateien/Ordner geändert wurden:
+      - 'src/**'
+      - 'public/**'
+      - 'angular.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/angular-build-release.yml'
+
+  workflow_dispatch:  # Erlaubt manuelles Auslösen über GitHub UI
+
+# Was soll ausgeführt werden?
+jobs:
+  build-and-release:
+    # Läuft auf einem Ubuntu Linux Server (von GitHub bereitgestellt)
+    runs-on: ubuntu-latest
+
+    # Berechtigungen: Darf Code lesen UND Releases/Deployments schreiben
+    permissions:
+      contents: write  # Notwendig für: zu gh-pages pushen
+
+    # Liste der Schritte, die ausgeführt werden:
+    steps:
+      # Repository herunterladen
+      # GitHub Actions startet mit einem leeren Server.
+      # Code vom Repository herunterladen ("git clone")
+      - name: Checkout code
+        uses: actions/checkout@v4  # Vorgefertigte Action von GitHub
+
+      # Node.js installieren
+      # Angular build benötigt Node.js.
+      # aktiviere npm-Caching (beschleunigt nachfolgende Workflow-Läufe)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Node.js 20 (LTS)
+          cache: 'npm'        # Cache für node_modules (macht Builds schneller)
+
+      # Installiert Dependencies aus package.json (wie "npm install").
+      # --legacy-peer-deps: Ignoriert Peer-Dependency-Konflikte (manchmal nötig bei Angular)
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      # Angular App bauen
+      # --base-href setzt den Basis-Pfad für alle URLs in der App.
+      # Wichtig für GitHub Pages, da die App dort unter /mer-leaflet-tt8q7y/angular/ liegt.
+      - name: Build Angular app
+        run: npm run build -- --base-href /mer-leaflet-tt8q7y/angular/
+
+      # Versionsnummer generieren
+      # Erstellt eindeutige Versionsnummer: Datum (YYYY-MM-DD) + Commit-Hash
+      - name: Generate version identifier
+        id: version
+        run: |
+          VERSION=$(date +%Y-%m-%d)-$(git rev-parse --short HEAD)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated version: $VERSION"
+
+      # Release ZIP erstellen
+      # Packt die komplilierte Angular App in eine ZIP-Datei zum manuellen Download
+      - name: Create Release ZIP
+        run: |
+          cd dist/szenarienexplorer/browser
+          zip -r ../../../szenarienexplorer-${{ steps.version.outputs.VERSION }}.zip .
+          cd ../../..
+          ls -lh szenarienexplorer-*.zip
+
+      # GitHub Release erstellen
+      # Erstellt Release mit Tag, ZIP-Datei und Build-Informationen
+      # Erscheint unter: github.com/{user}/{repo}/releases
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.VERSION }}
+          name: Release v${{ steps.version.outputs.VERSION }}
+          files: szenarienexplorer-${{ steps.version.outputs.VERSION }}.zip
+          generate_release_notes: false
+          make_latest: true
+          body: |
+            # MeR Szenarienexplorer Release v${{ steps.version.outputs.VERSION }}
+
+            **Build Date**: ${{ github.event.head_commit.timestamp }}
+            **Commit**: ${{ github.sha }}
+            **Branch**: ${{ github.ref_name }}
+
+            ## Installation
+            1. Download `szenarienexplorer-${{ steps.version.outputs.VERSION }}.zip`
+            2. Extract to your web server
+            3. Embed with:
+            ```html
+            <link rel="stylesheet" href="styles.css">
+            <szenarien-component></szenarien-component>
+            <script src="polyfills.js" type="module"></script>
+            <script src="main.js" type="module"></script>
+            ```
+
+      # Deploy auf GitHub , indem der 'gh-pages' branch aktualisiert wirt
+      # Veröffentlicht die komplilierte App auf GitHub Pages (kostenloser Hosting-Service)
+      # destination_dir: angular → deployed in Unterordner /angular/
+      # keep_files: true → überschreibt keine anderen Dateien im gh-pages Branch
+      - name: Deploy to GitHub Pages (/angular/)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/szenarienexplorer/browser
+          publish_branch: gh-pages
+          destination_dir: angular
+          keep_files: true
+          commit_message: 'Deploy Angular app v${{ steps.version.outputs.VERSION }}'
