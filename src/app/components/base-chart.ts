@@ -56,7 +56,8 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
     const sizeClasses = this.scenarioState.chartSizeClass$.value;
 
     // Fetch single data file (new format: all data in one file)
-    const filename = `/data/${this.chartConfig.dataSource}.json`;
+    // Use relative path to respect base-href
+    const filename = `data/${this.chartConfig.dataSource}.json`;
 
     this.dataService.fetchJSON<DataRow[]>(filename).pipe(
       catchError(error => {
