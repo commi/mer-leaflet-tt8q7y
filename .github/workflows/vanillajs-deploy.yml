@@ -1,0 +1,60 @@
+# GitHub Actions Workflow: Vanilla JS App Deployment
+
+# Dieser Workflow deployed die Legacy Vanilla JS Version der Anwendung auf GitHub Pages unter / (Root).
+#
+# Unterschied zum Angular Workflow: Keine Build-Schritte nötig, deployed zu Root (/) statt /angular/
+#
+# GitHub Actions sind das Automatisierungstool von GitHub, das Code bei bestimmten Events ausführt
+
+name: Deploy Vanilla JS App
+
+on:
+  push:
+    branches:
+      - vanillajs-legacy
+    paths:
+      - 'data/**'
+      - 'hooks/**'
+      - 'js/**'
+      - 'public/**'
+      - 'index.html'
+      - '.github/workflows/vanillajs-deploy.yml'
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      # Repository herunterladen
+      # GitHub Actions startet mit einem leeren Server.
+      # Code vom Repository herunterladen ("git clone")
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Deployment-Verzeichnis vorbereiten
+      # Kopiert nur die Dateien, die auf GitHub Pages landen sollen
+      # (data/, hooks/, js/, public/, *.html, *.js)
+      - name: Prepare deployment directory
+        run: |
+          mkdir -p deploy
+          cp -r data hooks js public index.html deploy/ 2>/dev/null || true
+          cp *.html *.js deploy/ 2>/dev/null || true
+          ls -la deploy/
+
+      # Deploy auf GitHub Pages (Root)
+      # Veröffentlicht JS App auf GitHub Pages (kostenloser Hosting-Service)
+      # destination_dir: (leer) → deployed in Root (/) statt Unterordner
+      # keep_files: true → überschreibt keine anderen Dateien im gh-pages Branch (wichtig für /angular/)
+      - name: Deploy to GitHub Pages (/)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          publish_branch: gh-pages
+          keep_files: true
+          commit_message: 'Deploy Vanilla JS app from ${{ github.sha }}'
