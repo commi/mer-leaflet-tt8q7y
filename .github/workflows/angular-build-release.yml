@@ -58,6 +58,8 @@ jobs:
           tag_name: v${{ steps.version.outputs.VERSION }}
           name: Release v${{ steps.version.outputs.VERSION }}
           files: szenarienexplorer-${{ steps.version.outputs.VERSION }}.zip
+          generate_release_notes: false
+          make_latest: true
           body: |
             # MeR Szenarienexplorer Release v${{ steps.version.outputs.VERSION }}
 
@@ -81,6 +83,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist/szenarienexplorer/browser
+          publish_branch: vanillajs-legacy
           destination_dir: angular
           keep_files: true
           commit_message: 'Deploy Angular app v${{ steps.version.outputs.VERSION }}'
