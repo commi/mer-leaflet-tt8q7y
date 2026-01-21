@@ -1,85 +1,77 @@
 # MeR Szenarienexplorer
 
-Web-basierter Szenarienexplorer für Transport- und Logistik-Datenvisualisierung mit Fokus auf verschiedene Antriebstechnologien (Diesel, BEV, OLKW, FCEV) und Emissionsszenarien.
+Web-basierter Szenarienexplorer.
+
+## Live Demo
+
+- Angular App: https://commi.github.io/mer-leaflet-tt8q7y/angular/
+- Vanilla JS App (Legacy): https://commi.github.io/mer-leaflet-tt8q7y/
 
 ## Technologie-Stack
 
-- **Angular 19** mit Angular Elements (Web Component)
-- **Leaflet** für interaktive Karten
-- **Frappe Charts** für Datenvisualisierung
-- **Bootstrap 5.3** für Styling
-- **TypeScript**
+- Angular 19 mit Angular Elements (für Web Componen  Erstellung)
+- Frappe Charts für Stacked Bar Charts
+- Bootstrap 5.3 für Styling
+- TypeScript
+- chroma-js für Farbinterpolation
 
 ## Komponentenhierarchie
 
 ```
 AppComponent (szenarien-component)
 ├── ScenarioSelectorComponent
-│   └── Szenario-Auswahl (Referenz/Krise)
-├── MapViewComponent
-│   ├── Leaflet-Karte mit GeoJSON-Layern
-│   ├── Jahr-Slider (2025-2045)
-│   └── Layer-Auswahl (Diesel/BEV/OLKW/FCEV/Oberleitung)
+│   └── Szenario-Auswahl
 └── ChartViewComponent
-    ├── Frappe Charts (Stacked Bar Charts)
-    ├── Datenquelle (Bestand/Neuzulassungen/THG-Emissionen)
-    └── Größenklasse (3,5-7,5t bis >26t)
+    ├── Charts
+    ├── Datenquellen-Auswahl (Bestand / Kosten / THG-Emissionen)
+    └── Größenklassen-Filter
 ```
-
-**Hinweis**: Controls sind direkt in Map/ChartView integriert (keine separaten Control-Komponenten).
 
 ## Services & Utilities
 
-- **ScenarioStateService**: Zentrale State-Verwaltung mit RxJS BehaviorSubjects
-- **DataService**: HTTP-Client mit Caching für JSON-Daten
-- **color.util.ts**: Pure function für Farbinterpolation (kein Service)
+- ScenarioStateService: Zentrale UI-State-Verwaltung
+- DataService: HTTP-Client mit Caching für JSON-Daten
+- color.util.ts: Farbinterpolation und Color Mapping
 
-## Moderne Angular Features
+## Datenstruktur
 
-- ✅ `inject()` Function statt Constructor Dependency Injection
-- ✅ `@ViewChild` mit `ElementRef` für DOM-Referenzen
-- ✅ Neue Control Flow Syntax: `@for`, `@if`
-- ✅ `ViewEncapsulation.ShadowDom` auf Root Component
-- ✅ `:host { display: contents; }` für Layout-Transparenz
-- ✅ CSS Grid & Subgrid für Legenden
-
-## Datenquellen
-
-### Verzeichnisstruktur: `public/data/`
+### `public/data/`
 
 ```
 data/
-├── GeoJSON/
-│   ├── 1/                          # Szenario "Referenz"
-│   │   ├── Diesel.geojson
-│   │   ├── BEV.geojson
-│   │   ├── OLKW.geojson
-│   │   └── FCEV.geojson
-│   └── 2/                          # Szenario "Krise"
-│       ├── Diesel.geojson
-│       ├── BEV.geojson
-│       ├── OLKW.geojson
-│       └── FCEV.geojson
-├── Bestand und Neuzulassungen/
-│   ├── 1/                          # Szenario "Referenz"
-│   │   ├── Bestand alle Größenklassen.json
-│   │   ├── Neuzulassungen alle Größenklassen.json
-│   │   ├── THG-Emissionen alle Größenklassen.json
-│   │   └── ... (weitere Größenklassen)
-│   └── 2/                          # Szenario "Krise"
-│       └── ... (gleiche Struktur)
-├── Hintergrundkarte/
-│   ├── Grenze Bundesländer.geojson
-│   ├── TEN-T roads.geojson
-│   └── Städte Deutschland.geojson
-└── Oberleitungsausbau.geojson
+├── Bestand.json       # Bestandszahlen aller Szenarien & Größenklassen
+├── Kosten.json        # Kostendaten aller Szenarien & Größenklassen
+└── THG.json           # THG-Emissionen aller Szenarien (keine Größenklassen)
 ```
 
-### Koordinatensysteme
+### Datenformat
 
-- **EPSG:3034**: Lambert Conformal Conic (Hauptprojektionssystem)
-- **EPSG:25832**: UTM Zone 32N
-- **EPSG:4326** / **OGC:CRS84**: WGS84 (Lat/Lon)
+```json
+[
+  {
+    "Szenario": "Referenz",
+    "Groessenklasse": "3,5-12 t",
+    "Technologie": "Diesel",
+    "Jahr": 2025,
+    "Bestand": "123456"
+  },
+  ...
+]
+```
+
+Werte für Technologien:
+- `Diesel` - Dieselantrieb
+- `BEV` - Battery Electric Vehicle
+- `BWS-BEV` - Batteriewechselsystem
+- `OL-BEV` - Oberleitungs-BEV
+- `FCEV` - Fuel Cell Electric Vehicle
+
+Werte für Größenklassen:
+- `3,5-12 t`
+- `12-26 t`
+- `Lastzüge`
+- `Sattelzüge`
+- `alle Größenklassen`
 
 ## Development
 
@@ -91,33 +83,59 @@ npm install
 npm start
 # → http://localhost:4200
 
-# Production Build
+# Build
 npm run build
-# → dist/szenarienexplorer/browser/
+# → Erstellt in dist/szenarienexplorer/browser/
 ```
 
-## Als Web Component verwenden
+### Neue Komponente erstellen
 
-Nach dem Build kann die Anwendung als Custom Element eingebunden werden:
+Alle Komponenten sind non-standalone und müssen in `app.module.ts` registriert werden und so erstellt werden:
+
+```bash
+ng generate component components/my-component --skip-tests --standalone=false --inline-style --module=app
+```
+
+## Deployment
+
+### Automatisches GitHub Pages Deployment
+
+Die Anwendung wird automatisch bei jedem Push auf `main` via GitHub Actions gebaut und deployed:
+
+1. Angular App wird mit `--base-href /mer-leaflet-tt8q7y/angular/` gebaut
+2. Automatische GitHub-Release-Erstellung mit Version `YYYY-MM-DD-HASH`
+3. Commit des Builds zu GitHub Pages Branch `gh-pages:/angular/`
+4. `gh-pages`-Branch wird automatisch unter https://commi.github.io/mer-leaflet-tt8q7y/ veröffentlicht
+
+Workflow: `.github/workflows/angular-build-release.yml`
+
+### Als Web Component verwenden
+
+Die Anwendung kann als Custom Element eingebunden werden:
 
 ```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>MeR Szenarienexplorer</title>
-  <link rel="stylesheet" href="dist/szenarienexplorer/browser/styles.css">
+  <title>Szenarienexplorer</title>
 </head>
 <body>
+  <!-- Webcomponent start -->
   <szenarien-component></szenarien-component>
 
-  <script src="dist/szenarienexplorer/browser/polyfills.js" type="module"></script>
-  <script src="dist/szenarienexplorer/browser/main.js" type="module"></script>
+  <script src="polyfills.js" type="module"></script>
+  <script src="main.js" type="module"></script>
+  <!-- Ende -->
 </body>
 </html>
 ```
 
-**Test-Datei**: `test.html` (lokalen HTTP-Server erforderlich)
+### Release Download
+
+Jeder Build erstellt auch ein Release ZIP mit der kompilierten Anwendung:
+
+- https://github.com/commi/mer-leaflet-tt8q7y/releases/latest
 
 ## Projektstruktur
 
@@ -126,27 +144,65 @@ src/
 ├── app/
 │   ├── components/
 │   │   ├── scenario-selector/        # Szenario-Auswahl
-│   │   ├── map-view/                  # Karte + Controls (inline)
-│   │   └── chart-view/                # Chart + Controls (inline)
+│   │   ├── chart-view/                # Chart Container
+│   │   ├── bestand-chart/             # Bestandschart
+│   │   ├── kosten-chart/              # Kostenchart
+│   │   ├── thg-chart/                 # THG-Emissionen Chart
+│   │   ├── chart-legend/              # Chart-Legende (wiederverwendbar)
+│   │   ├── size-class-selector/       # Größenklassen-Auswahl
+│   │   ├── abbreviations-legend/      # Technologie-Abkürzungen
+│   │   └── base-chart.ts              # Abstract Base für Chart-Komponenten
 │   ├── services/
 │   │   ├── scenario-state.service.ts  # State Management
 │   │   └── data.service.ts            # Data Fetching & Caching
+│   ├── models/
+│   │   ├── chart-config.model.ts      # übergreifende Chart-Konfiguration
+│   │   └── data.model.ts              # Datenmodelle mit Type Guards
 │   ├── utils/
-│   │   └── color.util.ts              # Farbinterpolation (pure function)
+│   │   └── color.util.ts              # Color Mapping
 │   ├── app.component.ts               # Root Component
-│   └── app.module.ts                  # App Module (non-standalone)
+│   └── app.module.ts                  # App Module
 ├── main.ts                            # Angular Elements Bootstrap
-├── styles.scss                        # Global Styles (Bootstrap + Leaflet)
-└── typings.d.ts                       # Type Definitions (frappe-charts)
+├── styles.scss                        # Global Styles (Bootstrap)
+└── typings.d.ts                       # Type Definitions (für frappe-charts, da sie keine mitbringen)
 
 public/
-├── data/                              # JSON & GeoJSON Daten
+├── data/                              # JSON Daten
+│   ├── Bestand.json
+│   ├── Kosten.json
+│   └── THG.json
 └── favicon.ico
 ```
 
 ## Szenarien
 
-- **Referenz**: Rückbildung der Energiepreise nach Krise 2022
-- **Krise**: Verharren der Energiepreise auf Krisenniveau
+- Referenz: Rückbildung der Energiepreise nach Krise 2022
+- Krise: Verharren der Energiepreise auf Krisenniveau
 
-Beide Szenarien unterscheiden sich hinsichtlich der Entwicklung des Strom- und Dieselpreises.
+## Color System
+
+Statisches Color Mapping für konsistente Farben über alle Charts:
+
+```json5
+// Format: "Technologie_Größenklasse" → Farbe
+{
+  "Diesel_3,5-12 t": "#lightColor",
+  "Diesel_12-26 t": "#primaryColor",
+  "Diesel_Lastzüge": "#darkColor",
+  // ... für alle Technologien
+}
+```
+
+Farbpaletten:
+- Diesel → Schwarz/Grau-Töne
+- BEV → Blau-Töne
+- BWS-BEV → Hellblau-Töne
+- OL-BEV → Türkis-Töne
+- FCEV → Violett-Töne
+
+## aktive Branches
+
+- main: Angular App (aktuelle Entwicklung)
+- vanillajs-legacy: Vanilla JS Version (alt)
+- gh-pages: Deployment-Branch für GitHub-Pages (automatisch befüllt)
+
