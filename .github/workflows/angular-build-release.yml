@@ -33,7 +33,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build Angular app
-        run: npm run build -- --base-href /angular/
+        run: npm run build -- --base-href /mer-leaflet-tt8q7y/angular/
 
       - name: Generate version identifier
         id: version
