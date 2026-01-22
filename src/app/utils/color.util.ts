@@ -55,7 +55,7 @@ const TECHNOLOGY_COLORS: TechnologyColor[] = [
 // THG component order for color shading (light to dark gradient)
 const COMPONENT_ORDER = ['Fahrzeug', 'Energie_WTT', 'Energie_TTW', 'Wartung', 'EoL', 'Akku', 'Infrastruktur'];
 
-// Technologies that use light gradient (towards lighter shades), others use dark gradient
+// Technologies that use gradient towards lighter, others use dark gradient
 const USE_LIGHT_GRADIENT = ['Diesel', 'BWS-BEV', 'FCEV'];
 
 // Special size class value for "all size classes"
@@ -145,8 +145,7 @@ function getSizeClassColor(
   }
 
   // Determine gradient direction
-  const usesLight = USE_LIGHT_GRADIENT.includes(techColor.prefix);
-  const targetColor = usesLight ? techColor.light : techColor.dark;
+  const targetColor = USE_LIGHT_GRADIENT.includes(techColor.prefix) ? techColor.light : techColor.dark;
 
   // Sattelzüge is base (primary), gradient towards 3,5-12t
   const gradients: { [key: string]: number } = {
@@ -156,8 +155,7 @@ function getSizeClassColor(
     '3,5-12 t': 1.0       // full target
   };
 
-  const proportion = gradients[sizeClass] ?? 0;
-  return chroma.mix(techColor.primary, targetColor, proportion, 'lab').hex();
+  return chroma.mix(techColor.primary, targetColor, gradients[sizeClass] ?? 0, 'oklab').hex();
 }
 
 /**
@@ -172,7 +170,7 @@ function getComponentColor(techColor: TechnologyColor, component: string): strin
 
   // Create gradient from light to dark across components
   const proportion = index / (COMPONENT_ORDER.length - 1);
-  return chroma.mix(techColor.light, techColor.dark, proportion, 'lab').hex();
+  return chroma.mix(techColor.primary, 'white', proportion, 'oklab').hex();
 }
 
 /**
@@ -222,15 +220,8 @@ export function getChartColor(seriesName: string, selectedSizeClasses?: string[]
 
 /**
  * Get primary color for a technology (for legend display)
- * @param technology Technology name (exact match to prefix)
- * @returns Hex color string
  */
 export function getTechnologyColor(technology: string): string {
-  const techColor = TECHNOLOGY_COLORS.find(tc => tc.prefix === technology);
-  return techColor ? techColor.primary : '#CCCCCC';
+  return TECHNOLOGY_COLORS.find(tc => tc.prefix === technology)?.primary ?? '#CCCCCC';
 }
 
-// Backwards compatibility aliases
-export function getSeriesColor(seriesName: string): string {
-  return getChartColor(seriesName);
-}
