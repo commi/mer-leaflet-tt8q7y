@@ -167,12 +167,12 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
       const baseName = name.split('_')[0].trim();
 
       // IMPORTANT: Check most specific prefixes first!
-      // Order: Diesel (0) → BEV (1) → BWS (2) → OL (3) → FCEV (4)
-      if (baseName.includes('OL-BEV')) return 3;
-      if (baseName.includes('BWS-BEV') || baseName.includes('BWS')) return 2;
-      if (baseName.includes('BEV')) return 1;
-      if (baseName.includes('FCEV') || baseName.includes('H2')) return 4;
-      if (baseName.includes('Diesel')) return 0;
+      // Order: BEV (0, bottom) → FCEV (1) → OL (2) → BWS (3) → Diesel (4, top)
+      if (baseName.includes('OL-BEV')) return 2;
+      if (baseName.includes('BWS-BEV') || baseName.includes('BWS')) return 3;
+      if (baseName.includes('BEV')) return 0;
+      if (baseName.includes('FCEV') || baseName.includes('H2')) return 1;
+      if (baseName.includes('Diesel')) return 4;
 
       return 999; // Unknown
     };
