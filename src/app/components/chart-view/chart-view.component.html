@@ -8,14 +8,6 @@
 
       <app-thg-chart class="chart-area-thg"></app-thg-chart>
 
-      <!-- Right sidebar: Controls -->
-      <div class="sidebar-controls">
-        <app-abbreviations-legend></app-abbreviations-legend>
-        <app-size-class-selector
-          [ngModel]="scenarioState.chartSizeClass$ | async"
-          (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
-        </app-size-class-selector>
-      </div>
     </div>
   </div>
 </div>

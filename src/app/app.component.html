@@ -1,6 +1,15 @@
 <div class="d-flex flex-column gap-3 p-4">
 
-  <app-scenario-selector></app-scenario-selector>
+  <!-- Horizontal controls row -->
+  <div class="d-flex gap-3 flex-wrap">
+    <app-scenario-selector class="flex-shrink-0"></app-scenario-selector>
+    <app-size-class-selector
+      class="flex-shrink-0"
+      [ngModel]="scenarioState.chartSizeClass$ | async"
+      (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+    </app-size-class-selector>
+    <app-abbreviations-legend class="flex-shrink-0"></app-abbreviations-legend>
+  </div>
 
   <!-- Chart view (full width) -->
   <app-chart-view></app-chart-view>
