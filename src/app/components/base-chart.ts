@@ -3,8 +3,8 @@ import { Chart } from 'frappe-charts';
 import { DataService } from '../services/data.service';
 import { ScenarioStateService } from '../services/scenario-state.service';
 import { ChartConfig } from '../models/chart-config.model';
-import { DataRow, hasGroessenklasse } from '../models/data.model';
-import { getSeriesColor, ALL_SIZE_CLASSES } from '../utils/color.util';
+import { DataRow, hasGroessenklasse, hasKomponente } from '../models/data.model';
+import { getChartColor, ALL_SIZE_CLASSES } from '../utils/color.util';
 import { LegendItem } from './chart-legend/chart-legend.component';
 import { Subscription, combineLatest, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -83,6 +83,31 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
 
     // Filter by scenario
     let filtered = rawData.filter(row => row.Szenario === scenario);
+
+    // THG-specific transformations
+    if (this.chartConfig.id === 'thg') {
+      filtered = filtered.map(row => {
+        if (hasKomponente(row)) {
+          // Rename "Energie X" → "Energie_WTT X" for all technologies
+          const komponente = row.Komponente
+            .replace('Energie Diesel', 'Energie_WTT Diesel')
+            .replace('Energie BEV', 'Energie_WTT BEV')
+            .replace('Energie BWS-BEV', 'Energie_WTT BWS-BEV')
+            .replace('Energie OL-BEV', 'Energie_WTT OL-BEV')
+            .replace('Energie FCEV', 'Energie_WTT FCEV');
+          return { ...row, Komponente: komponente };
+        }
+        return row;
+      }).filter(row => {
+        // Filter out always-zero Infrastruktur components
+        if (hasKomponente(row)) {
+          const comp = row.Komponente || '';
+          return !comp.includes('Infrastruktur FCEV') &&
+                 !comp.includes('Infrastruktur BWS-BEV');
+        }
+        return true;
+      });
+    }
 
     // Determine key names based on data structure
     const dataKey = this.chartConfig.dataKey; // 'Bestand', 'Kosten', or 'THG'
@@ -220,7 +245,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
         spaceRatio: 0.5
       },
       height: 300,
-      colors: chartData.datasets.map(d => getSeriesColor(d.name)),
+      colors: chartData.datasets.map(d => getChartColor(d.name, this.selectedSizeClasses)),
       axisOptions: {
         xAxisMode: 'tick',
         xIsSeries: false
@@ -263,7 +288,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
 
       currentGroup.push({
         name: name,
-        color: getSeriesColor(name)
+        color: getChartColor(name, this.selectedSizeClasses)
       });
       prevOrder = techOrder;
     });
