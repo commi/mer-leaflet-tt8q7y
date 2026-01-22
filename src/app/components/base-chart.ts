@@ -12,6 +12,7 @@ import { catchError } from 'rxjs/operators';
 @Directive()
 export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() selectedSizeClasses: string[] = [];
+  @Input() height: number = 300;
 
   protected scenarioState = inject(ScenarioStateService);
   protected dataService = inject(DataService);
@@ -91,21 +92,14 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
           // Rename "Energie X" → "Energie_WTT X" for all technologies
           const komponente = row.Komponente
             .replace('Energie Diesel', 'Energie_WTT Diesel')
-            .replace('Energie BEV', 'Energie_WTT BEV')
-            .replace('Energie BWS-BEV', 'Energie_WTT BWS-BEV')
-            .replace('Energie OL-BEV', 'Energie_WTT OL-BEV')
-            .replace('Energie FCEV', 'Energie_WTT FCEV');
+            //.replace('Energie BEV', 'Energie_WTT BEV')
+            //.replace('Energie BWS-BEV', 'Energie_WTT BWS-BEV')
+            //.replace('Energie OL-BEV', 'Energie_WTT OL-BEV')
+            //.replace('Energie FCEV', 'Energie_WTT FCEV')
+            ;
           return { ...row, Komponente: komponente };
         }
         return row;
-      }).filter(row => {
-        // Filter out always-zero Infrastruktur components
-        if (hasKomponente(row)) {
-          const comp = row.Komponente || '';
-          return !comp.includes('Infrastruktur FCEV') &&
-                 !comp.includes('Infrastruktur BWS-BEV');
-        }
-        return true;
       });
     }
 
@@ -238,7 +232,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
 
     // Create new chart
     this.chart = new Chart(this.chartContainer.nativeElement, {
-      title: `${this.chartConfig.title} ${this.chartConfig.unitLabel}`,
+      //title: `${this.chartConfig.title} ${this.chartConfig.unitLabel}`,
       data: {
         labels: chartData.labels,
         datasets: chartData.datasets
@@ -248,7 +242,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
         stacked: true,
         spaceRatio: 0.5
       },
-      height: 300,
+      height: this.height,
       colors: chartData.datasets.map(d => getChartColor(d.name, this.selectedSizeClasses)),
       axisOptions: {
         xAxisMode: 'tick',
@@ -257,20 +251,19 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
     });
 
     // Update legend
-    this.updateLegend(chartData.datasets.map(d => d.name));
+    this.updateLegend(chartData.datasets.map(d => d.name).reverse());
   }
 
   private updateLegend(seriesNames: string[]): void {
     // Group by technology using same logic as sortDatasetsByTechnology
     const getTechOrder = (name: string): number => {
-      const baseName = name.split('_')[0].trim();
 
       // IMPORTANT: Check most specific prefixes first!
-      if (baseName.includes('OL-BEV')) return 3;
-      if (baseName.includes('BWS-BEV') || baseName.includes('BWS')) return 2;
-      if (baseName.includes('BEV')) return 1;
-      if (baseName.includes('FCEV') || baseName.includes('H2')) return 4;
-      if (baseName.includes('Diesel')) return 0;
+      if (name.includes('OL-BEV')) return 3;
+      if (name.includes('BWS-BEV') || name.includes('BWS')) return 2;
+      if (name.includes('BEV')) return 1;
+      if (name.includes('FCEV') || name.includes('H2')) return 4;
+      if (name.includes('Diesel')) return 0;
 
       return 999;
     };
