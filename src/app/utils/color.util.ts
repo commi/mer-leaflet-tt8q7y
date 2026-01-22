@@ -43,44 +43,20 @@ export interface TechnologyColor {
 }
 
 // Designer color palette from enERSyn brand guidelines
-export const TECHNOLOGY_COLORS: TechnologyColor[] = [
+const TECHNOLOGY_COLORS: TechnologyColor[] = [
   // Primary technologies (longest prefixes first for matching!)
   { prefix: 'OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
   { prefix: 'BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
   { prefix: 'Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
   { prefix: 'BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
   { prefix: 'FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  // THG component categories
-  { prefix: 'Fahrzeug Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
-  { prefix: 'Fahrzeug BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'Fahrzeug BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
-  { prefix: 'Fahrzeug OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'Fahrzeug FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'Energie Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
-  { prefix: 'Energie BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'Energie BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
-  { prefix: 'Energie OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'Energie FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'Energie_TTW Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
-  { prefix: 'Infrastruktur BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'Infrastruktur BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
-  { prefix: 'Infrastruktur OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'Infrastruktur FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'Akku BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'Akku BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
-  { prefix: 'Akku OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'Akku FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'Wartung BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'Wartung BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
-  { prefix: 'Wartung Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
-  { prefix: 'Wartung FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'Wartung OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
-  { prefix: 'EoL BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
-  { prefix: 'EoL BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
-  { prefix: 'EoL Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
-  { prefix: 'EoL FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
-  { prefix: 'EoL OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' }
 ];
+
+// THG component order for color shading (light to dark gradient)
+const COMPONENT_ORDER = ['Fahrzeug', 'Energie_WTT', 'Energie_TTW', 'Wartung', 'EoL', 'Akku', 'Infrastruktur'];
+
+// Technologies that use gradient towards lighter, others use dark gradient
+const USE_LIGHT_GRADIENT = ['Diesel', 'BWS-BEV', 'FCEV'];
 
 // Special size class value for "all size classes"
 export const ALL_SIZE_CLASSES = 'alle Größenklassen';
@@ -94,70 +70,158 @@ export const SIZE_CLASSES = [
   'Sattelzüge'
 ];
 
-// Static color mapping: Technology + Size Class → Fixed Color
-// This ensures consistent colors regardless of which size classes are selected
-const COLOR_MAP: { [key: string]: string } = {};
-
-// Build static color map on module load
-(() => {
-  // Technologies that use light gradient (towards light), others use dark gradient
-  const useLightGradient = ['Diesel', 'BWS-BEV', 'FCEV'];
-
-  TECHNOLOGY_COLORS.forEach(tech => {
-    // No suffix (or "alle Größenklassen") → primary color
-    COLOR_MAP[tech.prefix] = tech.primary;
-
-    // Determine gradient direction for this technology
-    const targetColor = useLightGradient.some(t => tech.prefix.startsWith(t)) ? tech.light : tech.dark;
-
-    // Sattelzüge is base (primary), gradient towards 3,5-12t
-    const sizeClassColors = [
-      tech.primary,                                           // "alle Größenklassen"
-      chroma.mix(tech.primary, targetColor, 1.0, 'lab').hex(),  // "3,5-12 t" (100% target)
-      chroma.mix(tech.primary, targetColor, 0.67, 'lab').hex(), // "12-26 t" (67% target)
-      chroma.mix(tech.primary, targetColor, 0.33, 'lab').hex(), // "Lastzüge" (33% target)
-      tech.primary                                            // "Sattelzüge" (base/primary)
-    ];
-
-    SIZE_CLASSES.forEach((sizeClass, index) => {
-      // Support both underscore and space separators
-      COLOR_MAP[`${tech.prefix}_${sizeClass}`] = sizeClassColors[index] || tech.primary;
-      COLOR_MAP[`${tech.prefix} ${sizeClass}`] = sizeClassColors[index] || tech.primary;
-    });
-  });
-})();
+/**
+ * Extract technology name from series name
+ * @param seriesName Full series name (e.g., "Diesel_Sattelzüge", "Fahrzeug Diesel", "BEV")
+ * @returns Technology name (e.g., "Diesel", "BEV", "BWS-BEV", "OL-BEV", "FCEV")
+ */
+function extractTechnology(seriesName: string): string {
+  // Check longest prefixes first to avoid matching "BEV" when it's "BWS-BEV" or "OL-BEV"
+  for (const tech of TECHNOLOGY_COLORS) {
+    if (seriesName.includes(tech.prefix)) {
+      return tech.prefix;
+    }
+  }
+  return '';
+}
 
 /**
- * Get color for a series name with static tech + size class mapping
- * @param seriesName Full series name (e.g., "BEV" or "BEV_3,5-12 t")
+ * Extract size class from series name
+ * @param seriesName Full series name (e.g., "Diesel_Sattelzüge", "BEV 3,5-12 t")
+ * @returns Size class or null if not found
+ */
+function extractSizeClass(seriesName: string): string | null {
+  for (const sizeClass of SIZE_CLASSES) {
+    if (sizeClass === ALL_SIZE_CLASSES) continue;
+    if (seriesName.includes(sizeClass)) {
+      return sizeClass;
+    }
+  }
+  return null;
+}
+
+/**
+ * Extract THG component from series name
+ * @param seriesName Full series name (e.g., "Fahrzeug Diesel", "Energie_WTT BEV")
+ * @returns Component name or null if not found
+ */
+function extractComponent(seriesName: string): string | null {
+  for (const component of COMPONENT_ORDER) {
+    if (seriesName.includes(component)) {
+      return component;
+    }
+  }
+  return null;
+}
+
+/**
+ * Get technology color object
+ * @param technology Technology name
+ * @returns TechnologyColor object or null if not found
+ */
+function getTechColor(technology: string): TechnologyColor | null {
+  return TECHNOLOGY_COLORS.find(tc => tc.prefix === technology) || null;
+}
+
+/**
+ * Calculate size class color with gradation
+ * @param techColor Technology color object
+ * @param sizeClass Size class name
+ * @param selectedSizeClasses Currently selected size classes
  * @returns Hex color string
  */
-export function getSeriesColor(seriesName: string): string {
-  // Check static map first
-  if (COLOR_MAP[seriesName]) {
-    return COLOR_MAP[seriesName];
+function getSizeClassColor(
+  techColor: TechnologyColor,
+  sizeClass: string | null,
+  selectedSizeClasses?: string[]
+): string {
+  // If "alle Größenklassen" is selected or no specific size class
+  if (!sizeClass || selectedSizeClasses?.includes(ALL_SIZE_CLASSES)) {
+    // Special case: FCEV with "alle GK" uses lighter blue
+    if (techColor.prefix === 'FCEV') {
+      return techColor.light;
+    }
+    return techColor.primary;
   }
 
-  // Find matching technology color by prefix (longest match first)
-  const sortedColors = [...TECHNOLOGY_COLORS].sort((a, b) => b.prefix.length - a.prefix.length);
-  const techColor = sortedColors.find(tc =>
-    seriesName.startsWith(tc.prefix)
-  );
+  // Determine gradient direction
+  const targetColor = USE_LIGHT_GRADIENT.includes(techColor.prefix) ? techColor.light : techColor.dark;
+
+  // Sattelzüge is base (primary), gradient towards 3,5-12t
+  const gradients: { [key: string]: number } = {
+    'Sattelzüge': 0,      // base (primary)
+    'Lastzüge': 0.33,     // towards target
+    '12-26 t': 0.67,      // more towards target
+    '3,5-12 t': 1.0       // full target
+  };
+
+  return chroma.mix(techColor.primary, targetColor, gradients[sizeClass] ?? 0, 'oklab').hex();
+}
+
+/**
+ * Calculate THG component color with shading
+ * @param techColor Technology color object
+ * @param component Component name
+ * @returns Hex color string
+ */
+function getComponentColor(techColor: TechnologyColor, component: string): string {
+  const index = COMPONENT_ORDER.findIndex(c => component.includes(c));
+  if (index === -1) return techColor.primary;
+
+  // Create gradient from light to dark across components
+  const proportion = index / (COMPONENT_ORDER.length - 1);
+  return chroma.mix(techColor.primary, 'white', proportion, 'oklab').hex();
+}
+
+/**
+ * CENTRAL COLOR FUNCTION
+ * Get color for any chart series based on context
+ *
+ * @param seriesName Full series name from data (e.g., "Diesel_Sattelzüge", "Fahrzeug Diesel", "BEV")
+ * @param selectedSizeClasses Optional array of currently selected size classes (for context)
+ * @returns Hex color string
+ *
+ * @example
+ * // Bestand/Kosten with size class
+ * getChartColor("Diesel_Sattelzüge", ["Sattelzüge", "Lastzüge"]) // → primary color
+ *
+ * @example
+ * // Bestand/Kosten with "alle GK" selected
+ * getChartColor("FCEV", ["alle Größenklassen"]) // → light blue (special case)
+ *
+ * @example
+ * // THG component
+ * getChartColor("Fahrzeug Diesel") // → shaded color based on component order
+ *
+ * @example
+ * // Legend (just technology)
+ * getChartColor("BEV") // → primary color
+ */
+export function getChartColor(seriesName: string, selectedSizeClasses?: string[]): string {
+  // Extract technology
+  const technology = extractTechnology(seriesName);
+  const techColor = getTechColor(technology);
 
   if (!techColor) {
     console.warn(`No technology color found for series: ${seriesName}`);
     return '#CCCCCC';
   }
 
-  // Return primary color as fallback
-  return techColor.primary;
+  // Check if this is a THG component series
+  const component = extractComponent(seriesName);
+  if (component) {
+    return getComponentColor(techColor, component);
+  }
+
+  // Check if this has a size class
+  const sizeClass = extractSizeClass(seriesName);
+  return getSizeClassColor(techColor, sizeClass, selectedSizeClasses);
 }
 
 /**
  * Get primary color for a technology (for legend display)
  */
 export function getTechnologyColor(technology: string): string {
-  const techColor = TECHNOLOGY_COLORS.find(tc => tc.prefix === technology);
-  return techColor ? techColor.primary : '#CCCCCC';
+  return TECHNOLOGY_COLORS.find(tc => tc.prefix === technology)?.primary ?? '#CCCCCC';
 }
 
