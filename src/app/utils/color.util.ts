@@ -100,17 +100,23 @@ const COLOR_MAP: { [key: string]: string } = {};
 
 // Build static color map on module load
 (() => {
+  // Technologies that use light gradient (towards light), others use dark gradient
+  const useLightGradient = ['Diesel', 'BWS-BEV', 'FCEV'];
+
   TECHNOLOGY_COLORS.forEach(tech => {
     // No suffix (or "alle Größenklassen") → primary color
     COLOR_MAP[tech.prefix] = tech.primary;
 
-    // Each size class gets a fixed shade
+    // Determine gradient direction for this technology
+    const targetColor = useLightGradient.some(t => tech.prefix.startsWith(t)) ? tech.light : tech.dark;
+
+    // Sattelzüge is base (primary), gradient towards 3,5-12t
     const sizeClassColors = [
-      tech.primary,     // "alle Größenklassen" or no suffix
-      tech.light,       // "3,5-12 t"
-      tech.primary,     // "12-26 t"
-      tech.dark,        // "Lastzüge"
-      chroma.mix(tech.primary, tech.dark, 0.5, 'lab').hex()  // "Sattelzüge"
+      tech.primary,                                           // "alle Größenklassen"
+      chroma.mix(tech.primary, targetColor, 1.0, 'lab').hex(),  // "3,5-12 t" (100% target)
+      chroma.mix(tech.primary, targetColor, 0.67, 'lab').hex(), // "12-26 t" (67% target)
+      chroma.mix(tech.primary, targetColor, 0.33, 'lab').hex(), // "Lastzüge" (33% target)
+      tech.primary                                            // "Sattelzüge" (base/primary)
     ];
 
     SIZE_CLASSES.forEach((sizeClass, index) => {
