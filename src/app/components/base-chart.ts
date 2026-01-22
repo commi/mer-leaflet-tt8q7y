@@ -129,7 +129,11 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
 
     // Get unique years (sorted)
     const years = [...new Set(filtered.map(row => row.Jahr))].sort();
-    const labels = years.map(year => `'${year.toString().slice(-2)}`);
+    // Show only years divisible by 5 (2025, 2030, 2035, 2040, 2045)
+    const labels = years.map(year => {
+      const yearNum = parseInt(year);
+      return yearNum % 5 === 0 ? year : '';
+    });
 
     // Build datasets
     const datasetMap = new Map<string, number[]>();
