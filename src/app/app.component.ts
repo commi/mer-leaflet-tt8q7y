@@ -1,4 +1,5 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
+import { ScenarioStateService } from './services/scenario-state.service';
 
 @Component({
   selector: 'szenarien-component',
@@ -9,4 +10,5 @@ import { Component, ViewEncapsulation } from '@angular/core';
 })
 export class AppComponent {
   title = 'MeR Szenarienexplorer';
+  scenarioState = inject(ScenarioStateService);
 }

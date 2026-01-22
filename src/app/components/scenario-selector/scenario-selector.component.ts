@@ -7,8 +7,10 @@ import { map } from 'rxjs';
   selector: 'app-scenario-selector',
   standalone: false,
   templateUrl: './scenario-selector.component.html',
-  styles: ``,
-  encapsulation: ViewEncapsulation.None
+  styles: `
+    :host {
+      display: contents;
+    }`
 })
 export class ScenarioSelectorComponent {
   scenarioState = inject(ScenarioStateService);
