@@ -5,12 +5,12 @@ import { getTechnologyColor } from '../../utils/color.util';
   selector: 'app-abbreviations-legend',
   standalone: false,
   template: `
-    <div class="card mb-3">
+    <div class="card">
       <div class="card-body">
         <h5 class="h6 mb-2">Abkürzungen</h5>
         <dl class="abbreviations-grid small">
           @for (abbr of abbreviations; track abbr.tech) {
-            <dt><span [style.color]="abbr.color">■</span> <strong>{{abbr.tech}}</strong></dt>
+            <dt><span [style.color]="abbr.color">@if(abbr.color) {■}</span> <strong>{{abbr.tech}}</strong></dt>
             <dd>{{abbr.description}}</dd>
           }
         </dl>
@@ -18,6 +18,14 @@ import { getTechnologyColor } from '../../utils/color.util';
     </div>
   `,
   styles: `
+    :host {
+      display: contents;
+    }
+
+    .card {
+      min-width: fit-content;
+    }
+
     .abbreviations-grid {
       display: grid;
       grid-template-columns: auto auto 1fr;
