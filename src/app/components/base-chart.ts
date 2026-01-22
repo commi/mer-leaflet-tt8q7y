@@ -158,6 +158,11 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
 
     datasets = this.sortDatasetsByTechnology(datasets);
 
+    // Filter out technologies where ALL values are zero across all years
+    datasets = datasets.filter(dataset => {
+      return dataset.values.some(value => value !== 0);
+    });
+
     return { labels, datasets };
   }
 
