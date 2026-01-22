@@ -6,7 +6,7 @@ import { CHART_CONFIGS } from '../../models/chart-config.model';
   selector: 'app-kosten-chart',
   standalone: false,
   templateUrl: './kosten-chart.component.html',
-  styles: ``
+  styles: `:host { display: flex; flex-direction: column; }`
 })
 export class KostenChartComponent extends BaseChartComponent {
   @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;

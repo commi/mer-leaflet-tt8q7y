@@ -6,7 +6,7 @@ import { CHART_CONFIGS } from '../../models/chart-config.model';
   selector: 'app-bestand-chart',
   standalone: false,
   templateUrl: './bestand-chart.component.html',
-  styles: ``
+  styles: `:host { display: flex; flex-direction: column; }`
 })
 export class BestandChartComponent extends BaseChartComponent {
   @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;
