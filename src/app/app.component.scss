@@ -1,6 +1,4 @@
 @import "../styles";
 
-.row {
-  --bs-gutter-x: 1rem;
-  --bs-gutter-y: 1rem;
-}
+// Grid gutters now set via Bootstrap $grid-gutter-width variable in styles.scss
+// No need to override here anymore
