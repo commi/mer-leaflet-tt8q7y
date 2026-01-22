@@ -1,13 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import 'bootstrap/dist/css/bootstrap.min.css';
-@import 'leaflet/dist/leaflet.css';
+// Import font first (needed for variable override)
 @import '@fontsource/atkinson-hyperlegible';
 
-/* Font */
-body {
-  font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
+// Bootstrap variable overrides
+$font-family-sans-serif: 'Atkinson Hyperlegible', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$grid-gutter-width: 1rem; // Override default 1.5rem
+$spacer: 1rem;
+
+@import 'bootstrap/scss/bootstrap';
+@import 'leaflet/dist/leaflet.css';
 
 /* Additional custom styles */
 .leaflet-tooltip.city {
@@ -39,7 +41,7 @@ body {
 
 #tbody_legend td {
   white-space: nowrap;
-  min-width: 1rem;
+  min-width: $spacer;
 }
 
 #tbody_legend td:first-child {
