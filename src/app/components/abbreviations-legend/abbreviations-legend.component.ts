@@ -42,6 +42,8 @@ export class AbbreviationsLegendComponent {
     { tech: 'BEV', description: 'Batterieelektrisch', color: getTechnologyColor('BEV') },
     { tech: 'BWS', description: 'Batteriewechselsystem', color: getTechnologyColor('BWS-BEV') },
     { tech: 'OL', description: 'Oberleitung', color: getTechnologyColor('OL-BEV') },
-    { tech: 'FCEV', description: 'H₂-Brennstoffzelle', color: getTechnologyColor('FCEV') }
+    { tech: 'FCEV', description: 'H₂-Brennstoffzelle', color: getTechnologyColor('FCEV') },
+    { tech: 'WTT', description: 'Well-to-Tank', color: '' },
+    { tech: 'TTW', description: 'Tank-to-Wheel', color: '' }
   ];
 }
