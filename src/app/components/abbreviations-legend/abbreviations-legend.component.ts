@@ -7,12 +7,26 @@ import { getTechnologyColor } from '../../utils/color.util';
   template: `
     <div class="card-body">
       <h5 class="h6 mb-2">Abkürzungen</h5>
-      <dl class="abbreviations-grid small mb-0">
-        @for (abbr of abbreviations; track abbr.tech) {
-          <dt><span [style.color]="abbr.color">@if(abbr.color) {■}</span> <strong>{{abbr.tech}}</strong></dt>
-          <dd>{{abbr.description}}</dd>
-        }
-      </dl>
+      <div class="d-flex flex-row gap-2 align-items-sm-start">
+        <dl class="abbreviations-grid small">
+          <dt><span [style.color]="getColor('Diesel')">■</span> <strong>Diesel</strong></dt>
+          <dd></dd>
+          <dt><span [style.color]="getColor('BEV')">■</span> <strong>BEV</strong></dt>
+          <dd>Batterieelektrisch</dd>
+          <dt><span [style.color]="getColor('BWS-BEV')">■</span> <strong>BWS</strong></dt>
+          <dd>Batteriewechselsystem</dd>
+          <dt><span [style.color]="getColor('OL-BEV')">■</span> <strong>OL</strong></dt>
+          <dd>Oberleitung</dd>
+          <dt><span [style.color]="getColor('FCEV')">■</span> <strong>FCEV</strong></dt>
+          <dd>H₂-Brennstoffzelle</dd>
+        </dl>
+        <dl class="abbreviations-grid small">
+          <dt><span></span><strong>WTT</strong></dt>
+          <dd>Well-to-Tank</dd>
+          <dt><span></span><strong>TTW</strong></dt>
+          <dd>Tank-to-Wheel</dd>
+        </dl>
+      </div>
     </div>
   `,
   host: {
@@ -41,13 +55,7 @@ import { getTechnologyColor } from '../../utils/color.util';
   `
 })
 export class AbbreviationsLegendComponent {
-  abbreviations = [
-    { tech: 'Diesel', description: '', color: getTechnologyColor('Diesel') },
-    { tech: 'BEV', description: 'Batterieelektrisch', color: getTechnologyColor('BEV') },
-    { tech: 'BWS', description: 'Batteriewechselsystem', color: getTechnologyColor('BWS-BEV') },
-    { tech: 'OL', description: 'Oberleitung', color: getTechnologyColor('OL-BEV') },
-    { tech: 'FCEV', description: 'H₂-Brennstoffzelle', color: getTechnologyColor('FCEV') },
-    { tech: 'WTT', description: 'Well-to-Tank', color: '' },
-    { tech: 'TTW', description: 'Tank-to-Wheel', color: '' }
-  ];
+  getColor(tech: string): string {
+    return getTechnologyColor(tech);
+  }
 }
