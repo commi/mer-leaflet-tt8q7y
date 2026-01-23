@@ -8,9 +8,14 @@ import thgData from '../../../data/THG.json';
   standalone: false,
   templateUrl: './thg-chart.component.html', styles: `
     :host {
-      display: flex;
-      flex-direction: column;
+      display: contents;
+    }
+    .chart-node {
+      grid-area: var(--chart-area);
       page-break-inside: avoid;
+    }
+    .legend-node {
+      grid-area: var(--legend-area);
     }
   `,
   changeDetection: ChangeDetectionStrategy.Default

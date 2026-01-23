@@ -2,11 +2,11 @@
   <div class="card-body">
     <div class="charts-grid">
 
-      <app-bestand-chart class="chart-area-bestand"></app-bestand-chart>
+      <app-bestand-chart style="--chart-area: bestand-chart; --legend-area: bestand-legend"></app-bestand-chart>
 
-      <app-kosten-chart class="chart-area-kosten"></app-kosten-chart>
+      <app-kosten-chart style="--chart-area: kosten-chart; --legend-area: kosten-legend"></app-kosten-chart>
 
-      <app-thg-chart class="chart-area-thg" [height]="600"></app-thg-chart>
+      <app-thg-chart [height]="600" style="--chart-area: thg-chart; --legend-area: thg-legend"></app-thg-chart>
 
     </div>
   </div>

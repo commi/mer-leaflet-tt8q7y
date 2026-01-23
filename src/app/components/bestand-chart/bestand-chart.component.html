@@ -1,15 +1,19 @@
-<h6 class="mb-4">Fahrzeuge im Bestand [Tsd.]</h6>
-
-@if (chartData.datasets.length > 0) {
-  <app-chart-shell
-    [data]="chartData"
-    [scale]="{ tickCount: 6 }"
-    class="chart-shell">
-    <app-stacked-bar-plot
+<div class="chart-node">
+  <h6 class="mb-2">Fahrzeuge im Bestand [Tsd.]</h6>
+  @if (chartData.datasets.length > 0) {
+    <app-chart-shell
       [data]="chartData"
-      [colorForSeries]="colorForSeries"
-      [style.--num-columns]="chartData.labels.length">
-    </app-stacked-bar-plot>
-  </app-chart-shell>
-}
-<!--<app-chart-legend [legendGroups]="legendGroups"></app-chart-legend>-->
+      [scale]="{ tickCount: 6 }"
+      class="chart-shell">
+      <app-stacked-bar-plot
+        [data]="chartData"
+        [colorForSeries]="colorForSeries"
+        [style.--num-columns]="chartData.labels.length">
+      </app-stacked-bar-plot>
+    </app-chart-shell>
+  }
+</div>
+
+<div class="legend-node">
+  <app-chart-legend [legendGroups]="legendGroups"></app-chart-legend>
+</div>

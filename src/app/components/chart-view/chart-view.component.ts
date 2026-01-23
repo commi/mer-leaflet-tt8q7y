@@ -8,41 +8,34 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
   styles: `
     .charts-grid {
       display: grid;
+      gap: 1rem;
       grid-template-columns: 1fr;
-      grid-template-rows: auto;
-      gap: 1.5rem;
       grid-template-areas:
-        "bestand"
-        "kosten"
-        "thg";
+        "bestand-chart"
+        "kosten-chart"
+        "bestand-legend"
+        "thg-chart"
+        "thg-legend";
     }
 
-    @media (min-width: 992px) {
+    @media (min-width: 840px) {
       .charts-grid {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto;
+        grid-template-columns: 1fr auto;
+        gap: 1rem 1rem;
         grid-template-areas:
-          "bestand thg"
-          "kosten thg";
+          "bestand-chart bestand-legend"
+          "kosten-chart bestand-legend"
+          "thg-chart thg-legend";
       }
     }
 
-    .chart-area-bestand {
-      grid-area: bestand;
-    }
-
-    .chart-area-kosten {
-      grid-area: kosten;
-    }
-
-    .chart-area-thg {
-      grid-area: thg;
-      min-height: 400px;
-    }
-
-    @media (min-width: 992px) {
-      .chart-area-thg {
-        min-height: 600px;
+    @media (min-width: 1280px) {
+      .charts-grid {
+        grid-template-columns: 1fr auto 1fr auto;
+        gap: 1rem 1rem;
+        grid-template-areas:
+          "bestand-chart bestand-legend thg-chart thg-legend"
+          "kosten-chart bestand-legend thg-chart thg-legend";
       }
     }
   `,

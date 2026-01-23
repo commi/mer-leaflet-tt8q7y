@@ -8,9 +8,14 @@ import kostenData from '../../../data/Kosten.json';
   standalone: false,
   templateUrl: './kosten-chart.component.html', styles: `
     :host {
-      display: flex;
-      flex-direction: column;
+      display: contents;
+    }
+    .chart-node {
+      grid-area: var(--chart-area);
       page-break-inside: avoid;
+    }
+    .legend-node {
+      grid-area: var(--legend-area);
     }
   `,
   changeDetection: ChangeDetectionStrategy.Default
