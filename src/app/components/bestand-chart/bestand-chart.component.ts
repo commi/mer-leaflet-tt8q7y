@@ -6,7 +6,13 @@ import {CHART_CONFIGS} from '../../models/chart-config.model';
   selector: 'app-bestand-chart',
   standalone: false,
   templateUrl: './bestand-chart.component.html',
-  styles: `:host { display: flex; flex-direction: column; }`,
+  styles: `
+    :host {
+      display: flex;
+      flex-direction: column;
+      page-break-inside: avoid;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class BestandChartComponent extends BaseChartComponent {

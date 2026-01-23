@@ -5,8 +5,13 @@ import {CHART_CONFIGS} from '../../models/chart-config.model';
 @Component({
   selector: 'app-kosten-chart',
   standalone: false,
-  templateUrl: './kosten-chart.component.html',
-  styles: `:host { display: flex; flex-direction: column; }`,
+  templateUrl: './kosten-chart.component.html', styles: `
+    :host {
+      display: flex;
+      flex-direction: column;
+      page-break-inside: avoid;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class KostenChartComponent extends BaseChartComponent {

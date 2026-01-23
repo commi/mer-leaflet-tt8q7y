@@ -53,6 +53,7 @@ import {assertChartData, computeMaxValue, computeTicks, maxOfData, stackedTotals
       gap: 10px;
       container-type: inline-size;
       container-name: chart;
+      page-break-inside: avoid;
       
       /* Defaults: can be overridden externally */
       --axis-text: #444;
