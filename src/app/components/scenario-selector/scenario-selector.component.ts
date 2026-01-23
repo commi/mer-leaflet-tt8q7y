@@ -8,7 +8,7 @@ import { map } from 'rxjs';
   standalone: false,
   templateUrl: './scenario-selector.component.html',
   host: {
-    'class': 'card'
+    'class': 'card border-0'
   }
 })
 export class ScenarioSelectorComponent {

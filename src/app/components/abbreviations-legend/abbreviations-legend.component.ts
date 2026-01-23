@@ -16,7 +16,7 @@ import { getTechnologyColor } from '../../utils/color.util';
     </div>
   `,
   host: {
-    'class': 'card'
+    'class': 'card border-0'
   },
   styles: `
     :host {

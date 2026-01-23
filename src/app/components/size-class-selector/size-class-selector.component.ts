@@ -7,7 +7,7 @@ import { SIZE_CLASSES, ALL_SIZE_CLASSES } from '../../utils/color.util';
   standalone: false,
   templateUrl: './size-class-selector.component.html',
   host: {
-    'class': 'card'
+    'class': 'card border-0'
   },
   styles: `
     :host {
