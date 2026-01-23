@@ -59,7 +59,7 @@ import {assertChartData, computeMaxValue, computeTicks, maxOfData, stackedTotals
       --axis-text: #444;
       --axis-font-size: 12px;
       --grid-line-color: rgba(0,0,0,.10);
-      --bar-gap: 6px;
+      --bar-gap: 3px;
 
       /* Default series colors (fallback if no generator used) */
       --series-1: #0a3b46;
