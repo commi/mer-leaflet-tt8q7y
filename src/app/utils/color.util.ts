@@ -47,13 +47,13 @@ const TECHNOLOGY_COLORS: TechnologyColor[] = [
   // Primary technologies (longest prefixes first for matching!)
   { prefix: 'OL-BEV', primary: '#85C200', dark: '#00692E', light: '#CFE899' },
   { prefix: 'BWS-BEV', primary: '#998A87', dark: '#5C5957', light: '#CCC4C2' },
-  { prefix: 'Diesel', primary: '#003847', dark: '#4C7380', light: '#B2C4C7' },
+  { prefix: 'Diesel', primary: '#003847', dark: '#4C7380', light: '#b3c3c8' },
   { prefix: 'BEV', primary: '#DEDB00', dark: '#616100', light: '#9C9E3B' },
   { prefix: 'FCEV', primary: '#0061A1', dark: '#66A1C7', light: '#B2D1E3' },
 ];
 
 // THG component order for color shading (light to dark gradient)
-const COMPONENT_ORDER = ['Fahrzeug', 'Energie_WTT', 'Energie_TTW', 'Wartung', 'EoL', 'Akku', 'Infrastruktur'];
+const COMPONENT_ORDER = ['Fahrzeug', 'EoL', 'Wartung', 'Akku', 'Infrastruktur', 'Energie_WTT', 'Energie_TTW'];
 
 // Technologies that use gradient towards lighter, others use dark gradient
 const USE_LIGHT_GRADIENT = ['Diesel', 'BWS-BEV', 'FCEV'];
@@ -170,7 +170,7 @@ function getComponentColor(techColor: TechnologyColor, component: string): strin
 
   // Create gradient from light to dark across components
   const proportion = index / (COMPONENT_ORDER.length - 1);
-  return chroma.mix(techColor.primary, 'white', proportion, 'oklab').hex();
+  return chroma.mix(techColor.primary, techColor.light, proportion, 'oklab').hex();
 }
 
 /**
