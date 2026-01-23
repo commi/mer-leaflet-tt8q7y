@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { getTechnologyColor } from '../../utils/color.util';
+import {Component} from '@angular/core';
+import {getChartColor} from '../../utils/color.util';
 
 @Component({
   selector: 'app-abbreviations-legend',
@@ -56,6 +56,6 @@ import { getTechnologyColor } from '../../utils/color.util';
 })
 export class AbbreviationsLegendComponent {
   getColor(tech: string): string {
-    return getTechnologyColor(tech);
+    return getChartColor(tech);
   }
 }
