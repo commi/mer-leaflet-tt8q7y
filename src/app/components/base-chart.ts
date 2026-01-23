@@ -1,55 +1,54 @@
-import { Directive, OnInit, OnDestroy, AfterViewInit, Input, ElementRef, inject } from '@angular/core';
-import { Chart } from 'frappe-charts';
-import { DataService } from '../services/data.service';
-import { ScenarioStateService } from '../services/scenario-state.service';
-import { ChartConfig } from '../models/chart-config.model';
-import { DataRow, hasGroessenklasse, hasKomponente } from '../models/data.model';
-import { getChartColor, ALL_SIZE_CLASSES } from '../utils/color.util';
-import { LegendItem } from './chart-legend/chart-legend.component';
-import { Subscription, combineLatest, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {Directive, inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {DataService} from '../services/data.service';
+import {ScenarioStateService} from '../services/scenario-state.service';
+import {ChartConfig} from '../models/chart-config.model';
+import {DataRow, hasGroessenklasse, hasKomponente} from '../models/data.model';
+import {ALL_SIZE_CLASSES, getChartColor} from '../utils/color.util';
+import {LegendItem} from './chart-legend/chart-legend.component';
+import {ChartData, ColorForSeries} from './chart/chart-types';
+import {combineLatest, of, Subscription} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Directive()
-export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() selectedSizeClasses: string[] = [];
+export abstract class BaseChartComponent implements OnInit, OnDestroy {
   @Input() height: number = 300;
 
   protected scenarioState = inject(ScenarioStateService);
   protected dataService = inject(DataService);
 
-  protected chart?: Chart;
   protected subscriptions: Subscription[] = [];
 
+  // Chart data for template binding
+  chartData: ChartData = { labels: [], datasets: [] };
   legendGroups: Array<Array<LegendItem>> = [];
+
+  // Color function for the chart
+  colorForSeries: ColorForSeries = (seriesName: string) => {
+    return getChartColor(seriesName, this.scenarioState.chartSizeClass$.value);
+  };
 
   // Abstract properties that child components must provide
   abstract chartConfig: ChartConfig;
-  abstract chartContainer: ElementRef<HTMLDivElement>;
   // Override this in THG chart to skip size class filtering
   protected useSizeClassFilter = true;
 
   ngOnInit(): void {
+    // Initial load
+    this.updateChart();
+
+    // Subscribe to state changes
     this.subscriptions.push(
       combineLatest([
         this.scenarioState.scenario$,
         this.scenarioState.chartSizeClass$
       ]).subscribe(() => {
-        if (this.chart) {
-          this.updateChart();
-        }
+        this.updateChart();
       })
     );
   }
 
-  ngAfterViewInit(): void {
-    this.updateChart();
-  }
-
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-    if (this.chart) {
-      this.chart.destroy();
-    }
   }
 
   protected updateChart(): void {
@@ -222,42 +221,18 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
   private renderChart(
     chartData: { labels: string[], datasets: Array<{name: string, values: number[]}> }
   ): void {
-
-    if (!this.chartContainer) return;
-
-    // Destroy existing chart
-    if (this.chart) {
-      this.chart.destroy();
-    }
-
-    // Create new chart
-    this.chart = new Chart(this.chartContainer.nativeElement, {
-      //title: `${this.chartConfig.title} ${this.chartConfig.unitLabel}`,
-      data: {
-        labels: chartData.labels,
-        datasets: chartData.datasets
-      },
-      type: 'bar',
-      barOptions: {
-        stacked: true,
-        spaceRatio: 0.5
-      },
-      height: this.height,
-      colors: chartData.datasets.map(d => getChartColor(d.name, this.selectedSizeClasses)),
-      axisOptions: {
-        xAxisMode: 'tick',
-        xIsSeries: false
-      }
-    });
+    // Store chart data for template binding
+    this.chartData = chartData;
 
     // Update legend
     this.updateLegend(chartData.datasets.map(d => d.name).reverse());
   }
 
   private updateLegend(seriesNames: string[]): void {
+    const sizeClasses = this.scenarioState.chartSizeClass$.value;
+
     // Group by technology using same logic as sortDatasetsByTechnology
     const getTechOrder = (name: string): number => {
-
       // IMPORTANT: Check most specific prefixes first!
       if (name.includes('OL-BEV')) return 3;
       if (name.includes('BWS-BEV') || name.includes('BWS')) return 2;
@@ -285,7 +260,7 @@ export abstract class BaseChartComponent implements OnInit, AfterViewInit, OnDes
 
       currentGroup.push({
         name: name,
-        color: getChartColor(name, this.selectedSizeClasses)
+        color: getChartColor(name, sizeClasses)
       });
       prevOrder = techOrder;
     });

@@ -1,5 +1,5 @@
-import { Component, ViewEncapsulation, inject } from '@angular/core';
-import { ScenarioStateService } from '../../services/scenario-state.service';
+import {Component, inject} from '@angular/core';
+import {ScenarioStateService} from '../../services/scenario-state.service';
 
 @Component({
   selector: 'app-chart-view',
@@ -29,7 +29,6 @@ import { ScenarioStateService } from '../../services/scenario-state.service';
       min-height: 600px;
     }
   `,
-  encapsulation: ViewEncapsulation.None
 })
 export class ChartViewComponent {
   scenarioState = inject(ScenarioStateService);

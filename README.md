@@ -9,8 +9,7 @@ Web-basierter Szenarienexplorer.
 
 ## Technologie-Stack
 
-- Angular 19 mit Angular Elements (für Web Componen  Erstellung)
-- Frappe Charts für Stacked Bar Charts
+- Angular 19 mit Angular Elements (für Web Component Erstellung)
 - Bootstrap 5.3 für Styling
 - TypeScript
 - chroma-js für Farbinterpolation
@@ -145,6 +144,9 @@ src/
 │   ├── components/
 │   │   ├── scenario-selector/        # Szenario-Auswahl
 │   │   ├── chart-view/                # Chart Container
+│   │   ├── chart/                     # Custom Chart Components
+│   │   │   ├── ...
+│   │   │   └── ...
 │   │   ├── bestand-chart/             # Bestandschart
 │   │   ├── kosten-chart/              # Kostenchart
 │   │   ├── thg-chart/                 # THG-Emissionen Chart
@@ -163,8 +165,7 @@ src/
 │   ├── app.component.ts               # Root Component
 │   └── app.module.ts                  # App Module
 ├── main.ts                            # Angular Elements Bootstrap
-├── styles.scss                        # Global Styles (Bootstrap)
-└── typings.d.ts                       # Type Definitions (für frappe-charts, da sie keine mitbringen)
+└── styles.scss                        # Global Styles (Bootstrap)
 
 public/
 ├── data/                              # JSON Daten

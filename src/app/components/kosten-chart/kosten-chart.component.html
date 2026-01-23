@@ -1,3 +1,15 @@
-<h6 class="mb-2">Kosten in Euro</h6>
-<div #chartContainer class="chart-container"></div>
+<h6 class="mb-4">Kosten in Euro</h6>
+
+@if (chartData.datasets.length > 0) {
+  <app-chart-shell
+    [data]="chartData"
+    [scale]="{ tickCount: 6 }"
+    class="chart-shell">
+    <app-stacked-bar-plot
+      [data]="chartData"
+      [colorForSeries]="colorForSeries"
+      [style.--num-columns]="chartData.labels.length">
+    </app-stacked-bar-plot>
+  </app-chart-shell>
+}
 <app-chart-legend class="mt-auto" [legendGroups]="legendGroups"></app-chart-legend>

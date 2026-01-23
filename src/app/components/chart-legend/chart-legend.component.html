@@ -1,6 +1,6 @@
 <div class="card mt-2">
   <div class="card-body p-2 small d-flex flex-column gap-1">
-    @for (group of legendGroups; track group) {
+    @for (group of legendGroups; track group[0].name) {
       <div class="d-flex flex-row flex-wrap gap-0">
         @for (item of group; track item.name) {
           <span class="text-nowrap me-3">

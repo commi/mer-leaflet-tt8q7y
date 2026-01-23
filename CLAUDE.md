@@ -15,7 +15,7 @@ The application is built with Angular and follows a component-based architecture
 - **Modern DI**: Uses `inject()` function instead of constructor injection
 - **Reactive State Management**: Central state via `ScenarioStateService` with RxJS observables
 - **Data Caching**: HTTP requests cached via `DataService`
-- **Frappe Charts**: Data visualization with stacked bar charts
+- **Custom Chart Components**: Custom stacked bar charts
 - **New Control Flow**: Uses `@for` and `@if` instead of `*ngFor` and `*ngIf`
 
 ## Key Components
@@ -26,9 +26,9 @@ The application is built with Angular and follows a component-based architecture
 AppComponent (selector: szenarien-component, ViewEncapsulation.ShadowDom)
 ├── ScenarioSelectorComponent - Scenario selection (Referenz/Krise)
 └── ChartViewComponent - Chart visualization with inline controls
-    ├── Frappe Charts (Stacked Bar Charts)
-    ├── Data source selector (Bestand/Neuzulassungen/THG-Emissionen)
-    └── Size class filter (3,5-7,5t bis >26t)
+    ├── BestandChartComponent - Vehicle stock chart
+    ├── KostenChartComponent - Cost chart
+    └── ThgChartComponent - GHG emissions chart
 ```
 
 ### Services & Utilities
@@ -58,12 +58,6 @@ AppComponent (selector: szenarien-component, ViewEncapsulation.ShadowDom)
   - `AppComponent`: `ViewEncapsulation.ShadowDom` (creates custom element with shadow DOM)
   - All child components: `ViewEncapsulation.None` (no isolation needed)
   - Components that need layout transparency: `:host { display: contents; }`
-
-### Key Files
-
-- **Main entry point**: src/main.ts - Bootstraps Angular module and registers custom element `szenarien-component`
-- **Root module**: src/app/app.module.ts - Declares all components, imports FormsModule & HttpClientModule
-- **Chart component**: src/app/components/chart-view/chart-view.component.ts:49 - Frappe Charts with inline controls
 
 ## Data Structure
 
@@ -111,7 +105,7 @@ Use `inject()` for dependency injection and `@ViewChild` for DOM references.
 ### CSS Architecture
 
 - **Global styles**: `src/styles.scss` imports Bootstrap CSS
-- **Component styles**: Use `ViewEncapsulation.None` with `:host { display: contents; }` where needed
+- **Component styles**: Use `:host { display: contents; }` where needed
 - **CSS Grid**: Chart legends use CSS Grid with `display: contents` on child elements
 - **Subgrid**: Chart legend uses CSS Subgrid for perfect alignment across groups
 
@@ -129,8 +123,7 @@ The built application can be embedded as a custom element:
 ## External Dependencies
 
 Loaded via npm packages (not script tags):
-- **chroma-js** + **@types/chroma-js**: Color interpolation
-- **frappe-charts**: Chart visualization (custom typings in src/typings.d.ts)
+- **chroma-js** + **@types/chroma-js**: Color interpolation for gradients
 - **bootstrap@5.3**: Styling framework
 - **@angular/elements**: Web Component support
 
@@ -141,7 +134,6 @@ Loaded via npm packages (not script tags):
 - AppComponent uses `ViewEncapsulation.ShadowDom` for proper custom element behavior
 - Child components use `ViewEncapsulation.None` (no additional isolation needed)
 - Components use `:host { display: contents; }` for layout transparency with Bootstrap Grid
-- ChartViewComponent has controls inlined (no separate control components)
 - All services are injected via `inject()` function, not constructor
 - DOM references use `@ViewChild` with `ElementRef` instead of `document.querySelector`
 - Templates use new Angular syntax: `@for`, `@if` instead of `*ngFor`, `*ngIf`
