@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BaseChartComponent} from '../base-chart';
 import {BestandKostenRow} from '../../models/data.model';
 import kostenData from '../../../data/Kosten.json';
+import {getBestandKostenLegendOrder, getBestandKostenStackOrder} from '../../utils/color.util';
 
 @Component({
   selector: 'app-kosten-chart',
@@ -26,4 +27,12 @@ export class KostenChartComponent extends BaseChartComponent {
   readonly title = 'Kosten';
   readonly unitDivisor = 1000000000;
   readonly unitLabel = 'in Mrd. €';
+
+  protected getSeriesOrder(seriesName: string): number {
+    return getBestandKostenStackOrder(seriesName);
+  }
+
+  protected getLegendOrder(seriesName: string): number {
+    return getBestandKostenLegendOrder(seriesName);
+  }
 }

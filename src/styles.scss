@@ -51,3 +51,39 @@ $spacer: 1rem;
 #tbody_legend td:last-child {
   padding-inline-end: 0;
 }
+
+
+// chart color definitions
+:host {
+  /* Diesel */
+  --color-diesel-vehicle-dark: #003746;
+  --color-diesel-vehicle-medium: #3F636F;
+  --color-diesel-energy-wtt: #4d737e;
+  --color-diesel-energy-ttw: #B3C3C8;
+  --color-diesel-energy-soft: #79929B;
+  --color-diesel-energy-medium: #95AAB1;
+  --color-diesel-energy-light: #B3C3C8;
+
+  /* BEV */
+  --color-bev-energy: #DEDC00;
+  --color-bev-battery: color-mix(in oklab, #DEDC03, #9B9F3B 50%); /* Farbe zwischen Fahrzeug und Energie */
+  --color-bev-vehicle: #9B9F3B;
+  --color-bev-infrastructure: #606200;
+  --color-bev-highlight: #BCBC2E;
+
+  /* OL-BEV */
+  --color-ol-bev-light: #CFE899;
+  --color-ol-bev-medium: #85C200;
+  --color-ol-bev-dark: #00692E;
+
+  /* FCEV/Brennstoffzelle */
+  --color-fcev-primary: #0061A1;
+  --color-fcev-dark: #21418A;
+  --color-fcev-light: #66A0C4;
+  --color-fcev-battery: #b2d1e3;
+
+  /* BWS-BEV (Batteriewechselsystem) */
+  --color-bws-bev-primary: #998A87;
+  --color-bws-bev-dark: #5C5957;
+  --color-bws-bev-light: #CCC4C2;
+}
