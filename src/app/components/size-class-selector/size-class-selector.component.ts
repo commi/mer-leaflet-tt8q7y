@@ -6,13 +6,14 @@ import { SIZE_CLASSES, ALL_SIZE_CLASSES } from '../../utils/color.util';
   selector: 'app-size-class-selector',
   standalone: false,
   templateUrl: './size-class-selector.component.html',
-  styles: `:host {
-    display: contents;
-  }
-  
-  .card {
-    min-width: fit-content;
-  }`,
+  host: {
+    'class': 'card'
+  },
+  styles: `
+    :host {
+      min-width: max-content;
+    }
+  `,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

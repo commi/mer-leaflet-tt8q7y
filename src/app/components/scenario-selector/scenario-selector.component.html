@@ -1,21 +1,18 @@
-<div class="card">
-  <div class="card-body flex-grow-0 d-flex gap-4 align-items-center">
-    <label for="szenario-select" class="card-title h6 mb-0">Szenario:</label>
-    <select id="szenario-select"
-            class="form-select"
-            style="width: auto; max-width: 600px;"
-            [ngModel]="scenarioState.scenario$ | async"
-            (ngModelChange)="scenarioState.scenario$.next($event)">
-      @for (scenario of scenarios; track scenario.id) {
-        <option [value]="scenario.id">{{ scenario.name }}</option>
-      }
-    </select>
-  </div>
-  @if (selectedScenarioConfig$ | async; as config) {
-    <div class="card-body border-top">
-      <p class="card-text mb-0">
-        {{ config.infoText }}
-      </p>
-    </div>
-  }
+<div class="card-body flex-grow-0 d-flex flex-column flex-sm-row gap-2 gap-sm-3 align-items-start align-items-sm-center">
+  <label for="szenario-select" class="card-title h6 mb-0">Szenario:</label>
+  <select id="szenario-select"
+          class="form-select flex-grow-1"
+          [ngModel]="scenarioState.scenario$ | async"
+          (ngModelChange)="scenarioState.scenario$.next($event)">
+    @for (scenario of scenarios; track scenario.id) {
+      <option [value]="scenario.id">{{ scenario.name }}</option>
+    }
+  </select>
 </div>
+@if (selectedScenarioConfig$ | async; as config) {
+  <div class="card-body border-top">
+    <p class="card-text mb-0 small">
+      {{ config.infoText }}
+    </p>
+  </div>
+}

@@ -3,3 +3,42 @@
 :host {
   display: block;
 }
+
+.app-grid {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+
+  // Mobile: Stack vertically
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "selector selector"
+    "sizeclass legend"
+    "charts charts";
+
+  // Desktop: Controls in first row, charts below
+  @media (min-width: 992px) {
+    padding: 1.5rem;
+    gap: 1.5rem;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "selector sizeclass legend"
+      "charts charts charts";
+  }
+}
+
+.grid-selector {
+  grid-area: selector;
+}
+
+.grid-sizeclass {
+  grid-area: sizeclass;
+}
+
+.grid-legend {
+  grid-area: legend;
+}
+
+.grid-charts {
+  grid-area: charts;
+}

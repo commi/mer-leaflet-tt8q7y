@@ -8,12 +8,23 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
   styles: `
     .charts-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
       gap: 1.5rem;
       grid-template-areas:
-        "bestand thg"
-        "kosten thg";
+        "bestand"
+        "kosten"
+        "thg";
+    }
+
+    @media (min-width: 992px) {
+      .charts-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+          "bestand thg"
+          "kosten thg";
+      }
     }
 
     .chart-area-bestand {
@@ -26,7 +37,13 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
 
     .chart-area-thg {
       grid-area: thg;
-      min-height: 600px;
+      min-height: 400px;
+    }
+
+    @media (min-width: 992px) {
+      .chart-area-thg {
+        min-height: 600px;
+      }
     }
   `,
 })

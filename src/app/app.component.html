@@ -1,20 +1,15 @@
-<div class="d-flex flex-column gap-3 p-4">
+<div class="container-fluid app-grid">
 
-  <!-- Horizontal controls row -->
-  <div class="d-flex gap-3 align-content-stretch">
+  <app-scenario-selector class="grid-selector"></app-scenario-selector>
 
-    <app-scenario-selector></app-scenario-selector>
+  <app-size-class-selector
+    class="grid-sizeclass"
+    [ngModel]="scenarioState.chartSizeClass$ | async"
+    (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
+  </app-size-class-selector>
 
-    <app-size-class-selector
-      [ngModel]="scenarioState.chartSizeClass$ | async"
-      (ngModelChange)="scenarioState.chartSizeClass$.next($event)">
-    </app-size-class-selector>
+  <app-abbreviations-legend class="grid-legend"></app-abbreviations-legend>
 
-    <app-abbreviations-legend></app-abbreviations-legend>
-    
-  </div>
-
-  <!-- Chart view (full width) -->
-  <app-chart-view></app-chart-view>
+  <app-chart-view class="grid-charts"></app-chart-view>
 
 </div>
