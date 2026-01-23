@@ -9,6 +9,7 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
     .charts-grid {
       display: grid;
       gap: 1rem;
+      place-items: end normal;
       grid-template-columns: 1fr;
       grid-template-areas:
         "bestand-chart"
@@ -24,7 +25,7 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
         gap: 1rem 1rem;
         grid-template-areas:
           "bestand-chart bestand-legend"
-          "kosten-chart bestand-legend"
+          "kosten-chart ."
           "thg-chart thg-legend";
       }
     }
@@ -35,7 +36,7 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
         gap: 1rem 1rem;
         grid-template-areas:
           "bestand-chart bestand-legend thg-chart thg-legend"
-          "kosten-chart bestand-legend thg-chart thg-legend";
+          "kosten-chart . thg-chart thg-legend";
       }
     }
   `,
