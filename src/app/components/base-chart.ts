@@ -32,6 +32,10 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
   // Override this in THG chart to skip size class filtering
   protected useSizeClassFilter = true;
 
+  // Abstract methods for sorting
+  protected abstract getSeriesOrder(seriesName: string): number;
+  protected abstract getLegendOrder(seriesName: string): number;
+
   ngOnInit(): void {
     // Initial load
     this.updateChart();
@@ -179,31 +183,16 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
   }
 
   private sortDatasetsByTechnology(datasets: Array<{name: string, values: number[]}>): Array<{name: string, values: number[]}> {
-    const getTechOrder = (name: string): number => {
-      // Split by underscore to remove size class suffix
-      const baseName = name.split('_')[0].trim();
-
-      // IMPORTANT: Check most specific prefixes first!
-      // Order: BEV (0, bottom) → FCEV (1) → OL (2) → BWS (3) → Diesel (4, top)
-      if (baseName.includes('OL-BEV')) return 2;
-      if (baseName.includes('BWS-BEV') || baseName.includes('BWS')) return 3;
-      if (baseName.includes('BEV')) return 0;
-      if (baseName.includes('FCEV') || baseName.includes('H2')) return 1;
-      if (baseName.includes('Diesel')) return 4;
-
-      return 999; // Unknown
-    };
-
     return datasets.sort((a, b) => {
-      const orderA = getTechOrder(a.name);
-      const orderB = getTechOrder(b.name);
+      const orderA = this.getSeriesOrder(a.name);
+      const orderB = this.getSeriesOrder(b.name);
 
-      // Sort by technology order first
+      // Sort by order first
       if (orderA !== orderB) {
         return orderA - orderB;
       }
 
-      // Within same technology, sort by series name
+      // Fallback to alphabetical
       return a.name.localeCompare(b.name, undefined, { numeric: true });
     });
   }
@@ -221,27 +210,15 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
   private updateLegend(seriesNames: string[]): void {
     const sizeClasses = this.scenarioState.chartSizeClass$.value;
 
-    // Group by technology using same logic as sortDatasetsByTechnology
-    const getTechOrder = (name: string): number => {
-      // IMPORTANT: Check most specific prefixes first!
-      if (name.includes('OL-BEV')) return 3;
-      if (name.includes('BWS-BEV') || name.includes('BWS')) return 2;
-      if (name.includes('BEV')) return 1;
-      if (name.includes('FCEV') || name.includes('H2')) return 4;
-      if (name.includes('Diesel')) return 0;
-
-      return 999;
-    };
-
     const legendGroupsArray: Array<Array<LegendItem>> = [];
     let currentGroup: Array<LegendItem> = [];
     let prevOrder = -1;
 
     seriesNames.forEach(name => {
-      const techOrder = getTechOrder(name);
+      const legendOrder = this.getLegendOrder(name);
 
-      if (prevOrder !== -1 && techOrder !== prevOrder) {
-        // Start new group (different technology)
+      if (prevOrder !== -1 && legendOrder !== prevOrder) {
+        // Start new group (different order)
         if (currentGroup.length > 0) {
           legendGroupsArray.push(currentGroup);
         }
@@ -252,7 +229,7 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
         name: name,
         color: getChartColor(name, sizeClasses)
       });
-      prevOrder = techOrder;
+      prevOrder = legendOrder;
     });
 
     // Push last group
