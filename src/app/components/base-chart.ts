@@ -1,20 +1,16 @@
 import {Directive, inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {DataService} from '../services/data.service';
 import {ScenarioStateService} from '../services/scenario-state.service';
-import {ChartConfig} from '../models/chart-config.model';
 import {DataRow, hasGroessenklasse, hasKomponente} from '../models/data.model';
 import {ALL_SIZE_CLASSES, getChartColor} from '../utils/color.util';
 import {LegendItem} from './chart-legend/chart-legend.component';
 import {ChartData, ColorForSeries} from './chart/chart-types';
-import {combineLatest, of, Subscription} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {combineLatest, Subscription} from 'rxjs';
 
 @Directive()
 export abstract class BaseChartComponent implements OnInit, OnDestroy {
   @Input() height: number = 300;
 
   protected scenarioState = inject(ScenarioStateService);
-  protected dataService = inject(DataService);
 
   protected subscriptions: Subscription[] = [];
 
@@ -28,7 +24,11 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
   };
 
   // Abstract properties that child components must provide
-  abstract chartConfig: ChartConfig;
+  abstract readonly dataSource: DataRow[];
+  abstract readonly dataKey: string;
+  abstract readonly title: string;
+  abstract readonly unitDivisor: number;
+  abstract readonly unitLabel: string;
   // Override this in THG chart to skip size class filtering
   protected useSizeClassFilter = true;
 
@@ -55,19 +55,9 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
     const scenario = this.scenarioState.scenario$.value;
     const sizeClasses = this.scenarioState.chartSizeClass$.value;
 
-    // Fetch single data file (new format: all data in one file)
-    // Use relative path to respect base-href
-    const filename = `data/${this.chartConfig.dataSource}.json`;
-
-    this.dataService.fetchJSON<DataRow[]>(filename).pipe(
-      catchError(error => {
-        console.warn(`Failed to load ${filename}:`, error);
-        return of<DataRow[]>([]);
-      })
-    ).subscribe(data => {
-      const chartData = this.transformData(data, scenario, sizeClasses);
-      this.renderChart(chartData);
-    });
+    // Use directly imported data
+    const chartData = this.transformData(this.dataSource, scenario, sizeClasses);
+    this.renderChart(chartData);
   }
 
   /**
@@ -85,7 +75,7 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
     let filtered = rawData.filter(row => row.Szenario === scenario);
 
     // THG-specific transformations
-    if (this.chartConfig.id === 'thg') {
+    if (this.dataKey === 'THG') {
       filtered = filtered.map(row => {
         if (hasKomponente(row)) {
           // Rename "Energie X" → "Energie_WTT X" for all technologies
@@ -103,7 +93,7 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
     }
 
     // Determine key names based on data structure
-    const dataKey = this.chartConfig.dataKey; // 'Bestand', 'Kosten', or 'THG'
+    const dataKey = this.dataKey; // 'Bestand', 'Kosten', or 'THG'
     const hasSizeClass = filtered.length > 0 && hasGroessenklasse(filtered[0]);
 
     // Filter by size classes (only for Bestand/Kosten, not THG)
@@ -149,7 +139,7 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
       } else {
         rawValue = row.THG;
       }
-      const value = parseFloat(rawValue || '0') / this.chartConfig.unitDivisor;
+      const value = parseFloat(rawValue || '0') / this.unitDivisor;
 
       // Create series name with size class suffix (if applicable)
       // Add suffix only when multiple specific size classes selected (not ALL_SIZE_CLASSES)

@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BaseChartComponent} from '../base-chart';
-import {CHART_CONFIGS} from '../../models/chart-config.model';
+import {THGRow} from '../../models/data.model';
+import thgData from '../../../data/THG.json';
 
 @Component({
   selector: 'app-thg-chart',
@@ -15,6 +16,10 @@ import {CHART_CONFIGS} from '../../models/chart-config.model';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class ThgChartComponent extends BaseChartComponent {
-  chartConfig = CHART_CONFIGS[2]; // THG config
+  readonly dataSource = thgData as THGRow[];
+  readonly dataKey = 'THG' as const;
+  readonly title = 'THG-Emissionen';
+  readonly unitDivisor = 1;
+  readonly unitLabel = 'in Mt CO2äq';
   protected override useSizeClassFilter = false; // THG has no size classes
 }

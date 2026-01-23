@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BaseChartComponent} from '../base-chart';
-import {CHART_CONFIGS} from '../../models/chart-config.model';
+import {BestandKostenRow} from '../../models/data.model';
+import kostenData from '../../../data/Kosten.json';
 
 @Component({
   selector: 'app-kosten-chart',
@@ -15,5 +16,9 @@ import {CHART_CONFIGS} from '../../models/chart-config.model';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class KostenChartComponent extends BaseChartComponent {
-  chartConfig = CHART_CONFIGS[1]; // Kosten config
+  readonly dataSource = kostenData as BestandKostenRow[];
+  readonly dataKey = 'Kosten' as const;
+  readonly title = 'Kosten';
+  readonly unitDivisor = 1000000000;
+  readonly unitLabel = 'in Mrd. €';
 }

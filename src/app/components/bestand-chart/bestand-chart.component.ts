@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BaseChartComponent} from '../base-chart';
-import {CHART_CONFIGS} from '../../models/chart-config.model';
+import {BestandKostenRow} from '../../models/data.model';
+import bestandData from '../../../data/Bestand.json';
 
 @Component({
   selector: 'app-bestand-chart',
@@ -16,5 +17,9 @@ import {CHART_CONFIGS} from '../../models/chart-config.model';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class BestandChartComponent extends BaseChartComponent {
-  chartConfig = CHART_CONFIGS[0]; // Bestand config
+  readonly dataSource = bestandData as BestandKostenRow[];
+  readonly dataKey = 'Bestand' as const;
+  readonly title = 'Bestand';
+  readonly unitDivisor = 1000;
+  readonly unitLabel = 'in Tsd. Fahrzeuge';
 }
