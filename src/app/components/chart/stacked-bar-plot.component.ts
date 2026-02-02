@@ -72,6 +72,7 @@ interface StackedColumn {
       align-self: flex-end; /* Align column to bottom of container */
 
       .segment {
+        position: relative;
         flex: 0 0 calc((var(--value) / var(--column-total)) * 100%);
         opacity: 1;
         transition-duration: 0.2s;
@@ -89,9 +90,113 @@ interface StackedColumn {
         color: var(--segment-text, rgba(255, 255, 255, .92));
         line-height: 1;
         min-height: 0;
+        cursor: pointer;
 
         &:first-child {
           margin-bottom: 0;
+        }
+
+        /* Tooltip via CSS generated content */
+        &::before {
+          content: attr(data-name);
+
+          /* reused values */
+          --tooltip-offset-y: 8px;
+          --tooltip-transition: var(--transition-base, 0.2s ease-in-out);
+
+          position: absolute;
+          bottom: 100%;
+          margin-block-end: var(--tooltip-margin, 3px);
+          align-self: center;
+          text-align: center;
+
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          background: var(--tooltip-bg, rgba(0, 0, 0, 0.9));
+          color: var(--tooltip-color, var(--white, white));
+          padding: var(--tooltip-padding-y, 8px) var(--tooltip-padding-x, 8px);
+
+          padding-bottom: calc(var(--tooltip-padding-x, 8px) + var(--arrow-h));
+
+          --r: var(--tooltip-border-radius, 6px);
+          --arrow-h: 8px;
+          --arrow-w: 16px;
+
+          //noinspection CssInvalidFunction
+          clip-path: polygon(
+            /*  Top-left corner  */
+            calc(var(--r) * (1 - cos(0deg))) calc(var(--r) * (1 - sin(0deg))),
+            calc(var(--r) * (1 - cos(15deg))) calc(var(--r) * (1 - sin(15deg))),
+            calc(var(--r) * (1 - cos(30deg))) calc(var(--r) * (1 - sin(30deg))),
+            calc(var(--r) * (1 - cos(45deg))) calc(var(--r) * (1 - sin(45deg))),
+            calc(var(--r) * (1 - cos(60deg))) calc(var(--r) * (1 - sin(60deg))),
+            calc(var(--r) * (1 - cos(75deg))) calc(var(--r) * (1 - sin(75deg))),
+            calc(var(--r) * (1 - cos(90deg))) calc(var(--r) * (1 - sin(90deg))),
+            /*  Top edge  */
+            calc(100% - var(--r)) 0,
+            /*  Top-right corner  */
+            calc(100% - var(--r) * (1 - sin(0deg))) calc(var(--r) * (1 - cos(0deg))),
+            calc(100% - var(--r) * (1 - sin(15deg))) calc(var(--r) * (1 - cos(15deg))),
+            calc(100% - var(--r) * (1 - sin(30deg))) calc(var(--r) * (1 - cos(30deg))),
+            calc(100% - var(--r) * (1 - sin(45deg))) calc(var(--r) * (1 - cos(45deg))),
+            calc(100% - var(--r) * (1 - sin(60deg))) calc(var(--r) * (1 - cos(60deg))),
+            calc(100% - var(--r) * (1 - sin(75deg))) calc(var(--r) * (1 - cos(75deg))),
+            calc(100% - var(--r) * (1 - sin(90deg))) calc(var(--r) * (1 - cos(90deg))),
+            /*  Right edge down  */
+            100% calc(100% - var(--arrow-h) - var(--r)),
+            /*  Bottom-right corner  */
+            calc(100% - var(--r) * (1 - cos(0deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(0deg))),
+            calc(100% - var(--r) * (1 - cos(15deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(15deg))),
+            calc(100% - var(--r) * (1 - cos(30deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(30deg))),
+            calc(100% - var(--r) * (1 - cos(45deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(45deg))),
+            calc(100% - var(--r) * (1 - cos(60deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(60deg))),
+            calc(100% - var(--r) * (1 - cos(75deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(75deg))),
+            calc(100% - var(--r) * (1 - cos(90deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(90deg))),
+            /*  Arrow right base  */
+            calc(50% + var(--arrow-w) / 2) calc(100% - var(--arrow-h)),
+            /*  Arrow tip  */
+            50% 100%,
+            /*  Arrow left base  */
+            calc(50% - var(--arrow-w) / 2) calc(100% - var(--arrow-h)),
+            /*  Bottom-left corner  */
+            calc(var(--r) * (1 - cos(90deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(90deg))),
+            calc(var(--r) * (1 - cos(75deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(75deg))),
+            calc(var(--r) * (1 - cos(60deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(60deg))),
+            calc(var(--r) * (1 - cos(45deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(45deg))),
+            calc(var(--r) * (1 - cos(30deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(30deg))),
+            calc(var(--r) * (1 - cos(15deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(15deg))),
+            calc(var(--r) * (1 - cos(0deg))) calc(100% - var(--arrow-h) - var(--r) * (1 - sin(0deg))),
+            /*  Left edge up  */
+            0 calc(var(--r))
+          );
+
+          font-size: var(--tooltip-font-size, 12px);
+          line-height: var(--body-line-height, 1.4);
+          white-space: nowrap;
+          pointer-events: none;
+          z-index: var(--tooltip-zindex, 1000);
+
+          opacity: 0;
+          translate: 0 calc(var(--tooltip-offset-y) * -1);
+          visibility: hidden;
+
+          transition: opacity var(--tooltip-transition),
+          visibility var(--tooltip-transition),
+          translate var(--tooltip-transition);
+          transition-behavior: allow-discrete;
+
+          @starting-style {
+            translate: 0 calc(var(--tooltip-offset-y) * -1);
+            opacity: 0;
+          }
+        }
+
+        &:hover::before {
+          opacity: 1;
+          translate: 0 0;
+          visibility: visible;
         }
       }
     }
