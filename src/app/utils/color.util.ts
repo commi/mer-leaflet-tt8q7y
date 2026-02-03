@@ -106,16 +106,16 @@ export function getChartColor(seriesName: string): string {
 const THG_SERIES_ORDER: RegExp[] = [
   // Fahrzeug
   // Akku
-  /^Akku BEV$/,
   /^Fahrzeug BEV$/,
-  /^Akku FCEV$/,
+  /^Akku BEV$/,
   /^Fahrzeug FCEV$/,
-  /^Akku OL-BEV$/,
+  /^Akku FCEV$/,
   /^Fahrzeug OL-BEV$/,
-  /^Akku BWS-BEV$/,
+  /^Akku OL-BEV$/,
   /^Fahrzeug BWS-BEV$/,
-  /^Akku Diesel$/,
+  /^Akku BWS-BEV$/,
   /^Fahrzeug Diesel$/,
+  /^Akku Diesel$/,
 
   // Energie
   /^Energie BEV$/,
