@@ -3,15 +3,30 @@
   @if (chartData.datasets.length > 0) {
     <app-chart-shell
       [data]="chartData"
-      [scale]="{ tickCount: 6 }"
+      [scale]="{ tickCount: 6, maxValue: maxValue }"
       class="chart-shell">
       <app-stacked-bar-plot
         [data]="chartData"
         [colorForSeries]="colorForSeries"
+        [scale]="{ maxValue: maxValue }"
         [style.--num-columns]="chartData.labels.length">
       </app-stacked-bar-plot>
+
+      <!-- Reference Line: "Keine Antriebswende" -->
+      @if (referenceLineData.datasets.length > 0) {
+        <app-line-plot
+          style="margin-inline: var(--plot-padding-inline, 8px)"
+          [data]="referenceLineData"
+          [scale]="{ maxValue: maxValue, minX: lineMinX, maxX: lineMaxX }"
+          [showPoints]="false"
+          [valueFormatter]="valueFormatter"
+          class="reference-line">
+        </app-line-plot>
+      }
     </app-chart-shell>
   }
 </div>
 
-<span class="legend-node"></span>
+<div class="legend-node" style="align-self: flex-start;">
+  <app-chart-legend [legendGroups]="legendGroups"></app-chart-legend>
+</div>

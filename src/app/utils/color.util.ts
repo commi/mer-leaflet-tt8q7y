@@ -91,10 +91,17 @@ export const LEGEND_COLOR_MAP: Map<RegExp, string> = new Map([
   [/\b(FCEV|Brennstoffzelle)\b/i, "var(--color-fcev-primary)"],
 ]);
 
-export function getChartColor(seriesName: string): string {
+export function getChartColor(seriesName: string, seriesIndex?: number): string {
   for (const [regex, cssVar] of LEGEND_COLOR_MAP) {
     if (regex.test(seriesName)) return cssVar;
   }
+
+  // use CSS var with index
+  if(seriesIndex !== undefined)
+  {
+    return `var(--series-${seriesIndex + 1})`;
+  }
+
   console.warn(`Keine Farbe für "${seriesName}"`);
   return '#F00';
 }

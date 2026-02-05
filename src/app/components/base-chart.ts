@@ -19,8 +19,8 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
   legendGroups: Array<Array<LegendItem>> = [];
 
   // Color function for the chart
-  colorForSeries: ColorForSeries = (seriesName: string) => {
-    return getChartColor(seriesName);
+  colorForSeries: ColorForSeries = (seriesName: string, index: number) => {
+    return getChartColor(seriesName, index);
   };
 
   // Abstract properties that child components must provide
@@ -207,12 +207,12 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
     this.updateLegend(chartData.datasets.map(d => d.name).reverse());
   }
 
-  private updateLegend(seriesNames: string[]): void {
+  protected updateLegend(seriesNames: string[]): void {
     const legendGroupsArray: Array<Array<LegendItem>> = [];
     let currentGroup: Array<LegendItem> = [];
     let prevOrder = -1;
 
-    seriesNames.forEach(name => {
+    seriesNames.forEach((name, index) => {
       const legendOrder = this.getLegendOrder(name);
 
       if (prevOrder !== -1 && legendOrder !== prevOrder) {
@@ -225,7 +225,7 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
 
       currentGroup.push({
         name: name,
-        color: getChartColor(name)
+        color: getChartColor(name, index)
       });
       prevOrder = legendOrder;
     });

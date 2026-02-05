@@ -14,6 +14,7 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
       grid-template-areas:
         "bestand-chart"
         "kosten-chart"
+        "kosten-legend"
         "bestand-legend"
         "thg-chart"
         "thg-legend";
@@ -25,7 +26,7 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
         gap: 1rem 1rem;
         grid-template-areas:
           "bestand-chart bestand-legend"
-          "kosten-chart ."
+          "kosten-chart kosten-legend"
           "thg-chart thg-legend";
       }
     }
@@ -36,7 +37,7 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
         gap: 1rem 1rem;
         grid-template-areas:
           "bestand-chart bestand-legend thg-chart thg-legend"
-          "kosten-chart . thg-chart thg-legend";
+          "kosten-chart kosten-legend thg-chart thg-legend";
       }
     }
   `,
