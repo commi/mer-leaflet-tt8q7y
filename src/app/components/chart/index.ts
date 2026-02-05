@@ -6,3 +6,4 @@ export { ChartXAxisComponent } from './x-axis.component';
 export { ChartGridLinesComponent } from './grid-lines.component';
 export { ChartShellComponent } from './chart-shell.component';
 export { StackedBarPlotComponent } from './stacked-bar-plot.component';
+export { LinePlotComponent } from './line-plot.component';

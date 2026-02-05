@@ -208,8 +208,6 @@ export abstract class BaseChartComponent implements OnInit, OnDestroy {
   }
 
   private updateLegend(seriesNames: string[]): void {
-    const sizeClasses = this.scenarioState.chartSizeClass$.value;
-
     const legendGroupsArray: Array<Array<LegendItem>> = [];
     let currentGroup: Array<LegendItem> = [];
     let prevOrder = -1;

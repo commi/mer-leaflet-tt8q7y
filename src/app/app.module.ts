@@ -15,7 +15,7 @@ import {KostenChartComponent} from './components/kosten-chart/kosten-chart.compo
 import {ThgChartComponent} from './components/thg-chart/thg-chart.component';
 
 // Custom chart components
-import {ChartGridLinesComponent, ChartShellComponent, ChartXAxisComponent, ChartYAxisComponent, StackedBarPlotComponent} from './components/chart';
+import {ChartGridLinesComponent, ChartShellComponent, ChartXAxisComponent, ChartYAxisComponent, LinePlotComponent, StackedBarPlotComponent} from './components/chart';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,8 @@ import {ChartGridLinesComponent, ChartShellComponent, ChartXAxisComponent, Chart
     ChartXAxisComponent,
     ChartGridLinesComponent,
     ChartShellComponent,
-    StackedBarPlotComponent
+    StackedBarPlotComponent,
+    LinePlotComponent
   ],
   imports: [
     CommonModule,
