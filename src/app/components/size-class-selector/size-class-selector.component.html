@@ -6,7 +6,9 @@
              type="checkbox"
              [id]="'size-' + sizeClass"
              [checked]="isSizeClassSelected(sizeClass)"
-             (change)="toggleSizeClass(sizeClass)">
+             [disabled]="isSizeClassSelected(sizeClass) && allSizeClasses ===sizeClass"
+             (change)="toggleSizeClass(sizeClass)"
+      >
       <label class="form-check-label small" [for]="'size-' + sizeClass">
         {{ sizeClass }}
       </label>

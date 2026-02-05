@@ -1,6 +1,6 @@
-import { Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { SIZE_CLASSES, ALL_SIZE_CLASSES } from '../../utils/color.util';
+import {Component, forwardRef} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ALL_SIZE_CLASSES, SIZE_CLASSES} from '../../utils/color.util';
 
 @Component({
   selector: 'app-size-class-selector',
@@ -24,6 +24,7 @@ import { SIZE_CLASSES, ALL_SIZE_CLASSES } from '../../utils/color.util';
 })
 export class SizeClassSelectorComponent implements ControlValueAccessor {
   sizeClasses = SIZE_CLASSES;
+  allSizeClasses = ALL_SIZE_CLASSES;
   selectedSizeClasses: string[] = [ALL_SIZE_CLASSES];
 
   private onChange: (value: string[]) => void = () => {};
