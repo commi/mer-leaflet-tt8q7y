@@ -3,7 +3,7 @@ import {BaseChartComponent} from '../base-chart';
 import {BestandKostenRow} from '../../models/data.model';
 import kostenData from '../../../data/Kosten.json';
 import keineAntriebswendeData from '../../../data/KeineAntriebswende.json';
-import {getBestandKostenLegendOrder, getBestandKostenStackOrder} from '../../utils/color.util';
+import {ALL_SIZE_CLASSES, getBestandKostenLegendOrder, getBestandKostenStackOrder} from '../../utils/color.util';
 import {LineChartData} from '../chart/chart-types';
 import {computeMaxValue, stackedTotals} from '../chart/chart-utils';
 
@@ -94,18 +94,38 @@ export class KostenChartComponent extends BaseChartComponent {
     this.lineMinX = Math.min(...barYears);
     this.lineMaxX = Math.max(...barYears);
 
-    // Load reference data and create line
-    const referenceData = keineAntriebswendeData as Array<{ Jahr: string, Kosten: number }>;
+    // Load reference data and filter by selected size classes
+    const referenceData = keineAntriebswendeData as Array<{Groessenklasse: string, Jahr: string, Kosten: number}>;
+    const sizeClasses = this.scenarioState.chartSizeClass$.value;
+
+    // Filter by size class (same logic as bar chart data)
+    let filteredData = referenceData;
+    const shouldFilter = !sizeClasses.includes(ALL_SIZE_CLASSES);
+    if (shouldFilter) {
+      filteredData = referenceData.filter(row => sizeClasses.includes(row.Groessenklasse));
+    }
+
+    // Group by year and sum costs
+    const yearTotals = new Map<string, number>();
+    filteredData.forEach(row => {
+      const existing = yearTotals.get(row.Jahr) || 0;
+      yearTotals.set(row.Jahr, existing + row.Kosten);
+    });
+
+    // Create points from aggregated data
+    const points = Array.from(yearTotals.entries())
+      .map(([jahr, kosten]) => ({
+        x: parseInt(jahr),
+        y: kosten / this.unitDivisor,
+        label: jahr,
+        value: kosten / this.unitDivisor
+      }))
+      .sort((a, b) => a.x - b.x);
 
     this.referenceLineData = {
       datasets: [{
         name: 'Keine Antriebswende',
-        points: referenceData.map(entry => ({
-          x: parseInt(entry.Jahr),  // Use actual year as X coordinate
-          y: entry.Kosten / this.unitDivisor,
-          label: entry.Jahr,
-          value: entry.Kosten / this.unitDivisor
-        }))
+        points: points
       }]
     };
   }
@@ -115,11 +135,19 @@ export class KostenChartComponent extends BaseChartComponent {
   };
 
   /**
-   * Show only ref line legend
-   * @param seriesNames
-   * @protected
+   * Show only ref line legend for this chart
    */
-  protected override updateLegend(seriesNames: string[]) {
-    super.updateLegend(this.referenceLineData.datasets.map(d => d.name));
+  protected override updateLegend(_seriesNames: string[]) {
+    // Create legend for bar chart data
+    // super.updateLegend(seriesNames);
+
+    // Add reference line to legend
+    if (this.referenceLineData.datasets.length > 0) {
+      this.legendGroups = [this.referenceLineData.datasets.map((ds, index) => ({
+        name: ds.name,
+        color: this.colorForSeries(ds.name, index),
+        type: 'dashed-line'
+      }))];
+    }
   }
 }
