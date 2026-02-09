@@ -1,86 +1,422 @@
 [
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2025",
-    "Kosten": 66623343040.1856
+    "Kosten": 6639178182.07622
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2026",
-    "Kosten": 67562042802.8536
+    "Kosten": 6802041908.06267
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2027",
-    "Kosten": 68777147758.7445
+    "Kosten": 6986922684.45332
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2028",
-    "Kosten": 70080819052.12129
+    "Kosten": 7178774336.20929
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2029",
-    "Kosten": 71383322228.0224
+    "Kosten": 7370263151.0327
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2030",
-    "Kosten": 72681306380.6813
+    "Kosten": 7561120630.68697
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2031",
-    "Kosten": 74355938425.6689
+    "Kosten": 7783748143.07868
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2032",
-    "Kosten": 76022461420.9049
+    "Kosten": 8005865902.88638
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2033",
-    "Kosten": 77680360457.2305
+    "Kosten": 8227406152.0099
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2034",
-    "Kosten": 79328577973.49109
+    "Kosten": 8448254922.92698
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2035",
-    "Kosten": 80964997711.1868
+    "Kosten": 8668205741.19584
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2036",
-    "Kosten": 82587975204.2743
+    "Kosten": 8887091115.98627
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2037",
-    "Kosten": 83540741979.0687
+    "Kosten": 9131713666.08004
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2038",
-    "Kosten": 84476370360.5502
+    "Kosten": 9375023550.56007
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2039",
-    "Kosten": 85394386999.2549
+    "Kosten": 9616901522.51024
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2040",
-    "Kosten": 86294426600.70479
+    "Kosten": 9857238977.60487
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2041",
-    "Kosten": 87162986634.79149
+    "Kosten": 10094691096.7842
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2042",
-    "Kosten": 88014076281.5723
+    "Kosten": 10330473878.8268
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2043",
-    "Kosten": 88847661877.207
+    "Kosten": 10564519547.7914
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2044",
-    "Kosten": 89663622516.8264
+    "Kosten": 10796754143.563
   },
   {
+    "Groessenklasse": "3,5-12 t",
     "Jahr": "2045",
-    "Kosten": 90461841027.4907
+    "Kosten": 11027105903.7697
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2025",
+    "Kosten": 8109962019.5766
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2026",
+    "Kosten": 8179971399.89725
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2027",
+    "Kosten": 8278247285.53776
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2028",
+    "Kosten": 8385663272.8011
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2029",
+    "Kosten": 8493226420.39295
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2030",
+    "Kosten": 8600595612.10208
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2031",
+    "Kosten": 8744735245.8653
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2032",
+    "Kosten": 8887911037.67521
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2033",
+    "Kosten": 9030096758.97741
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2034",
+    "Kosten": 9171213636.43943
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2035",
+    "Kosten": 9311082709.55971
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2036",
+    "Kosten": 9449571879.07802
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2037",
+    "Kosten": 9373534904.50957
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2038",
+    "Kosten": 9295633709.11869
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2039",
+    "Kosten": 9215925314.63369
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2040",
+    "Kosten": 9134475402.36314
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2041",
+    "Kosten": 9050221384.3016
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2042",
+    "Kosten": 8964500125.48234
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2043",
+    "Kosten": 8877393208.32994
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2044",
+    "Kosten": 8788972074.80428
+  },
+  {
+    "Groessenklasse": "12-26 t",
+    "Jahr": "2045",
+    "Kosten": 8699306073.03376
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2025",
+    "Kosten": 12704227753.1861
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2026",
+    "Kosten": 12890118367.1415
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2027",
+    "Kosten": 13131551999.83
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2028",
+    "Kosten": 13390757595.3613
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2029",
+    "Kosten": 13649647244.8359
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2030",
+    "Kosten": 13907547114.8709
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2031",
+    "Kosten": 14241665823.8017
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2032",
+    "Kosten": 14574196029.4534
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2033",
+    "Kosten": 14905026211.4705
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2034",
+    "Kosten": 15233934906.342
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2035",
+    "Kosten": 15560485446.2892
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2036",
+    "Kosten": 15884336391.5396
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2037",
+    "Kosten": 16078296479.2577
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2038",
+    "Kosten": 16268786448.0928
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2039",
+    "Kosten": 16455704113.5078
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2040",
+    "Kosten": 16638969350.3915
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2041",
+    "Kosten": 16815824476.7598
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2042",
+    "Kosten": 16989116948.8139
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2043",
+    "Kosten": 17158834967.8515
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2044",
+    "Kosten": 17324949108.9704
+  },
+  {
+    "Groessenklasse": "Lastzüge",
+    "Jahr": "2045",
+    "Kosten": 17487430849.0088
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2025",
+    "Kosten": 39169975085.3467
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2026",
+    "Kosten": 39689911127.7522
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2027",
+    "Kosten": 40380425788.9234
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2028",
+    "Kosten": 41125623847.7496
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2029",
+    "Kosten": 41870185411.7608
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2030",
+    "Kosten": 42612043023.0213
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2031",
+    "Kosten": 43585789212.9232
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2032",
+    "Kosten": 44554488450.8899
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2033",
+    "Kosten": 45517831334.7727
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2034",
+    "Kosten": 46475174507.7827
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2035",
+    "Kosten": 47425223814.1421
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2036",
+    "Kosten": 48366975817.6704
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2037",
+    "Kosten": 48957196929.2214
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2038",
+    "Kosten": 49536926652.7786
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2039",
+    "Kosten": 50105856048.6032
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2040",
+    "Kosten": 50663742870.3453
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2041",
+    "Kosten": 51202249676.9459
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2042",
+    "Kosten": 51729985328.4493
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2043",
+    "Kosten": 52246914153.2342
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2044",
+    "Kosten": 52752947189.4887
+  },
+  {
+    "Groessenklasse": "Sattelzüge",
+    "Jahr": "2045",
+    "Kosten": 53247998201.6784
   }
 ]

@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 export interface LegendItem {
   name: string;
   color: string;
+  type?: 'box' | 'line' | 'dashed-line';
 }
 
 @Component({

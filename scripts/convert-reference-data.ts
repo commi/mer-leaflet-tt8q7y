@@ -6,56 +6,75 @@
 
 import {readFileSync, writeFileSync} from 'fs';
 
+interface ReferenceDataRow {
+  Groessenklasse: string;
+  Jahr: string;
+  Kosten: number;
+}
+
 function convertCSVToJSON(inputPath: string, outputPath: string): void {
 
   // Read CSV file
   const csvContent = readFileSync(inputPath, 'utf-8');
   const lines = csvContent.trim().split('\n');
 
-  // Parse header (years) - simple CSV split
+  // Parse header (years)
   const header = lines[0].split(',');
-  const years = header.slice(1); // Skip first empty column
-
-  // Parse data row - handle quoted values properly
-  const dataLine = lines[1];
-
-  // Extract label (before first comma)
-  const firstComma = dataLine.indexOf(',');
-  const label = dataLine.substring(0, firstComma);
-
-  // Extract values (after first comma) - they are quoted with commas inside
-  const valuesString = dataLine.substring(firstComma + 1);
-
-  // Match quoted values: "66,6233430401856"
-  const valueMatches = valuesString.match(/"([^"]+)"/g);
-  const valuesStr = valueMatches ? valueMatches.map(v => v.replace(/"/g, '')) : [];
+  const years = header.slice(1).map(y => y.trim()); // Skip first column (label)
 
 
-  // Convert German decimal format (comma) to English (dot) and parse
-  // Values in CSV are in Mrd. € (billions)
-  const values = valuesStr.map(v => {
-    const cleaned = v.replace(/"/g, '').replace(',', '.');
-    return parseFloat(cleaned);
-  });
+  const allData: ReferenceDataRow[] = [];
 
-  // Create JSON array with numeric values
-  const data = years.map((year, index) => {
-    // Convert from Mrd. € to raw value (multiply by 1e9)
-    // This matches the format used in Kosten.json
-    const rawValue = values[index] * 1_000_000_000;
+  // Process each data row (size class)
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line.trim()) continue;
 
-    return {
-      Jahr: year.replace(/"/g, ''),
-      Kosten: rawValue  // Keep as number, not string
-    };
-  });
+    // Parse CSV line - split by comma but respect quotes
+    const parts: string[] = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let j = 0; j < line.length; j++) {
+      const char = line[j];
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        parts.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    parts.push(current.trim());
+
+    const sizeClass = parts[0].replace(/"/g, '');
+    const valuesStr = parts.slice(1);
+
+
+    // Convert German decimal format (comma) to English (dot) and parse
+    // Values in CSV are already in Euro (not billions)
+    const values = valuesStr.map(v => {
+      const cleaned = v.replace(',', '.');
+      return parseFloat(cleaned);
+    });
+
+    // Create data rows for this size class
+    years.forEach((year, index) => {
+      allData.push({
+        Groessenklasse: sizeClass,
+        Jahr: year,
+        Kosten: values[index]
+      });
+    });
+  }
 
   // Write JSON file
-  const jsonContent = JSON.stringify(data, null, 2);
+  const jsonContent = JSON.stringify(allData, null, 2);
   writeFileSync(outputPath, jsonContent, 'utf-8');
 
   console.log(`Created ${outputPath}`);
-  console.log(`${data.length} data points converted`);
+  console.log(`${allData.length} data points converted`);
 }
 
 // Main execution

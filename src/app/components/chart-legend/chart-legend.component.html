@@ -4,7 +4,13 @@
       <div class="d-flex flex-column gap-0">
         @for (item of group; track item.name) {
           <span class="text-nowrap">
-            <span [style.color]="item.color">■</span> {{item.name}}
+            @if ((item.type || 'box') === 'box') {
+              <span [style.color]="item.color">■</span>
+            } @else if (item.type === 'dashed-line') {
+              <span [style.color]="item.color">╍</span>
+            } @else if (item.type === 'line') {
+              <span [style.color]="item.color">─</span>
+            } {{ item.name }}
           </span>
         }
       </div>
