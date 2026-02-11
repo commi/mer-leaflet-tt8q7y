@@ -6,6 +6,11 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
   standalone: false,
   templateUrl: './chart-view.component.html',
   styles: `
+    :host {
+      display: block;
+      container: charts-container / inline-size;
+    }
+
     .charts-grid {
       display: grid;
       gap: 1rem;
@@ -20,7 +25,7 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
         "thg-legend";
     }
 
-    @media (min-width: 840px) {
+    @container charts-container (min-width: 540px) {
       .charts-grid {
         grid-template-columns: 1fr auto;
         gap: 1rem 1rem;
@@ -31,7 +36,7 @@ import {ScenarioStateService} from '../../services/scenario-state.service';
       }
     }
 
-    @media (min-width: 1280px) {
+    @container charts-container (min-width: 1024px) {
       .charts-grid {
         grid-template-columns: 1fr auto 1fr auto;
         gap: 1rem 1rem;

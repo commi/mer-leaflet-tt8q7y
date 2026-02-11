@@ -2,6 +2,10 @@
 
 :host {
   display: block;
+
+  /* macht das Angular Element zum Query-Container */
+  container-type: inline-size;
+  container-name: app-grid-container;
 }
 
 .app-grid {
@@ -9,17 +13,31 @@
   gap: 1rem;
   padding: 1rem;
 
-  // Mobile: Stack vertically
-  grid-template-columns: 1fr 1fr;
+  /* Default: kompakter Container */
+  grid-template-columns: 1fr;
   grid-template-areas:
-    "selector selector"
-    "sizeclass legend"
-    "charts charts";
+    "selector"
+    "sizeclass"
+    "legend"
+    "charts";
+}
 
-  // Desktop: Controls in first row, charts below
-  @media (min-width: 992px) {
+/* 👇 reagiert auf Containerbreite statt Screenbreite */
+@container app-grid-container (min-width: 600px) {
+  .app-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "selector selector"
+      "sizeclass legend"
+      "charts charts";
+  }
+}
+
+@container app-grid-container (min-width: 992px) {
+  .app-grid {
     padding: 1.5rem;
     gap: 1.5rem;
+
     grid-template-columns: auto 1fr auto;
     grid-template-areas:
       "selector sizeclass legend"
