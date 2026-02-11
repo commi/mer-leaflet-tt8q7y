@@ -55,6 +55,8 @@ $spacer: 1rem;
 
 // chart color definitions
 :host {
+  @extend :root;
+  
   /* Diesel */
   --color-diesel-vehicle-dark: #003746;
   --color-diesel-vehicle-medium: #3F636F;
